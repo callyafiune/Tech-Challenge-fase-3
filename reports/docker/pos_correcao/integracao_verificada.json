@@ -1,0 +1,365 @@
+{
+  "sucesso": true,
+  "fonte_git": "fa821effafcac0aece10b705e248365793384354",
+  "verificado_em_utc": "2026-09-14T23:27:44.664720+00:00",
+  "training_sha256_host_e_container": "e71b3b99dcdd9c6c5f815ab64236752d7dcf21dcb96a6c7bda68a515f9824042",
+  "api_prontidao": {
+    "status": "pronto",
+    "versao_modelo": "20260914T232434-92cce529",
+    "backend": "onnx"
+  },
+  "modelo": {
+    "release": "releases/20260914T232434-92cce529",
+    "anterior": "releases/20260914T221243-003d412d"
+  },
+  "dag_id": "retreino_medico",
+  "run_id": "manual__2026-09-14T23:30:00+00:00",
+  "tarefas": {
+    "ingestao": "success",
+    "treinamento": "success",
+    "validacao": "success",
+    "publicacao": "success"
+  },
+  "airflow_saude": {
+    "dag_processor": {
+      "latest_dag_processor_heartbeat": null,
+      "status": null
+    },
+    "metadatabase": {
+      "status": "healthy"
+    },
+    "scheduler": {
+      "latest_scheduler_heartbeat": "2026-09-14T23:27:42.230955+00:00",
+      "status": "healthy"
+    },
+    "triggerer": {
+      "latest_triggerer_heartbeat": "2026-09-14T23:27:42.119261+00:00",
+      "status": "healthy"
+    }
+  },
+  "imagens": [
+    {
+      "id": "sha256:db8c57bbab5a6522cd581d8dd91fa2e7b14d37182f1f30f4fc00564bdb671cd7",
+      "tags": [
+        "medical-classifier:local"
+      ],
+      "criada_em": "2026-09-14T23:21:41.118062322Z"
+    },
+    {
+      "id": "sha256:4aa335021699aa872540e4ae7b96cd43add525a5223fe95279bcb93c75991b50",
+      "tags": [
+        "medical-classifier-airflow:local"
+      ],
+      "criada_em": "2026-09-14T23:23:16.250135722Z"
+    }
+  ],
+  "servicos": [
+    {
+      "nome": "medical-classifier-api-1",
+      "imagem_id": "sha256:db8c57bbab5a6522cd581d8dd91fa2e7b14d37182f1f30f4fc00564bdb671cd7",
+      "usuario": "10001:10001",
+      "status": "running",
+      "saude": "healthy",
+      "portas": {
+        "8000/tcp": [
+          {
+            "HostIp": "127.0.0.1",
+            "HostPort": "8000"
+          }
+        ]
+      }
+    },
+    {
+      "nome": "medical-classifier-prometheus-1",
+      "imagem_id": "sha256:5ce7540c3c00ef4ab0c9d2c995c6a5b9c421f44b4a115d97a2c7af3b1c21cbb0",
+      "usuario": "nobody",
+      "status": "running",
+      "saude": "healthy",
+      "portas": {
+        "9090/tcp": [
+          {
+            "HostIp": "127.0.0.1",
+            "HostPort": "9090"
+          }
+        ]
+      }
+    },
+    {
+      "nome": "medical-classifier-grafana-1",
+      "imagem_id": "sha256:f772d434e8fab0049deb2b1b30abd43342bcfca1537614aa8d36080232cf4283",
+      "usuario": "472",
+      "status": "running",
+      "saude": "healthy",
+      "portas": {
+        "3000/tcp": [
+          {
+            "HostIp": "127.0.0.1",
+            "HostPort": "3000"
+          }
+        ]
+      }
+    },
+    {
+      "nome": "medical-classifier-airflow-airflow-1",
+      "imagem_id": "sha256:4aa335021699aa872540e4ae7b96cd43add525a5223fe95279bcb93c75991b50",
+      "usuario": "10001:0",
+      "status": "running",
+      "saude": "healthy",
+      "portas": {
+        "8080/tcp": [
+          {
+            "HostIp": "127.0.0.1",
+            "HostPort": "8080"
+          }
+        ]
+      }
+    }
+  ],
+  "etapas": [
+    {
+      "etapa": "build_app",
+      "comando": [
+        "docker",
+        "compose",
+        "build",
+        "api"
+      ],
+      "fonte_git": "fa821effafcac0aece10b705e248365793384354",
+      "inicio_utc": "2026-09-14T23:21:28.577163+00:00",
+      "livre_inicio_mib": 2851.5,
+      "interrompido_por_espaco": false,
+      "codigo_saida": 0,
+      "segundos": 16.02,
+      "fim_utc": "2026-09-14T23:21:44.587666+00:00",
+      "livre_fim_mib": 2850.9
+    },
+    {
+      "etapa": "build_airflow",
+      "comando": [
+        "docker",
+        "compose",
+        "-f",
+        "docker-compose.airflow.yml",
+        "build",
+        "airflow"
+      ],
+      "fonte_git": "fa821effafcac0aece10b705e248365793384354",
+      "inicio_utc": "2026-09-14T23:22:01.122032+00:00",
+      "livre_inicio_mib": 2849.9,
+      "interrompido_por_espaco": false,
+      "codigo_saida": 0,
+      "segundos": 92.03,
+      "fim_utc": "2026-09-14T23:23:33.154250+00:00",
+      "livre_fim_mib": 2849.6
+    },
+    {
+      "etapa": "iniciar_airflow",
+      "comando": [
+        "docker",
+        "compose",
+        "-f",
+        "docker-compose.airflow.yml",
+        "up",
+        "-d",
+        "--no-deps",
+        "--force-recreate",
+        "--wait",
+        "--wait-timeout",
+        "180",
+        "airflow"
+      ],
+      "fonte_git": "fa821effafcac0aece10b705e248365793384354",
+      "inicio_utc": "2026-09-14T23:23:47.703181+00:00",
+      "livre_inicio_mib": 2849.5,
+      "interrompido_por_espaco": false,
+      "codigo_saida": 0,
+      "segundos": 26.02,
+      "fim_utc": "2026-09-14T23:24:13.718298+00:00",
+      "livre_fim_mib": 2850.8
+    },
+    {
+      "etapa": "executar_dag",
+      "comando": [
+        "docker",
+        "compose",
+        "-f",
+        "docker-compose.airflow.yml",
+        "exec",
+        "-T",
+        "airflow",
+        "airflow",
+        "dags",
+        "test",
+        "retreino_medico",
+        "2026-09-14T23:30:00+00:00"
+      ],
+      "fonte_git": "fa821effafcac0aece10b705e248365793384354",
+      "inicio_utc": "2026-09-14T23:24:21.471815+00:00",
+      "livre_inicio_mib": 2850.8,
+      "interrompido_por_espaco": false,
+      "codigo_saida": 0,
+      "segundos": 30.02,
+      "fim_utc": "2026-09-14T23:24:51.488574+00:00",
+      "livre_fim_mib": 2884.8
+    },
+    {
+      "etapa": "estado_dag",
+      "comando": [
+        "docker",
+        "compose",
+        "-f",
+        "docker-compose.airflow.yml",
+        "exec",
+        "-T",
+        "airflow",
+        "python",
+        "-"
+      ],
+      "fonte_git": "fa821effafcac0aece10b705e248365793384354",
+      "inicio_utc": "2026-09-14T23:24:59.168730+00:00",
+      "livre_inicio_mib": 2884.8,
+      "interrompido_por_espaco": false,
+      "codigo_saida": 0,
+      "segundos": 6.0,
+      "fim_utc": "2026-09-14T23:25:05.178019+00:00",
+      "livre_fim_mib": 2884.8
+    },
+    {
+      "etapa": "atualizar_api",
+      "comando": [
+        "docker",
+        "compose",
+        "up",
+        "-d",
+        "--no-deps",
+        "--force-recreate",
+        "--wait",
+        "--wait-timeout",
+        "120",
+        "api"
+      ],
+      "fonte_git": "fa821effafcac0aece10b705e248365793384354",
+      "inicio_utc": "2026-09-14T23:25:16.851389+00:00",
+      "livre_inicio_mib": 2888.0,
+      "interrompido_por_espaco": false,
+      "codigo_saida": 0,
+      "segundos": 8.0,
+      "fim_utc": "2026-09-14T23:25:24.860640+00:00",
+      "livre_fim_mib": 2887.9
+    },
+    {
+      "etapa": "smoke_stack",
+      "comando": [
+        ".\\.venv\\Scripts\\python.exe",
+        "scripts/smoke_stack.py",
+        "--requisicoes",
+        "20",
+        "--tempo-limite",
+        "120",
+        "--saida",
+        ".local/pos_correcao/smoke_stack.json"
+      ],
+      "fonte_git": "fa821effafcac0aece10b705e248365793384354",
+      "inicio_utc": "2026-09-14T23:25:52.231698+00:00",
+      "livre_inicio_mib": 2904.3,
+      "interrompido_por_espaco": false,
+      "codigo_saida": 0,
+      "segundos": 32.01,
+      "fim_utc": "2026-09-14T23:26:24.251156+00:00",
+      "livre_fim_mib": 2903.8
+    }
+  ],
+  "smoke": {
+    "sucesso": true,
+    "api": {
+      "health": 200,
+      "ready": 200,
+      "predict": 200,
+      "entrada_invalida": 422
+    },
+    "modelo": {
+      "versao": "20260914T232434-92cce529",
+      "backend": "onnx"
+    },
+    "requisicoes_validas_geradas": 21,
+    "prometheus": {
+      "coleta": "ativa",
+      "histograma": "presente",
+      "janela_taxa": "20s",
+      "instante_metricas_utc": "2026-09-14T23:26:22.460000+00:00"
+    },
+    "grafana": {
+      "fonte_dados": "OK",
+      "dashboard": "medical-classifier",
+      "paineis": [
+        {
+          "titulo": "Requisições de classificação",
+          "consultas": [
+            {
+              "expressao": "sum(http_requests_total{job=\"medical-api\",route=\"/predict\",method=\"POST\"}) or vector(0)",
+              "valor": 23.0
+            }
+          ]
+        },
+        {
+          "titulo": "Coleta de métricas",
+          "consultas": [
+            {
+              "expressao": "up{job=\"medical-api\"}",
+              "valor": 1.0
+            }
+          ]
+        },
+        {
+          "titulo": "Modelo pronto",
+          "consultas": [
+            {
+              "expressao": "(model_ready{job=\"medical-api\"} * on(job, instance) up{job=\"medical-api\"}) or vector(0)",
+              "valor": 1.0
+            }
+          ]
+        },
+        {
+          "titulo": "Chamadas de classificação por segundo",
+          "consultas": [
+            {
+              "expressao": "sum(rate(http_requests_total{job=\"medical-api\",route=\"/predict\",method=\"POST\"}[20s])) or vector(0)",
+              "valor": 0.7333333333333334
+            }
+          ]
+        },
+        {
+          "titulo": "Latência HTTP p50 e p95",
+          "consultas": [
+            {
+              "expressao": "histogram_quantile(0.50, sum by (le) (rate(http_request_duration_seconds_bucket{job=\"medical-api\",route=\"/predict\",method=\"POST\"}[20s])))",
+              "valor": 0.0025
+            },
+            {
+              "expressao": "histogram_quantile(0.95, sum by (le) (rate(http_request_duration_seconds_bucket{job=\"medical-api\",route=\"/predict\",method=\"POST\"}[20s])))",
+              "valor": 0.00475
+            }
+          ]
+        },
+        {
+          "titulo": "Proporção de erros de classificação",
+          "consultas": [
+            {
+              "expressao": "100 * (sum(rate(http_requests_total{job=\"medical-api\",route=\"/predict\",method=\"POST\",status=~\"4..\"}[20s])) or vector(0)) / clamp_min((sum(rate(http_requests_total{job=\"medical-api\",route=\"/predict\",method=\"POST\"}[20s])) or vector(0)), 1e-9)",
+              "valor": 9.090909090909092
+            },
+            {
+              "expressao": "100 * (sum(rate(http_requests_total{job=\"medical-api\",route=\"/predict\",method=\"POST\",status=~\"5..\"}[20s])) or vector(0)) / clamp_min((sum(rate(http_requests_total{job=\"medical-api\",route=\"/predict\",method=\"POST\"}[20s])) or vector(0)), 1e-9)",
+              "valor": 0.0
+            }
+          ]
+        }
+      ]
+    },
+    "inicio_utc": "2026-09-14T23:25:52.480911+00:00",
+    "fim_utc": "2026-09-14T23:26:22.989914+00:00"
+  },
+  "livre_host_mib": 2881.1,
+  "video_historico_sha256": "41d55f255cd0df8a2b06c6a3de0735d12e94a37e31b1cdbd62fe55c6751b1992",
+  "observacao_tempo": "A data lógica futura identifica a DAG; o tempo real do comando está em executar_dag.json."
+}

@@ -1,0 +1,153 @@
+{
+  "execucao": 34908437779,
+  "url": "https://github.com/callyafiune/Tech-Challenge-fase-3/actions/runs/34908437779",
+  "commit": "3a7ad7f052aa2ad246d399e4743f435bde8af221",
+  "conclusao": "success",
+  "fonte": "API GitHub Actions, logs e artefatos baixados pela integração GitHub.",
+  "jobs": [
+    {
+      "id": 104190345054,
+      "name": "Comparar camadas no runner 2",
+      "status": "completed",
+      "conclusion": "success",
+      "run_id": 34908437779,
+      "logs_url": null,
+      "steps": [
+        {
+          "name": "Set up job",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 1
+        },
+        {
+          "name": "Obter o código",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 2
+        },
+        {
+          "name": "Construir a mesma imagem do pipeline",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 3
+        },
+        {
+          "name": "Comparar transformações sem publicar modelo",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 4
+        },
+        {
+          "name": "Preservar diagnóstico e candidato isolado",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 5
+        },
+        {
+          "name": "Post Obter o código",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 10
+        },
+        {
+          "name": "Complete job",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 11
+        }
+      ]
+    },
+    {
+      "id": 104190345309,
+      "name": "Comparar camadas no runner 1",
+      "status": "completed",
+      "conclusion": "success",
+      "run_id": 34908437779,
+      "logs_url": null,
+      "steps": [
+        {
+          "name": "Set up job",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 1
+        },
+        {
+          "name": "Obter o código",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 2
+        },
+        {
+          "name": "Construir a mesma imagem do pipeline",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 3
+        },
+        {
+          "name": "Comparar transformações sem publicar modelo",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 4
+        },
+        {
+          "name": "Preservar diagnóstico e candidato isolado",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 5
+        },
+        {
+          "name": "Post Obter o código",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 10
+        },
+        {
+          "name": "Complete job",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 11
+        }
+      ]
+    }
+  ],
+  "artefatos": [
+    {
+      "id": 10373343066,
+      "name": "diagnostico-paridade-2-34908437779",
+      "size_in_bytes": 4406216,
+      "url": "https://api.github.com/repos/callyafiune/Tech-Challenge-fase-3/actions/artifacts/10373343066",
+      "archive_download_url": "https://api.github.com/repos/callyafiune/Tech-Challenge-fase-3/actions/artifacts/10373343066/zip",
+      "expired": false,
+      "created_at": "2026-09-14T23:21:56Z",
+      "expires_at": "2026-09-21T23:21:55Z",
+      "updated_at": "2026-09-14T23:21:56Z",
+      "digest": "sha256:79419639823de47f83acdd8784847e7628590745a7c55602a8264842f53d2e3e",
+      "workflow_run": {
+        "id": 34908437779,
+        "repository_id": 1370511453,
+        "head_repository_id": 1370511453,
+        "head_branch": "main",
+        "head_sha": "3a7ad7f052aa2ad246d399e4743f435bde8af221"
+      }
+    },
+    {
+      "id": 10373068811,
+      "name": "diagnostico-paridade-1-34908437779",
+      "size_in_bytes": 4406624,
+      "url": "https://api.github.com/repos/callyafiune/Tech-Challenge-fase-3/actions/artifacts/10373068811",
+      "archive_download_url": "https://api.github.com/repos/callyafiune/Tech-Challenge-fase-3/actions/artifacts/10373068811/zip",
+      "expired": false,
+      "created_at": "2026-09-14T23:22:01Z",
+      "expires_at": "2026-09-21T23:21:59Z",
+      "updated_at": "2026-09-14T23:22:01Z",
+      "digest": "sha256:714decb02049158f83c0ebe8cbd67a7b121f23d3f7f5586401689cea654f85c3",
+      "workflow_run": {
+        "id": 34908437779,
+        "repository_id": 1370511453,
+        "head_repository_id": 1370511453,
+        "head_branch": "main",
+        "head_sha": "3a7ad7f052aa2ad246d399e4743f435bde8af221"
+      }
+    }
+  ]
+}

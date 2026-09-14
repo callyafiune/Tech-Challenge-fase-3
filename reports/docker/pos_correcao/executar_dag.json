@@ -1,0 +1,25 @@
+{
+  "etapa": "executar_dag",
+  "comando": [
+    "docker",
+    "compose",
+    "-f",
+    "docker-compose.airflow.yml",
+    "exec",
+    "-T",
+    "airflow",
+    "airflow",
+    "dags",
+    "test",
+    "retreino_medico",
+    "2026-09-14T23:30:00+00:00"
+  ],
+  "fonte_git": "fa821effafcac0aece10b705e248365793384354",
+  "inicio_utc": "2026-09-14T23:24:21.471815+00:00",
+  "livre_inicio_mib": 2850.8,
+  "interrompido_por_espaco": false,
+  "codigo_saida": 0,
+  "segundos": 30.02,
+  "fim_utc": "2026-09-14T23:24:51.488574+00:00",
+  "livre_fim_mib": 2884.8
+}

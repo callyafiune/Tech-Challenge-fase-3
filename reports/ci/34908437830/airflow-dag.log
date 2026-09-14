@@ -1,0 +1,80 @@
+/opt/airflow-venv/lib/python3.11/site-packages/airflow/metrics/base_stats_logger.py:22 RemovedInAirflow3Warning: Timer and timing metrics publish in seconds were deprecated. It is enabled by default from Airflow 3 onwards. Enable timer_unit_consistency to publish all the timer and timing metrics in milliseconds.
+/opt/airflow-venv/lib/python3.11/site-packages/airflow/triggers/base.py:27 RemovedInAirflow3Warning: Timer and timing metrics publish in seconds were deprecated. It is enabled by default from Airflow 3 onwards. Enable timer_unit_consistency to publish all the timer and timing metrics in milliseconds.
+/opt/airflow-venv/lib/python3.11/site-packages/airflow/cli/commands/dag_command.py:48 UserWarning: Could not import graphviz. Rendering graph to the graphical format will not be possible.
+[2026-09-14T23:23:09.364+0000] {dagbag.py:588} INFO - Filling up the DagBag from /opt/airflow/dags
+[2026-09-14T23:23:09.400+0000] {dag.py:4435} INFO - dagrun id: retreino_medico
+[2026-09-14T23:23:09.408+0000] {dag.py:4451} INFO - created dagrun <DagRun retreino_medico @ 2026-09-14 00:00:00+00:00: manual__2026-09-14T00:00:00+00:00, state:running, queued_at: None. externally triggered: False>
+[2026-09-14T23:23:09.427+0000] {dag.py:4396} INFO - [DAG TEST] starting task_id=ingestao map_index=-1
+[2026-09-14T23:23:09.428+0000] {dag.py:4399} INFO - [DAG TEST] running task <TaskInstance: retreino_medico.ingestao manual__2026-09-14T00:00:00+00:00 [scheduled]>
+[2026-09-14 23:23:09,465] {taskinstance.py:3157} INFO - Exporting env vars: AIRFLOW_CTX_DAG_OWNER='equipe-ml' AIRFLOW_CTX_DAG_ID='retreino_medico' AIRFLOW_CTX_TASK_ID='ingestao' AIRFLOW_CTX_EXECUTION_DATE='2026-09-14T00:00:00+00:00' AIRFLOW_CTX_TRY_NUMBER='1' AIRFLOW_CTX_DAG_RUN_ID='manual__2026-09-14T00:00:00+00:00'
+[2026-09-14T23:23:09.465+0000] {taskinstance.py:3157} INFO - Exporting env vars: AIRFLOW_CTX_DAG_OWNER='equipe-ml' AIRFLOW_CTX_DAG_ID='retreino_medico' AIRFLOW_CTX_TASK_ID='ingestao' AIRFLOW_CTX_EXECUTION_DATE='2026-09-14T00:00:00+00:00' AIRFLOW_CTX_TRY_NUMBER='1' AIRFLOW_CTX_DAG_RUN_ID='manual__2026-09-14T00:00:00+00:00'
+[2026-09-14T23:23:09.468+0000] {taskinstance.py:740} INFO - ::endgroup::
+[2026-09-14 23:23:09,523] {subprocess.py:78} INFO - Tmp dir root location: /tmp
+[2026-09-14T23:23:09.523+0000] {subprocess.py:78} INFO - Tmp dir root location: /tmp
+[2026-09-14 23:23:09,523] {subprocess.py:88} INFO - Running command: ['/usr/bin/bash', '-c', "/opt/model-venv/bin/python -m medical_classifier.airflow_tasks ingestao --execucao '20260914T000000'"]
+[2026-09-14T23:23:09.523+0000] {subprocess.py:88} INFO - Running command: ['/usr/bin/bash', '-c', "/opt/model-venv/bin/python -m medical_classifier.airflow_tasks ingestao --execucao '20260914T000000'"]
+[2026-09-14 23:23:09,530] {subprocess.py:99} INFO - Output:
+[2026-09-14T23:23:09.530+0000] {subprocess.py:99} INFO - Output:
+[2026-09-14 23:23:12,807] {subprocess.py:106} INFO - {"etapa": "ingestao", "execucao": "20260914T000000", "estado": "/app/data/runs/20260914T000000", "sucesso": true}
+[2026-09-14T23:23:12.807+0000] {subprocess.py:106} INFO - {"etapa": "ingestao", "execucao": "20260914T000000", "estado": "/app/data/runs/20260914T000000", "sucesso": true}
+[2026-09-14 23:23:13,019] {subprocess.py:110} INFO - Command exited with return code 0
+[2026-09-14T23:23:13.019+0000] {subprocess.py:110} INFO - Command exited with return code 0
+[2026-09-14T23:23:13.029+0000] {taskinstance.py:349} INFO - ::group::Post task execution logs
+[2026-09-14T23:23:13.029+0000] {taskinstance.py:361} INFO - Marking task as SUCCESS. dag_id=retreino_medico, task_id=ingestao, run_id=manual__2026-09-14T00:00:00+00:00, execution_date=20260914T000000, start_date=, end_date=20260914T232313
+[2026-09-14T23:23:13.040+0000] {dag.py:4410} INFO - [DAG TEST] end task task_id=ingestao map_index=-1
+[2026-09-14T23:23:13.053+0000] {dag.py:4396} INFO - [DAG TEST] starting task_id=treinamento map_index=-1
+[2026-09-14T23:23:13.054+0000] {dag.py:4399} INFO - [DAG TEST] running task <TaskInstance: retreino_medico.treinamento manual__2026-09-14T00:00:00+00:00 [scheduled]>
+[2026-09-14 23:23:13,069] {taskinstance.py:3157} INFO - Exporting env vars: AIRFLOW_CTX_DAG_OWNER='equipe-ml' AIRFLOW_CTX_DAG_ID='retreino_medico' AIRFLOW_CTX_TASK_ID='treinamento' AIRFLOW_CTX_EXECUTION_DATE='2026-09-14T00:00:00+00:00' AIRFLOW_CTX_TRY_NUMBER='1' AIRFLOW_CTX_DAG_RUN_ID='manual__2026-09-14T00:00:00+00:00'
+[2026-09-14T23:23:13.069+0000] {taskinstance.py:3157} INFO - Exporting env vars: AIRFLOW_CTX_DAG_OWNER='equipe-ml' AIRFLOW_CTX_DAG_ID='retreino_medico' AIRFLOW_CTX_TASK_ID='treinamento' AIRFLOW_CTX_EXECUTION_DATE='2026-09-14T00:00:00+00:00' AIRFLOW_CTX_TRY_NUMBER='1' AIRFLOW_CTX_DAG_RUN_ID='manual__2026-09-14T00:00:00+00:00'
+[2026-09-14T23:23:13.069+0000] {taskinstance.py:740} INFO - ::endgroup::
+[2026-09-14 23:23:13,070] {subprocess.py:78} INFO - Tmp dir root location: /tmp
+[2026-09-14T23:23:13.070+0000] {subprocess.py:78} INFO - Tmp dir root location: /tmp
+[2026-09-14 23:23:13,071] {subprocess.py:88} INFO - Running command: ['/usr/bin/bash', '-c', "/opt/model-venv/bin/python -m medical_classifier.airflow_tasks treinamento --execucao '20260914T000000'"]
+[2026-09-14T23:23:13.071+0000] {subprocess.py:88} INFO - Running command: ['/usr/bin/bash', '-c', "/opt/model-venv/bin/python -m medical_classifier.airflow_tasks treinamento --execucao '20260914T000000'"]
+[2026-09-14 23:23:13,077] {subprocess.py:99} INFO - Output:
+[2026-09-14T23:23:13.077+0000] {subprocess.py:99} INFO - Output:
+[2026-09-14 23:23:20,100] {subprocess.py:106} INFO - {"etapa": "treinamento", "execucao": "20260914T000000", "estado": "/app/data/runs/20260914T000000", "sucesso": true}
+[2026-09-14T23:23:20.100+0000] {subprocess.py:106} INFO - {"etapa": "treinamento", "execucao": "20260914T000000", "estado": "/app/data/runs/20260914T000000", "sucesso": true}
+[2026-09-14 23:23:20,295] {subprocess.py:110} INFO - Command exited with return code 0
+[2026-09-14T23:23:20.295+0000] {subprocess.py:110} INFO - Command exited with return code 0
+[2026-09-14T23:23:20.392+0000] {taskinstance.py:349} INFO - ::group::Post task execution logs
+[2026-09-14T23:23:20.392+0000] {taskinstance.py:361} INFO - Marking task as SUCCESS. dag_id=retreino_medico, task_id=treinamento, run_id=manual__2026-09-14T00:00:00+00:00, execution_date=20260914T000000, start_date=, end_date=20260914T232320
+[2026-09-14T23:23:20.400+0000] {dag.py:4410} INFO - [DAG TEST] end task task_id=treinamento map_index=-1
+[2026-09-14T23:23:20.409+0000] {dag.py:4396} INFO - [DAG TEST] starting task_id=validacao map_index=-1
+[2026-09-14T23:23:20.409+0000] {dag.py:4399} INFO - [DAG TEST] running task <TaskInstance: retreino_medico.validacao manual__2026-09-14T00:00:00+00:00 [scheduled]>
+[2026-09-14 23:23:20,423] {taskinstance.py:3157} INFO - Exporting env vars: AIRFLOW_CTX_DAG_OWNER='equipe-ml' AIRFLOW_CTX_DAG_ID='retreino_medico' AIRFLOW_CTX_TASK_ID='validacao' AIRFLOW_CTX_EXECUTION_DATE='2026-09-14T00:00:00+00:00' AIRFLOW_CTX_TRY_NUMBER='1' AIRFLOW_CTX_DAG_RUN_ID='manual__2026-09-14T00:00:00+00:00'
+[2026-09-14T23:23:20.423+0000] {taskinstance.py:3157} INFO - Exporting env vars: AIRFLOW_CTX_DAG_OWNER='equipe-ml' AIRFLOW_CTX_DAG_ID='retreino_medico' AIRFLOW_CTX_TASK_ID='validacao' AIRFLOW_CTX_EXECUTION_DATE='2026-09-14T00:00:00+00:00' AIRFLOW_CTX_TRY_NUMBER='1' AIRFLOW_CTX_DAG_RUN_ID='manual__2026-09-14T00:00:00+00:00'
+[2026-09-14T23:23:20.424+0000] {taskinstance.py:740} INFO - ::endgroup::
+[2026-09-14 23:23:20,424] {subprocess.py:78} INFO - Tmp dir root location: /tmp
+[2026-09-14T23:23:20.424+0000] {subprocess.py:78} INFO - Tmp dir root location: /tmp
+[2026-09-14 23:23:20,425] {subprocess.py:88} INFO - Running command: ['/usr/bin/bash', '-c', "/opt/model-venv/bin/python -m medical_classifier.airflow_tasks validacao --execucao '20260914T000000'"]
+[2026-09-14T23:23:20.425+0000] {subprocess.py:88} INFO - Running command: ['/usr/bin/bash', '-c', "/opt/model-venv/bin/python -m medical_classifier.airflow_tasks validacao --execucao '20260914T000000'"]
+[2026-09-14 23:23:20,431] {subprocess.py:99} INFO - Output:
+[2026-09-14T23:23:20.431+0000] {subprocess.py:99} INFO - Output:
+[2026-09-14 23:23:23,500] {subprocess.py:106} INFO - {"etapa": "validacao", "execucao": "20260914T000000", "estado": "/app/data/runs/20260914T000000", "sucesso": true}
+[2026-09-14T23:23:23.500+0000] {subprocess.py:106} INFO - {"etapa": "validacao", "execucao": "20260914T000000", "estado": "/app/data/runs/20260914T000000", "sucesso": true}
+[2026-09-14 23:23:23,673] {subprocess.py:110} INFO - Command exited with return code 0
+[2026-09-14T23:23:23.673+0000] {subprocess.py:110} INFO - Command exited with return code 0
+[2026-09-14T23:23:23.680+0000] {taskinstance.py:349} INFO - ::group::Post task execution logs
+[2026-09-14T23:23:23.680+0000] {taskinstance.py:361} INFO - Marking task as SUCCESS. dag_id=retreino_medico, task_id=validacao, run_id=manual__2026-09-14T00:00:00+00:00, execution_date=20260914T000000, start_date=, end_date=20260914T232323
+[2026-09-14T23:23:23.688+0000] {dag.py:4410} INFO - [DAG TEST] end task task_id=validacao map_index=-1
+[2026-09-14T23:23:23.697+0000] {dag.py:4396} INFO - [DAG TEST] starting task_id=publicacao map_index=-1
+[2026-09-14T23:23:23.697+0000] {dag.py:4399} INFO - [DAG TEST] running task <TaskInstance: retreino_medico.publicacao manual__2026-09-14T00:00:00+00:00 [scheduled]>
+[2026-09-14 23:23:23,712] {taskinstance.py:3157} INFO - Exporting env vars: AIRFLOW_CTX_DAG_OWNER='equipe-ml' AIRFLOW_CTX_DAG_ID='retreino_medico' AIRFLOW_CTX_TASK_ID='publicacao' AIRFLOW_CTX_EXECUTION_DATE='2026-09-14T00:00:00+00:00' AIRFLOW_CTX_TRY_NUMBER='1' AIRFLOW_CTX_DAG_RUN_ID='manual__2026-09-14T00:00:00+00:00'
+[2026-09-14T23:23:23.712+0000] {taskinstance.py:3157} INFO - Exporting env vars: AIRFLOW_CTX_DAG_OWNER='equipe-ml' AIRFLOW_CTX_DAG_ID='retreino_medico' AIRFLOW_CTX_TASK_ID='publicacao' AIRFLOW_CTX_EXECUTION_DATE='2026-09-14T00:00:00+00:00' AIRFLOW_CTX_TRY_NUMBER='1' AIRFLOW_CTX_DAG_RUN_ID='manual__2026-09-14T00:00:00+00:00'
+[2026-09-14T23:23:23.712+0000] {taskinstance.py:740} INFO - ::endgroup::
+[2026-09-14 23:23:23,713] {subprocess.py:78} INFO - Tmp dir root location: /tmp
+[2026-09-14T23:23:23.713+0000] {subprocess.py:78} INFO - Tmp dir root location: /tmp
+[2026-09-14 23:23:23,713] {subprocess.py:88} INFO - Running command: ['/usr/bin/bash', '-c', "/opt/model-venv/bin/python -m medical_classifier.airflow_tasks publicacao --execucao '20260914T000000'"]
+[2026-09-14T23:23:23.713+0000] {subprocess.py:88} INFO - Running command: ['/usr/bin/bash', '-c', "/opt/model-venv/bin/python -m medical_classifier.airflow_tasks publicacao --execucao '20260914T000000'"]
+[2026-09-14 23:23:23,720] {subprocess.py:99} INFO - Output:
+[2026-09-14T23:23:23.720+0000] {subprocess.py:99} INFO - Output:
+[2026-09-14 23:23:25,031] {subprocess.py:106} INFO - {"etapa": "publicacao", "execucao": "20260914T000000", "estado": "/app/data/runs/20260914T000000", "sucesso": true}
+[2026-09-14T23:23:25.031+0000] {subprocess.py:106} INFO - {"etapa": "publicacao", "execucao": "20260914T000000", "estado": "/app/data/runs/20260914T000000", "sucesso": true}
+[2026-09-14 23:23:25,198] {subprocess.py:110} INFO - Command exited with return code 0
+[2026-09-14T23:23:25.198+0000] {subprocess.py:110} INFO - Command exited with return code 0
+[2026-09-14T23:23:25.205+0000] {taskinstance.py:349} INFO - ::group::Post task execution logs
+[2026-09-14T23:23:25.206+0000] {taskinstance.py:361} INFO - Marking task as SUCCESS. dag_id=retreino_medico, task_id=publicacao, run_id=manual__2026-09-14T00:00:00+00:00, execution_date=20260914T000000, start_date=, end_date=20260914T232325
+[2026-09-14T23:23:25.214+0000] {dag.py:4410} INFO - [DAG TEST] end task task_id=publicacao map_index=-1
+[2026-09-14T23:23:25.216+0000] {dagrun.py:854} INFO - Marking run <DagRun retreino_medico @ 2026-09-14 00:00:00+00:00: manual__2026-09-14T00:00:00+00:00, state:running, queued_at: None. externally triggered: False> successful
+[2026-09-14T23:23:25.217+0000] {dagrun.py:905} INFO - DagRun Finished: dag_id=retreino_medico, execution_date=2026-09-14 00:00:00+00:00, run_id=manual__2026-09-14T00:00:00+00:00, run_start_date=2026-09-14 00:00:00+00:00, run_end_date=2026-09-14 23:23:25.217247+00:00, run_duration=84205.217247, state=success, external_trigger=False, run_type=manual, data_interval_start=2026-09-06 00:00:00+00:00, data_interval_end=2026-09-13 00:00:00+00:00, dag_hash=None

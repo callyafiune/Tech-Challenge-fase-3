@@ -15,8 +15,8 @@ O objetivo autorizado é classificar cinco condições médicas do Medical Abstr
 | R07 | Validação e prontidão | B2 | Limites de entrada, testes API e prontidão 1 → 0 → 1 em parada/reinício | Verificado |
 | R08 | Dockerfile funcional | B3 | [Imagem, treino sem rede, usuário e permissões](../reports/docker/execucao_stack.json) | Verificado |
 | R09 | Baseline de latência HTTP | B3 | [Host](../reports/latencia_http_local.json): 1,45×; [Docker](../reports/docker/latencia_http.json): 1,33× no p50 | Verificado nos dois ambientes |
-| R10 | CI/CD por push | B4 | [CI completo](../reports/ci/34905435615/execucao.json), falha posterior e [correção verificada](diagnostico_paridade.md) | CI executado e correção local verificada; publicação GHCR não comprovada |
-| R11 | Pelo menos duas automações | B4 | Lint, testes, builds, DAG e stack concluídos no CI 34905435615 | Verificado no ambiente local e no GitHub Actions |
+| R10 | CI/CD por push | B4 | [CI completo com a correção ONNX](../reports/ci/34908437830/execucao.json), commit `3a7ad7f` | CI verificado; publicação GHCR não executada |
+| R11 | Pelo menos duas automações | B4 | Lint, 78 testes aprovados, builds, DAG e stack concluídos no CI 34908437830 | Verificado no ambiente local e no GitHub Actions |
 | R12 | DAG ingestão → treino → salvamento | B4 | [Quatro tarefas concluídas](../reports/airflow_execucao.json), publicação real e standalone consultado | Verificado |
 | R13 | Instrumentação Prometheus | B2 | Contadores, histograma, prontidão e consultas reais | Verificado |
 | R14 | API + Prometheus + Grafana via Compose | B3 | [Smoke da stack](../reports/smoke_stack.json) com `sucesso=true` | Verificado |
@@ -42,6 +42,8 @@ O teste contém 2.770 textos únicos e 231 linhas ambíguas; o teto de acurácia
 | Windows, mesma versão | HTTP local, 200 amostras/motor | 7,7405 ms | 5,3488 ms | 1,45× | [Relatório](../reports/latencia_http_local.json) |
 | Docker Linux/WSL2, `20260914T214809-a767fe94` | Modelo em processo, sem HTTP, 400 amostras/motor | 1,226336 ms | 0,328270 ms | 3,74× | [Relatório](../reports/docker/latencia_modelo.json) |
 | Servidores Docker, `20260914T221243-003d412d`; cliente Windows | HTTP, 200 amostras/motor | 5,41015 ms | 4,0585 ms | 1,33× | [Relatório](../reports/docker/latencia_http.json) |
+| Docker local após correção, `20260914T232434-92cce529` | Modelo em processo, 400 amostras/motor | 1,317915 ms | 0,346612 ms | 3,80× | [Relatório](../reports/docker/pos_correcao/latencia_modelo.json) |
+| GitHub Actions, `20260914T232314-d0a18808` | Modelo em processo, 400 amostras/motor | 0,744446 ms | 0,239354 ms | 3,11× | [Relatório](../reports/ci/34908437830/20260914T000000-latencia_modelo.json) |
 
 Host e Docker têm versões e ambientes próprios. Os benchmarks usam lote um, os mesmos textos entre motores e ordem alternada. O piso de aceleração p50 é uma regra local sujeita a ruído; não há SLO nem medição de saturação.
 
@@ -57,6 +59,8 @@ Uma tentativa histórica de construção Airflow foi interrompida por espaço, c
 
 ## Testes e revisões
 
+A [integração local após a correção](../reports/docker/pos_correcao/integracao_verificada.json) concluiu as quatro tarefas em 30,02 segundos e publicou `20260914T232434-92cce529`, mantendo a versão anterior. A API carregou a nova versão e os quatro serviços ficaram saudáveis; o novo smoke confirmou seis painéis e oito consultas. O commit local `fa821ef` e o remoto `3a7ad7f` possuem a mesma árvore Git, `1372ea830ae67647d3a6f50c9a5cee84d5dc0f75`; o SHA-256 do exportador também foi conferido dentro do Airflow.
+
 A suíte consolidada em [testes.xml](../reports/testes.xml) registra **78 casos aprovados, um ignorado, zero falhas e zero erros**. O caso ignorado exige o ambiente Airflow real; a DAG foi executada separadamente no container. Esse resultado não comprova execução remota de CI.
 
 Os pareceres mais recentes estão em [reports/reviews](../reports/reviews/), com rodadas anteriores nos subdiretórios numerados. Os manifestos preservam a solicitação `fable`, o uso de `claude-fable-5-1` e o modelo auxiliar reportado pela CLI. Parecer concluído não equivale a aprovação. O [tratamento dos achados](revisoes_adversariais.md) registra a contagem de rodadas, correções e decisões justificadas.
@@ -66,10 +70,10 @@ Os pareceres mais recentes estão em [reports/reviews](../reports/reviews/), com
 | Critério | Peso | Evidência disponível | Trabalho em acompanhamento |
 |---|---:|---|---|
 | Modelagem e otimização | 20% | Corpus real, qualidade, paridade e benchmarks | Vincular qualquer alteração posterior aos relatórios |
-| CI/CD | 15% | Workflows e CI remoto 34905435615 concluído com imagem validada | Publicação manual GHCR |
+| CI/CD | 15% | Workflows e CI remoto 34908437830 concluído com imagem validada | Publicação manual GHCR disponível, além do lint/test/build exigido |
 | Orquestração | 15% | Quatro tarefas concluídas no Airflow real, publicação e standalone consultado | Execução local registrada; produção permanece fora do escopo provisionado |
 | Monitoramento | 20% | Compose e smoke com seis painéis/oito consultas | Repetir verificações afetadas por correções posteriores |
 | Documentação | 15% | README, arquitetura, modelo, plano, matriz e três revisões B5 | Histórico semântico consolidado |
 | Vídeo STAR | 15% | Roteiro e MP4 final de 3min40s, sete cartões inspecionados e narração sintética | MP4 publicado no próprio repositório |
 
-A execução remota inicial [34904519738](https://github.com/callyafiune/Tech-Challenge-fase-3/actions/runs/34904519738) falhou no gate de paridade ONNX durante o treino da DAG. O [CI posterior 34905435615](https://github.com/callyafiune/Tech-Challenge-fase-3/actions/runs/34905435615) concluiu com sucesso, com instrumentação de erro e os mesmos critérios preservados. A falha voltou no [CI 34906533919](../reports/ci/34906533919/execucao.json). A [investigação por camada](diagnostico_paridade.md) identificou e corrigiu a representação de bigramas no conversor: erro de validação de 0,009424 para 1,93 × 10⁻⁷ no candidato remoto, sem novo ajuste. Os registros identificam commits e artefatos. Não há push GHCR ou infraestrutura AWS comprovados. O MP4 integra os arquivos do repositório. As evidências locais permanecem válidas dentro dos ambientes identificados.
+A execução remota inicial [34904519738](https://github.com/callyafiune/Tech-Challenge-fase-3/actions/runs/34904519738) falhou no gate de paridade ONNX durante o treino da DAG. O [CI posterior 34905435615](https://github.com/callyafiune/Tech-Challenge-fase-3/actions/runs/34905435615) concluiu com sucesso, com instrumentação de erro e os mesmos critérios preservados. A falha voltou no [CI 34906533919](../reports/ci/34906533919/execucao.json). A [investigação por camada](diagnostico_paridade.md) identificou e corrigiu a representação de bigramas no conversor: erro de validação de 0,009424 para 1,93 × 10⁻⁷ no candidato remoto, sem novo ajuste. O [CI final 34908437830](../reports/ci/34908437830/execucao.json) confirmou o ciclo completo corrigido, e dois runners de diagnóstico confirmaram a paridade. Os registros identificam commits e artefatos. Não há push GHCR ou infraestrutura AWS comprovados. O MP4 integra os arquivos do repositório. As evidências locais permanecem válidas dentro dos ambientes identificados.

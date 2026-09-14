@@ -1,0 +1,37 @@
+{
+  "sucesso": true,
+  "verificado_em_utc": "2026-09-14T23:31:11.970277+00:00",
+  "commit_fonte_remoto": "3a7ad7f052aa2ad246d399e4743f435bde8af221",
+  "commit_fonte_local": "fa821effafcac0aece10b705e248365793384354",
+  "arvore_fonte": "1372ea830ae67647d3a6f50c9a5cee84d5dc0f75",
+  "ci": 34908437830,
+  "diagnostico": 34908437779,
+  "testes_ci": {
+    "aprovados": 78,
+    "ignorados": 1,
+    "falhas": 0,
+    "erros": 0
+  },
+  "links_locais_conferidos": 132,
+  "fontes_video_preservadas": 8,
+  "sha256_video": "41d55f255cd0df8a2b06c6a3de0735d12e94a37e31b1cdbd62fe55c6751b1992",
+  "arquivos_zip_conferidos": [
+    {
+      "id": 10372934856,
+      "sha256": "0647741323eac08ef7028dae2ebf8d07db328b0719ebd9fbf0e111d5f3607adc"
+    },
+    {
+      "id": 10373343066,
+      "sha256": "79419639823de47f83acdd8784847e7628590745a7c55602a8264842f53d2e3e"
+    },
+    {
+      "id": 10373068811,
+      "sha256": "714decb02049158f83c0ebe8cbd67a7b121f23d3f7f5586401689cea654f85c3"
+    }
+  ],
+  "integracao_local": "reports/docker/pos_correcao/integracao_verificada.json",
+  "limites": [
+    "GHCR manual e arquitetura AWS não executados; fora do lint/test/build exigido.",
+    "Revisão suplementar Claude recebeu HTTP 429; os 14 pareceres anteriores permanecem preservados."
+  ]
+}

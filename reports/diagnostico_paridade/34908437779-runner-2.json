@@ -1,0 +1,397 @@
+{
+  "gerado_em": "2026-09-14T23:21:54.811718+00:00",
+  "ambiente": {
+    "python": "3.11.16",
+    "sistema": "Linux",
+    "arquitetura": "x86_64",
+    "processador": "",
+    "cpu": {
+      "vendor_id": "GenuineIntel",
+      "cpu family": "6",
+      "model": "173",
+      "model name": "Intel(R) Xeon(R) 6973P-C",
+      "stepping": "1",
+      "flags": "fpu vme de pse tsc msr pae mce cx8 apic sep mtrr pge mca cmov pat pse36 clflush mmx fxsr sse sse2 ss ht syscall nx pdpe1gb rdtscp lm constant_tsc rep_good nopl xtopology tsc_reliable nonstop_tsc cpuid aperfmperf tsc_known_freq pni pclmulqdq vmx ssse3 fma cx16 pcid sse4_1 sse4_2 x2apic movbe popcnt tsc_deadline_timer aes xsave avx f16c rdrand hypervisor lahf_lm abm 3dnowprefetch tpr_shadow ept vpid ept_ad fsgsbase tsc_adjust bmi1 hle avx2 smep bmi2 erms invpcid rtm avx512f avx512dq rdseed adx smap avx512ifma clflushopt clwb avx512cd sha_ni avx512bw avx512vl xsaveopt xsavec xgetbv1 xsaves user_shstk avx_vnni avx512_bf16 vnmi avx512vbmi umip waitpkg avx512_vbmi2 gfni vaes vpclmulqdq avx512_vnni avx512_bitalg avx512_vpopcntdq la57 rdpid cldemote movdiri movdir64b fsrm serialize tsxldtrk ibt amx_bf16 avx512_fp16 amx_tile amx_int8 arch_capabilities"
+    },
+    "dependencias": {
+      "numpy": "2.2.6",
+      "scipy": "1.17.1",
+      "scikit-learn": "1.7.2",
+      "onnx": "1.19.1",
+      "onnxruntime": "1.23.2",
+      "skl2onnx": "1.19.1"
+    },
+    "bibliotecas_numericas": [
+      {
+        "internal_api": "openblas",
+        "version": "0.3.29",
+        "num_threads": 1,
+        "architecture": "SkylakeX"
+      },
+      {
+        "internal_api": "openblas",
+        "version": "0.3.30",
+        "num_threads": 1,
+        "architecture": "SkylakeX"
+      },
+      {
+        "internal_api": "openmp",
+        "version": null,
+        "num_threads": 1,
+        "architecture": null
+      }
+    ]
+  },
+  "auditoria_dados": {
+    "revisao_corpus": "70a2d9106c724729be8b3c4ddb00d1b14ec300c8",
+    "semente": 42,
+    "treino_original": 11550,
+    "teste_oficial": 2888,
+    "teste_textos_unicos": 2770,
+    "teste_linhas_ambiguas": 231,
+    "teste_teto_acuracia_deterministica": 0.9591412742382271,
+    "sobreposicoes_removidas_treino": 1097,
+    "rotulos_conflitantes_removidos": 3846,
+    "duplicatas_removidas_treino": 0,
+    "treino": 5285,
+    "validacao": 1322,
+    "sha256_treino": "ad53aebc682d6b87a5647f619a079bb446d286fdc93bf0159b812418f5758609",
+    "sha256_teste": "1eecea73c9ecad292c55e10403bd139fab9580545d6878482997c5564d51ac05",
+    "distribuicao_treino": {
+      "1": 1402,
+      "2": 446,
+      "3": 659,
+      "4": 1242,
+      "5": 1536
+    },
+    "distribuicao_validacao": {
+      "1": 350,
+      "2": 112,
+      "3": 165,
+      "4": 311,
+      "5": 384
+    },
+    "distribuicao_teste": {
+      "1": 633,
+      "2": 299,
+      "3": 385,
+      "4": 610,
+      "5": 961
+    }
+  },
+  "erro_gate_treinamento": null,
+  "modelo_publicado": false,
+  "amostras": 1322,
+  "pipeline_do_projeto": {
+    "erro_maximo": 1.9207895529671504e-07,
+    "valores_nao_finitos": 0,
+    "linhas_acima_de_1e_4": 0,
+    "concordancia_argmax": 1.0,
+    "pior_linha": 437,
+    "referencia_pior_linha": [
+      0.03156569363555016,
+      0.03662979028607125,
+      0.06120637484757115,
+      0.8394388423830198,
+      0.031159298847787526
+    ],
+    "observado_pior_linha": [
+      0.03156566247344017,
+      0.036629755049943924,
+      0.06120632216334343,
+      0.8394390344619751,
+      0.031159263104200363
+    ]
+  },
+  "pipeline_conversor_padrao": {
+    "erro_maximo": 1.9207895529671504e-07,
+    "valores_nao_finitos": 0,
+    "linhas_acima_de_1e_4": 0,
+    "concordancia_argmax": 1.0,
+    "pior_linha": 437,
+    "referencia_pior_linha": [
+      0.03156569363555016,
+      0.03662979028607125,
+      0.06120637484757115,
+      0.8394388423830198,
+      0.031159298847787526
+    ],
+    "observado_pior_linha": [
+      0.03156566247344017,
+      0.036629755049943924,
+      0.06120632216334343,
+      0.8394390344619751,
+      0.031159263104200363
+    ]
+  },
+  "pipeline_sem_otimizacao": {
+    "erro_maximo": 1.9207895529671504e-07,
+    "valores_nao_finitos": 0,
+    "linhas_acima_de_1e_4": 0,
+    "concordancia_argmax": 1.0,
+    "pior_linha": 437,
+    "referencia_pior_linha": [
+      0.03156569363555016,
+      0.03662979028607125,
+      0.06120637484757115,
+      0.8394388423830198,
+      0.031159298847787526
+    ],
+    "observado_pior_linha": [
+      0.03156566247344017,
+      0.036629755049943924,
+      0.06120632216334343,
+      0.8394390344619751,
+      0.031159263104200363
+    ]
+  },
+  "pipeline_matmul_softmax": {
+    "erro_maximo": 2.630832044436815e-07,
+    "valores_nao_finitos": 0,
+    "linhas_acima_de_1e_4": 0,
+    "concordancia_argmax": 1.0,
+    "pior_linha": 1176,
+    "referencia_pior_linha": [
+      0.034140192633353855,
+      0.050464334880701865,
+      0.02778311272133303,
+      0.7207202561976759,
+      0.16689210356693537
+    ],
+    "observado_pior_linha": [
+      0.03414023295044899,
+      0.05046437680721283,
+      0.027783140540122986,
+      0.7207199931144714,
+      0.16689224541187286
+    ]
+  },
+  "pior_linha_executada_sozinha": {
+    "erro_maximo": 7.286966574593379e-08,
+    "valores_nao_finitos": 0,
+    "linhas_acima_de_1e_4": 0,
+    "concordancia_argmax": 1.0,
+    "pior_linha": 0,
+    "referencia_pior_linha": [
+      0.03156569363555016,
+      0.03662979028607125,
+      0.06120637484757115,
+      0.8394388423830198,
+      0.031159298847787526
+    ],
+    "observado_pior_linha": [
+      0.031565673649311066,
+      0.03662976995110512,
+      0.06120634451508522,
+      0.8394389152526855,
+      0.031159264966845512
+    ]
+  },
+  "lote_investigado": {
+    "inicio_inclusivo": 384,
+    "fim_exclusivo": 448,
+    "criterio": "Lote da pior linha do conversor padrão da biblioteca."
+  },
+  "tfidf": {
+    "erro_maximo_lote": 1.1920928955078125e-07,
+    "erro_maximo_pior_linha": 8.940696716308594e-08,
+    "features_divergentes_pior_linha": 0,
+    "dez_maiores_diferencas": [
+      {
+        "indice": 3283,
+        "termo": "channel",
+        "referencia": 0.2559613883495331,
+        "onnx": 0.25596147775650024,
+        "diferenca": 8.940696716308594e-08
+      },
+      {
+        "indice": 16751,
+        "termo": "the elderly",
+        "referencia": 0.18182598054409027,
+        "onnx": 0.18182604014873505,
+        "diferenca": 5.960464477539063e-08
+      },
+      {
+        "indice": 2515,
+        "termo": "blockers",
+        "referencia": 0.24963900446891785,
+        "onnx": 0.24963906407356262,
+        "diferenca": 5.960464477539063e-08
+      },
+      {
+        "indice": 3285,
+        "termo": "channel blockers",
+        "referencia": 0.2906505763530731,
+        "onnx": 0.2906506359577179,
+        "diferenca": 5.960464477539063e-08
+      },
+      {
+        "indice": 2834,
+        "termo": "calcium channel",
+        "referencia": 0.2676178514957428,
+        "onnx": 0.2676179111003876,
+        "diferenca": 5.960464477539063e-08
+      },
+      {
+        "indice": 5437,
+        "termo": "elderly",
+        "referencia": 0.2138044536113739,
+        "onnx": 0.21380451321601868,
+        "diferenca": 5.960464477539063e-08
+      },
+      {
+        "indice": 17516,
+        "termo": "they",
+        "referencia": 0.15327861905097961,
+        "onnx": 0.1532786637544632,
+        "diferenca": 4.470348358154297e-08
+      },
+      {
+        "indice": 2830,
+        "termo": "calcium",
+        "referencia": 0.19850805401802063,
+        "onnx": 0.1985080987215042,
+        "diferenca": 4.470348358154297e-08
+      },
+      {
+        "indice": 7720,
+        "termo": "hypertension is",
+        "referencia": 0.1345655918121338,
+        "onnx": 0.13456562161445618,
+        "diferenca": 2.9802322387695312e-08
+      },
+      {
+        "indice": 1522,
+        "termo": "antihypertensive",
+        "referencia": 0.11543277651071548,
+        "onnx": 0.11543280631303787,
+        "diferenca": 2.9802322387695312e-08
+      }
+    ]
+  },
+  "classificador_isolado_com_tfidf_sklearn": {
+    "linear_probabilidades": {
+      "erro_maximo": 1.2068115329277873e-07,
+      "valores_nao_finitos": 0,
+      "linhas_acima_de_1e_4": 0,
+      "concordancia_argmax": 1.0,
+      "pior_linha": 7,
+      "referencia_pior_linha": [
+        0.6452555479649129,
+        0.3269797846857443,
+        0.012274560360056396,
+        0.004422218759639727,
+        0.011067888229646779
+      ],
+      "observado_pior_linha": [
+        0.6452555060386658,
+        0.3269799053668976,
+        0.01227455772459507,
+        0.004422217607498169,
+        0.011067887768149376
+      ]
+    },
+    "linear_logits": {
+      "erro_maximo": 1.4809064330378874e-06,
+      "valores_nao_finitos": 0,
+      "linhas_acima_de_1e_4": 0,
+      "concordancia_argmax": 1.0,
+      "pior_linha": 1,
+      "referencia_pior_linha": [
+        6.210337111622864,
+        0.27231398028495823,
+        -2.271069882773836,
+        -2.5431506369890924,
+        -1.668430572144754
+      ],
+      "observado_pior_linha": [
+        6.210338592529297,
+        0.2723141610622406,
+        -2.2710697650909424,
+        -2.5431504249572754,
+        -1.6684308052062988
+      ]
+    },
+    "matmul_probabilidades": {
+      "erro_maximo": 1.422659011707239e-07,
+      "valores_nao_finitos": 0,
+      "linhas_acima_de_1e_4": 0,
+      "concordancia_argmax": 1.0,
+      "pior_linha": 62,
+      "referencia_pior_linha": [
+        0.9887957803503128,
+        0.0020430622982864073,
+        0.0019039489292967243,
+        0.0028103612691322243,
+        0.004446847152971879
+      ],
+      "observado_pior_linha": [
+        0.9887956380844116,
+        0.002043061424046755,
+        0.0019039486069232225,
+        0.00281036039814353,
+        0.004446843639016151
+      ]
+    },
+    "matmul_logits": {
+      "erro_maximo": 1.0552054119372656e-06,
+      "valores_nao_finitos": 0,
+      "linhas_acima_de_1e_4": 0,
+      "concordancia_argmax": 1.0,
+      "pior_linha": 3,
+      "referencia_pior_linha": [
+        -1.5344351044665652,
+        -1.2575671994715656,
+        -1.1439358126778372,
+        4.440651995146818,
+        -0.5047138785306563
+      ],
+      "observado_pior_linha": [
+        -1.534435510635376,
+        -1.257567286491394,
+        -1.1439355611801147,
+        4.440650939941406,
+        -0.5047138929367065
+      ]
+    }
+  },
+  "classificador_sklearn_com_tfidf_onnx": {
+    "erro_maximo": 1.0740686684496126e-07,
+    "valores_nao_finitos": 0,
+    "linhas_acima_de_1e_4": 0,
+    "concordancia_argmax": 1.0,
+    "pior_linha": 63,
+    "referencia_pior_linha": [
+      0.03789442671139092,
+      0.02737554702594901,
+      0.01652421599205376,
+      0.6900015158556501,
+      0.22820429441495627
+    ],
+    "observado_pior_linha": [
+      0.03789444566722109,
+      0.027375560023543088,
+      0.01652422690595217,
+      0.6900014084487832,
+      0.2282043589545004
+    ]
+  },
+  "artefatos_sha256": {
+    "metadata.json": "ba10cf243725bdab0101904019f5bfe0f37cc56614a63739db2ab1609dbceaed",
+    "matmul_logits.onnx": "6e1d6029af0e594d8a84a24e53175738ebf15e9db009ede909307910f95b26b3",
+    "model.onnx": "6500f8183c10d46bfeab5e0fd5996118ad3e8fdfd95fc721596ea18204af57aa",
+    "tfidf.onnx": "730ed0a030c0727961cc1a7587f861d9be8fd0fd05efa5607cf263f88c7657ea",
+    "linear_logits.onnx": "f50c3503e16345fb99e4bd64142fcce4a99eb86b7c72e5678bc6798d3d8b27a9",
+    "matmul_probabilidades.onnx": "cad2041619d9cb812f1d0ca25ff00e2fb368af867e3f49dbd0ef0ee40fbd14b9",
+    "pipeline_matmul.onnx": "2d91d95fbd526d2161a03897999853b16daf8d8269efb4a4e43da50a407c7c0a",
+    "linear_probabilidades.onnx": "272313f8ea486c7cecf209d37b9b6174fcd1c415f9a0a7aac06fc3b489cdd493",
+    "baseline.joblib": "8544079711efc41d836c49d200d0cc077422859ddccf1b175ded6abc00fc54f2",
+    "conversor_padrao.onnx": "b4cec83b1113fadaf740ca4418db22bc4123c8ec1935abed4b75b7210f8fde92"
+  },
+  "limites": [
+    "Os índices das comparações isoladas são relativos ao lote investigado.",
+    "As alternativas são diagnósticos; nenhuma delas substitui o modelo publicado.",
+    "TF-IDF isolado e alternativas MatMul usam o conversor padrão como controle.",
+    "Desabilitar otimizações do grafo não desabilita o despacho SIMD dos kernels."
+  ]
+}

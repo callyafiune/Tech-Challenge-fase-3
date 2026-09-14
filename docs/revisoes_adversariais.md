@@ -84,4 +84,6 @@ A terceira B5 identificou dois defeitos médios, ambos corrigidos: o gerador ago
 
 O verificador ampliado passou em **26 casos**, incluindo preservação de intermediários, e o MP4 foi renderizado novamente. A [rejeição de versão](../reports/video/rejeicao_versao.json) e a [inspeção dos quadros](../reports/video/inspecao_visual.json) registram as verificações posteriores ao terceiro parecer. O CI remoto 34905435615 concluiu com sucesso; esse resultado foi incorporado depois do snapshot da revisão.
 
+A correção posterior do exportador também passou no [CI 34908437830](../reports/ci/34908437830/execucao.json), com 78 testes aprovados e execução completa da DAG/stack. Dois runners confirmaram a paridade e a [integração local atualizada](../reports/docker/pos_correcao/integracao_verificada.json) publicou uma nova versão, mantendo os quatro serviços saudáveis. Esses resultados complementam a verificação técnica; a tentativa suplementar Claude para essa correção continuou limitada por HTTP 429, conforme registrado acima.
+
 Este documento não declara aprovação automática dos blocos. A [matriz](matriz_rastreabilidade.md) separa implementação, execução e trabalho restante. Cada parecer permanece vinculado ao seu snapshot; as correções e verificações posteriores são explicitamente identificadas.

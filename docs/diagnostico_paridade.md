@@ -18,6 +18,12 @@ A [regressão automatizada](../tests/test_model.py) contém um bigrama cujo comp
 
 O [candidato remoto foi reconvertido](../reports/diagnostico_paridade/correcao_paridade_verificada.json) sem novo ajuste. Na validação inteira, o erro caiu de 0,009424 para 1,93 × 10⁻⁷; no teste oficial, de 0,033730 para 3,13 × 10⁻⁷. As classes coincidiram em 100% das amostras. A avaliação do teste conferiu a equivalência da conversão e não selecionou hiperparâmetros. As duas expressões afetadas eram `gadopentetate dimeglumine` e `ehlers danlos`; seus componentes `dimeglumine` e `danlos` ficaram fora do vocabulário individual.
 
+## Confirmação remota da correção
+
+O [CI 34908437830](../reports/ci/34908437830/execucao.json) terminou com sucesso no commit `3a7ad7f`: 78 testes aprovados, DAG completa, publicação do modelo, stack verificada e imagem preservada. A versão `20260914T232314-d0a18808` obteve aceleração p50 de 3,11× no runner; os critérios originais foram mantidos.
+
+O [diagnóstico 34908437779](../reports/diagnostico_paridade/34908437779/execucao.json) também terminou em dois runners independentes. No [runner 1](../reports/diagnostico_paridade/34908437779-runner-1.json), o controle com a biblioteca voltou a apresentar erro de 0,009424, enquanto a exportação corrigida apresentou 1,93 × 10⁻⁷. No [runner 2](../reports/diagnostico_paridade/34908437779-runner-2.json), ambos apresentaram 1,92 × 10⁻⁷. Os dois candidatos corrigidos tiveram concordância de classes de 100% e nenhuma amostra acima do limite de `1e-4`. O controle do segundo runner confirma que a falha depende do vocabulário selecionado no ambiente; não é necessário que todo treino a reproduza.
+
 ## Reproduzir o diagnóstico
 
 ```powershell

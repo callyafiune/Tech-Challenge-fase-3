@@ -90,6 +90,8 @@ Depois do retreino real no Airflow, a versão Docker `20260914T221243-003d412d` 
 
 A [verificação da stack](reports/smoke_stack.json) usa essa versão `20260914T221243-003d412d` e confirmou a API, coleta Prometheus, seis painéis Grafana e oito consultas.
 
+Após a correção do exportador ONNX, a [nova integração local](reports/docker/pos_correcao/integracao_verificada.json) publicou **`20260914T232434-92cce529`**, atualmente carregada na API Docker. As quatro tarefas Airflow terminaram em 30,02 segundos; API, Prometheus, Grafana e Airflow ficaram saudáveis. O [novo smoke](reports/docker/pos_correcao/smoke_stack.json) confirmou seis painéis e oito consultas. No [benchmark em processo dessa versão](reports/docker/pos_correcao/latencia_modelo.json), o p50 foi **1,317915 → 0,346612 ms**, ou **3,80×**. Os resultados anteriores e o vídeo preservam suas versões e ambientes de medição.
+
 ## Executar a API
 
 Após treinar localmente:
@@ -252,7 +254,7 @@ A retenção é manual: preserve a versão apontada por `current.json`, a versã
 
 O [workflow de CI](.github/workflows/ci.yml) é acionado por push, pull request ou execução manual. Instala as dependências fixadas, executa lint e testes, valida Compose, constrói a aplicação e o Airflow, importa e executa a DAG, inicia os serviços e verifica a stack. Logs e relatórios são preservados como artefatos da execução.
 
-O [CI remoto 34905435615](https://github.com/callyafiune/Tech-Challenge-fase-3/actions/runs/34905435615) concluiu com **sucesso**, incluindo testes, construção das duas imagens, quatro tarefas Airflow, stack e imagem validada. O [registro da execução](reports/ci/34905435615/execucao.json) identifica o commit `9bee7b6`, os passos e os artefatos. Os relatórios remotos estão separados em `reports/ci/34905435615/`; as medições do vídeo continuam sendo as execuções locais identificadas.
+O [CI remoto 34908437830](https://github.com/callyafiune/Tech-Challenge-fase-3/actions/runs/34908437830) concluiu com **sucesso** no commit `3a7ad7f`, já com a correção da exportação ONNX: 78 testes aprovados, construção das duas imagens, quatro tarefas Airflow, stack e imagem validada. O [registro da execução](reports/ci/34908437830/execucao.json) identifica os passos e artefatos. No runner, a versão `20260914T232314-d0a18808` apresentou p50 de **0,744446 → 0,239354 ms**, ou **3,11×**, no [benchmark em processo](reports/ci/34908437830/20260914T000000-latencia_modelo.json). Os relatórios remotos estão separados por execução; as medições do vídeo continuam sendo as execuções locais identificadas.
 
 O [workflow de entrega](.github/workflows/entrega.yml) publica manualmente no GHCR a partir de `main`, depois do CI. Ele baixa a imagem construída e verificada pelo CI, confere SHA-256 e ID, carrega o arquivo e publica **sem reconstrução**, com tag do commit e `latest`. **A publicação GHCR ainda não foi comprovada**. A proposta AWS/ECR também não foi provisionada.
 
