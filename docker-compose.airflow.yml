@@ -1,0 +1,53 @@
+name: medical-classifier-airflow
+
+services:
+  airflow:
+    build:
+      context: .
+      dockerfile: Dockerfile.airflow
+    image: medical-classifier-airflow:local
+    user: "10001:0"
+    init: true
+    command: ["airflow", "standalone"]
+    environment:
+      AIRFLOW_HOME: /opt/airflow/estado
+      AIRFLOW__CORE__DAGS_FOLDER: /opt/airflow/dags
+      AIRFLOW__CORE__EXECUTOR: SequentialExecutor
+      AIRFLOW__CORE__LOAD_EXAMPLES: "false"
+      AIRFLOW__CORE__DAGS_ARE_PAUSED_AT_CREATION: "true"
+      AIRFLOW__DATABASE__SQL_ALCHEMY_CONN: sqlite:////opt/airflow/estado/airflow.db
+      AIRFLOW__LOGGING__BASE_LOG_FOLDER: /opt/airflow/estado/logs
+      AIRFLOW__WEBSERVER__EXPOSE_CONFIG: "false"
+      MEDICAL_DATA_DIR: /app/data
+      MODEL_DIR: /app/models
+    ports:
+      - "127.0.0.1:${AIRFLOW_PORT:-8080}:8080"
+    volumes:
+      - dados:/app/data
+      - modelos:/app/models
+      - airflow-estado:/opt/airflow/estado
+    security_opt:
+      - no-new-privileges:true
+    cap_drop:
+      - ALL
+    healthcheck:
+      test:
+        - CMD
+        - python
+        - -c
+        - "import urllib.request; urllib.request.urlopen('http://127.0.0.1:8080/health', timeout=5).close()"
+      interval: 15s
+      timeout: 10s
+      start_period: 60s
+      retries: 10
+    restart: unless-stopped
+
+volumes:
+  # Crie a stack principal antes; a remoção do Airflow nunca apaga estes volumes.
+  dados:
+    name: medical-classifier_dados
+    external: true
+  modelos:
+    name: medical-classifier_modelos
+    external: true
+  airflow-estado:

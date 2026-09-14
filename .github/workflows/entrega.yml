@@ -1,0 +1,65 @@
+name: Publicação manual da imagem
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  qualidade:
+    name: Validar a mesma revisão antes da publicação
+    if: github.ref == 'refs/heads/main'
+    uses: ./.github/workflows/ci.yml
+
+  publicar:
+    name: Publicar a imagem validada no GHCR
+    needs: qualidade
+    if: github.ref == 'refs/heads/main'
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    permissions:
+      contents: read
+      packages: write
+    steps:
+      - name: Exigir o identificador do artefato validado
+        shell: bash
+        env:
+          ARTEFATO_ID: ${{ needs.qualidade.outputs.imagem_artefato_id }}
+        run: |
+          if [[ ! "$ARTEFATO_ID" =~ ^[0-9]+$ ]]; then
+            echo "O CI não informou um identificador de artefato válido." >&2
+            exit 1
+          fi
+      - name: Baixar a imagem produzida e verificada pelo CI desta execução
+        uses: actions/download-artifact@v4
+        with:
+          artifact-ids: ${{ needs.qualidade.outputs.imagem_artefato_id }}
+          path: imagem
+          merge-multiple: true
+      - name: Definir o nome da imagem em minúsculas
+        id: imagem
+        shell: bash
+        run: echo "nome=ghcr.io/${GITHUB_REPOSITORY,,}" >> "$GITHUB_OUTPUT"
+      - name: Autenticar com o token temporário do GitHub
+        uses: docker/login-action@v3
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+      - name: Conferir integridade e carregar a mesma imagem validada
+        shell: bash
+        run: |
+          sha256sum -c imagem/classificador.tar.gz.sha256
+          docker load --input imagem/classificador.tar.gz
+          test "$(docker image inspect medical-classifier:local --format '{{.Id}}')" = "$(cat imagem/id.txt)"
+      - name: Publicar a imagem sem reconstrução
+        shell: bash
+        env:
+          IMAGEM: ${{ steps.imagem.outputs.nome }}
+          REVISAO: ${{ github.sha }}
+        run: |
+          docker tag medical-classifier:local "$IMAGEM:$REVISAO"
+          docker tag medical-classifier:local "$IMAGEM:latest"
+          docker push "$IMAGEM:$REVISAO"
+          docker push "$IMAGEM:latest"

@@ -1,0 +1,42 @@
+# Reutiliza as camadas da aplicação; construa medical-classifier:local primeiro.
+FROM medical-classifier:local
+
+USER root
+ENV PATH="/opt/airflow-venv/bin:$PATH" \
+    AIRFLOW_HOME=/opt/airflow/estado \
+    AIRFLOW__CORE__DAGS_FOLDER=/opt/airflow/dags \
+    AIRFLOW__CORE__LOAD_EXAMPLES=false \
+    MEDICAL_DATA_DIR=/app/data \
+    MODEL_DIR=/app/models \
+    OMP_NUM_THREADS=1 \
+    OPENBLAS_NUM_THREADS=1 \
+    MKL_NUM_THREADS=1 \
+    PYTHONDONTWRITEBYTECODE=1 \
+    PIP_NO_CACHE_DIR=1 \
+    PIP_DISABLE_PIP_VERSION_CHECK=1
+
+# Constraints oficiais da versão 2.11.0, presas ao commit e verificadas por SHA-256.
+ADD --checksum=sha256:b32ab3fa687c0e04b2260526fee79813bfb7944da5b6805e429c9f71b07c53f3 \
+    https://raw.githubusercontent.com/apache/airflow/338bcef28071e8b833876554c502079adb3739d0/constraints-3.11.txt \
+    /opt/airflow-constraints-3.11.txt
+RUN /usr/local/bin/python -m venv /opt/airflow-venv \
+    && /opt/airflow-venv/bin/python -m pip install --no-cache-dir --no-compile \
+        "apache-airflow==2.11.0" --constraint /opt/airflow-constraints-3.11.txt \
+    && /opt/airflow-venv/bin/python -m pip check \
+    && ln -s /opt/venv /opt/model-venv \
+    && mkdir -p /opt/airflow/dags /opt/airflow/estado \
+    && chown -R 10001:0 /opt/airflow \
+    && chmod -R g+rwX /opt/airflow
+
+# O link preserva os scripts do modelo sem duplicar suas dependências.
+COPY --chown=10001:0 dags /opt/airflow/dags
+
+WORKDIR /opt/airflow
+USER 10001:0
+RUN ["/opt/model-venv/bin/python", "-c", "import medical_classifier.airflow_tasks, onnxruntime"]
+RUN ["/opt/airflow-venv/bin/python", "-c", "import airflow; from airflow.operators.bash import BashOperator"]
+
+# A sonda HTTP específica é definida no Compose do Airflow.
+HEALTHCHECK NONE
+EXPOSE 8080
+CMD ["airflow", "standalone"]
