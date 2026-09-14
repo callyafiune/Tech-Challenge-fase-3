@@ -1,0 +1,26 @@
+{
+  "orfao_remoto": {
+    "ehlers danlos": {
+      "frequencia": 9,
+      "ausentes": [
+        "danlos"
+      ]
+    },
+    "gadopentetate dimeglumine": {
+      "frequencia": 9,
+      "ausentes": [
+        "dimeglumine"
+      ]
+    }
+  },
+  "somente_vocabulario_remoto": 265,
+  "somente_vocabulario_local": 265,
+  "validacao": {
+    "erro_maximo": 1.9309227050623434e-07,
+    "concordancia": 1.0
+  },
+  "teste": {
+    "erro_maximo": 3.1349054652185515e-07,
+    "concordancia": 1.0
+  }
+}

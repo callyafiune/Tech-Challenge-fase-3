@@ -129,7 +129,11 @@ def diagnosticar(dados: Path, saida: Path) -> dict:
     padrao = executar(grafo, entradas)[1]
     sem_otimizacao = executar(grafo, entradas, otimizar=False)[1]
     resumo = resumir(referencia, padrao)
-    pior = resumo["pior_linha"]
+    # Mantém a heurística da biblioteca como controle, mesmo após a correção do projeto.
+    grafo_biblioteca = converter(modelo, textual=True)
+    onnx.save(grafo_biblioteca, candidato / "conversor_padrao.onnx")
+    resumo_biblioteca = resumir(referencia, executar(grafo_biblioteca, entradas)[1])
+    pior = resumo_biblioteca["pior_linha"]
     inicio_lote = (pior // 64) * 64
     fim_lote = min(inicio_lote + 64, len(textos))
     posicao = pior - inicio_lote
@@ -175,13 +179,18 @@ def diagnosticar(dados: Path, saida: Path) -> dict:
         "erro_gate_treinamento": erro_treino,
         "modelo_publicado": False,
         "amostras": len(textos),
-        "pipeline_original": resumo,
+        "pipeline_do_projeto": resumo,
+        "pipeline_conversor_padrao": resumo_biblioteca,
         "pipeline_sem_otimizacao": resumir(referencia, sem_otimizacao),
         "pipeline_matmul_softmax": resumir(referencia, executar(alternativo, entradas)[1]),
         "pior_linha_executada_sozinha": resumir(
             referencia[pior : pior + 1], executar(grafo, entradas[pior : pior + 1])[1]
         ),
-        "lote_investigado": {"inicio_inclusivo": inicio_lote, "fim_exclusivo": fim_lote},
+        "lote_investigado": {
+            "inicio_inclusivo": inicio_lote,
+            "fim_exclusivo": fim_lote,
+            "criterio": "Lote da pior linha do conversor padrão da biblioteca.",
+        },
         "tfidf": {
             "erro_maximo_lote": float(np.abs(vetores - vetores_onnx).max()),
             "erro_maximo_pior_linha": float(erro_vetores.max()),
@@ -205,6 +214,7 @@ def diagnosticar(dados: Path, saida: Path) -> dict:
         "limites": [
             "Os índices das comparações isoladas são relativos ao lote investigado.",
             "As alternativas são diagnósticos; nenhuma delas substitui o modelo publicado.",
+            "TF-IDF isolado e alternativas MatMul usam o conversor padrão como controle.",
             "Desabilitar otimizações do grafo não desabilita o despacho SIMD dos kernels.",
         ],
     }
@@ -238,7 +248,8 @@ def main() -> None:
             {
                 "relatorio": str(argumentos.saida / "diagnostico.json"),
                 "erro_gate": resultado["erro_gate_treinamento"],
-                "pipeline_original": resultado["pipeline_original"],
+                "pipeline_do_projeto": resultado["pipeline_do_projeto"],
+                "pipeline_conversor_padrao": resultado["pipeline_conversor_padrao"],
             },
             ensure_ascii=False,
         )

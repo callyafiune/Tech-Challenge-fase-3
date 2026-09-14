@@ -50,7 +50,7 @@
       "erro_maximo": 1.9210818480441816e-07,
       "concordancia": 1.0,
       "indice_pior_linha": 437,
-      "limite_do_ensaio": "As variáveis restringem NumPy e OpenBLAS; não emulam outra CPU nem restringem o despacho SIMD do ONNX Runtime."
+      "limite_do_ensaio": "Somente OpenBLAS foi restringido. A variável NP_DISABLE_CPU_FEATURES está incorreta e foi ignorada pelo NumPy; o nome válido é NPY_DISABLE_CPU_FEATURES. Este ensaio não demonstra desativação do SIMD do NumPy e tampouco restringe o despacho do ONNX Runtime."
     }
   ],
   "margem_minima_baseline": {
@@ -84,7 +84,7 @@
     "concordancia": 1.0,
     "fonte": "reports/ci/34906533919/execucao.json"
   },
-  "conclusao": "A divergência voltou a ocorrer no CI 34906533919, nas duas tentativas. Os ensaios locais de hashseed, sistema operacional e despacho NumPy/OpenBLAS não a explicam. Um diagnóstico por camada foi acrescentado para capturar a transformação divergente no runner. Os critérios permanecem preservados.",
+  "conclusao": "A investigação posterior reproduziu a falha no CI e localmente com NPY_DISABLE_CPU_FEATURES correto. O corte do vocabulário expôs dois bigramas sem um componente unigram; o conversor os tratou como tokens únicos. A exportação por tuplas explícitas corrigiu o candidato sem refit. Ver reports/diagnostico_paridade/correcao_paridade_verificada.json e validacao_mesmo_ambiente.json. Os critérios permanecem preservados.",
   "procedimento": "Carregar baseline.joblib e validacao.csv, reconverter com convert_sklearn, entrada StringTensorType([None, 1]), zipmap=False, opset 17; executar ORT CPU com intra_op_num_threads=1 em lotes de 64 e comparar com predict_proba. Para reajuste, executar fit no treino.csv sob threadpool_limits(1) antes de reconverter. Variar somente as condições registradas em cada ensaio.",
   "script_temporario_nao_versionado": ".local/diagnostico_onnx.py"
 }

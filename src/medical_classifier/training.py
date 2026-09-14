@@ -4,6 +4,7 @@ import json
 import os
 import platform
 import uuid
+from copy import deepcopy
 from datetime import UTC, datetime
 from pathlib import Path
 from tempfile import TemporaryDirectory
@@ -48,6 +49,24 @@ def evaluate(labels, probabilities: np.ndarray) -> dict:
             zero_division=0,
         ),
     }
+
+
+def export_onnx(model: Pipeline) -> onnx.ModelProto:
+    """Exporta n-gramas explícitos sem modificar o pipeline ajustado."""
+    exportable = deepcopy(model)
+    vectorizer = exportable.named_steps["tfidf"]
+    # O padrão fixo [a-zA-Z]{2,} impede espaços dentro de cada token.
+    # Tuplas evitam que o conversor 1.19 confunda um bigrama com um token
+    # quando max_features remove um dos unigramas que o compõem.
+    vectorizer.vocabulary_ = {
+        tuple(term.split(" ")): index for term, index in vectorizer.vocabulary_.items()
+    }
+    return convert_sklearn(
+        exportable,
+        initial_types=[("texto", StringTensorType([None, 1]))],
+        options={id(exportable.named_steps["classifier"]): {"zipmap": False}},
+        target_opset=17,
+    )
 
 
 def fit_release(
@@ -102,12 +121,7 @@ def _fit_bundle(train, validation, release: Path, audit: dict, min_macro_f1: flo
     if metrics["f1_macro"] < min_macro_f1:
         raise ValueError("Modelo reprovado no piso de F1 macro da validação.")
     joblib.dump(model, release / "baseline.joblib")
-    converted = convert_sklearn(
-        model,
-        initial_types=[("texto", StringTensorType([None, 1]))],
-        options={id(model.named_steps["classifier"]): {"zipmap": False}},
-        target_opset=17,
-    )
+    converted = export_onnx(model)
     (release / "model.onnx").write_bytes(converted.SerializeToString())
     options = ort.SessionOptions()
     options.intra_op_num_threads = 1

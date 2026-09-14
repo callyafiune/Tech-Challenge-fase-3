@@ -15,7 +15,7 @@ O objetivo autorizado é classificar cinco condições médicas do Medical Abstr
 | R07 | Validação e prontidão | B2 | Limites de entrada, testes API e prontidão 1 → 0 → 1 em parada/reinício | Verificado |
 | R08 | Dockerfile funcional | B3 | [Imagem, treino sem rede, usuário e permissões](../reports/docker/execucao_stack.json) | Verificado |
 | R09 | Baseline de latência HTTP | B3 | [Host](../reports/latencia_http_local.json): 1,45×; [Docker](../reports/docker/latencia_http.json): 1,33× no p50 | Verificado nos dois ambientes |
-| R10 | CI/CD por push | B4 | [Execução CI remota concluída](../reports/ci/34905435615/execucao.json) e [falha posterior reproduzida](../reports/ci/34906533919/execucao.json) | Diagnóstico de paridade em andamento; publicação GHCR não comprovada |
+| R10 | CI/CD por push | B4 | [CI completo](../reports/ci/34905435615/execucao.json), falha posterior e [correção verificada](diagnostico_paridade.md) | CI executado e correção local verificada; publicação GHCR não comprovada |
 | R11 | Pelo menos duas automações | B4 | Lint, testes, builds, DAG e stack concluídos no CI 34905435615 | Verificado no ambiente local e no GitHub Actions |
 | R12 | DAG ingestão → treino → salvamento | B4 | [Quatro tarefas concluídas](../reports/airflow_execucao.json), publicação real e standalone consultado | Verificado |
 | R13 | Instrumentação Prometheus | B2 | Contadores, histograma, prontidão e consultas reais | Verificado |
@@ -57,7 +57,7 @@ Uma tentativa histórica de construção Airflow foi interrompida por espaço, c
 
 ## Testes e revisões
 
-A suíte consolidada em [testes.xml](../reports/testes.xml) registra **76 casos aprovados, um ignorado, zero falhas e zero erros**. O caso ignorado exige o ambiente Airflow real; a DAG foi executada separadamente no container. Esse resultado não comprova execução remota de CI.
+A suíte consolidada em [testes.xml](../reports/testes.xml) registra **78 casos aprovados, um ignorado, zero falhas e zero erros**. O caso ignorado exige o ambiente Airflow real; a DAG foi executada separadamente no container. Esse resultado não comprova execução remota de CI.
 
 Os pareceres mais recentes estão em [reports/reviews](../reports/reviews/), com rodadas anteriores nos subdiretórios numerados. Os manifestos preservam a solicitação `fable`, o uso de `claude-fable-5-1` e o modelo auxiliar reportado pela CLI. Parecer concluído não equivale a aprovação. O [tratamento dos achados](revisoes_adversariais.md) registra a contagem de rodadas, correções e decisões justificadas.
 
@@ -72,4 +72,4 @@ Os pareceres mais recentes estão em [reports/reviews](../reports/reviews/), com
 | Documentação | 15% | README, arquitetura, modelo, plano, matriz e três revisões B5 | Histórico semântico consolidado |
 | Vídeo STAR | 15% | Roteiro e MP4 final de 3min40s, sete cartões inspecionados e narração sintética | MP4 publicado no próprio repositório |
 
-A execução remota inicial [34904519738](https://github.com/callyafiune/Tech-Challenge-fase-3/actions/runs/34904519738) falhou no gate de paridade ONNX durante o treino da DAG. O [CI posterior 34905435615](https://github.com/callyafiune/Tech-Challenge-fase-3/actions/runs/34905435615) concluiu com sucesso, com instrumentação de erro e os mesmos critérios preservados. A falha voltou no [CI 34906533919](../reports/ci/34906533919/execucao.json), com diferença de probabilidade de 0,009424 e concordância de classe de 100%; a investigação por camada está em andamento. Os registros remotos identificam commits e artefatos. Não há push GHCR ou infraestrutura AWS comprovados. O MP4 integra os arquivos do repositório. As evidências locais permanecem válidas dentro dos ambientes identificados.
+A execução remota inicial [34904519738](https://github.com/callyafiune/Tech-Challenge-fase-3/actions/runs/34904519738) falhou no gate de paridade ONNX durante o treino da DAG. O [CI posterior 34905435615](https://github.com/callyafiune/Tech-Challenge-fase-3/actions/runs/34905435615) concluiu com sucesso, com instrumentação de erro e os mesmos critérios preservados. A falha voltou no [CI 34906533919](../reports/ci/34906533919/execucao.json). A [investigação por camada](diagnostico_paridade.md) identificou e corrigiu a representação de bigramas no conversor: erro de validação de 0,009424 para 1,93 × 10⁻⁷ no candidato remoto, sem novo ajuste. Os registros identificam commits e artefatos. Não há push GHCR ou infraestrutura AWS comprovados. O MP4 integra os arquivos do repositório. As evidências locais permanecem válidas dentro dos ambientes identificados.

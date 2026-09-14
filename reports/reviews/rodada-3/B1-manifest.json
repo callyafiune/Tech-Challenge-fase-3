@@ -1,0 +1,54 @@
+{
+  "bloco": "B1",
+  "modelo_solicitado": "fable",
+  "inicio_utc": "2026-09-14T22:47:32.747377+00:00",
+  "arquivos": [
+    {
+      "caminho": "src/medical_classifier/training.py",
+      "sha256": "507dceccc605bc90d6f247eb2a24ac2b9f966945af293defb23515348f853ff1",
+      "bytes": 8269
+    },
+    {
+      "caminho": "tests/test_model.py",
+      "sha256": "a9be02dfcce6603d43502c490b364d7b6b1becc09d31f4a3b136dc67bc12692c",
+      "bytes": 4273
+    },
+    {
+      "caminho": "src/medical_classifier/serving.py",
+      "sha256": "f1c4256d366e95b87473175fcc6bdab20c6e706816574702983324904aa5d0e4",
+      "bytes": 2853
+    },
+    {
+      "caminho": "reports/diagnostico_onnx.json",
+      "sha256": "70e9dd628ad8c10c56a447c3e6e7c9f885690ebf0ad34b48df2833ad1507eac0",
+      "bytes": 4193
+    }
+  ],
+  "prompt_sha256": "10fa2c774d41579687aa349c2850b74eb31ff93011957e0fa92c59919ff03d76",
+  "contexto": "Terceira rodada B1, focada exclusivamente na alteração da mensagem de erro do gate de paridade e na resposta científica à falha intermitente. O commit 9bee7b6 acrescentou erro máximo, concordância, quantidade de valores não finitos e tamanho da validação; preservou modelo, dados, algoritmos e critérios erro máximo<=1e-4, concordância=1 e valores finitos. Primeiro CI Ubuntu falhou duas vezes sem valores diagnósticos; novo CI com a mensagem detalhada passou as quatro etapas da DAG e o smoke sem outra mudança no código. Ensaios locais controlados estão no relatório: três hashseeds no Windows, Linux Docker e reajuste limitando SIMD de NumPy/OpenBLAS mantiveram erro de cerca de1,92e-7 e concordância1. Não atribuímos causa a hardware, não alegamos correção causal e não enfraquecemos o gate. Revise riscos concretos da instrumentação e alegações desse diagnóstico; não reabra escopo B1 já revisado em duas rodadas salvo regressão diretamente causada pela mudança. Não transforme falta de reprodução em confirmação de causa. Limite600palavras.",
+  "timeout_segundos": 600,
+  "aprovacao_automatica": false,
+  "fim_utc": "2026-09-14T22:47:36.592910+00:00",
+  "comando": [
+    "C:\\Users\\Cally\\.vscode\\extensions\\anthropic.claude-code-2.1.270-win32-x64\\resources\\native-binary\\claude.exe",
+    "-p",
+    "--model",
+    "fable",
+    "--effort",
+    "medium",
+    "--safe-mode",
+    "--strict-mcp-config",
+    "--permission-mode",
+    "dontAsk",
+    "--tools",
+    "",
+    "--output-format",
+    "json",
+    "--no-session-persistence"
+  ],
+  "modelos_reportados": [],
+  "exit_code": 1,
+  "codigo_saida_script": 1,
+  "stderr": "",
+  "erro": "A CLI reportou is_error=true; a revisão não foi concluída."
+}

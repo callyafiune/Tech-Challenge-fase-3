@@ -1,0 +1,36 @@
+{
+  "verificado_em": "2026-09-14T23:13:08.614882+00:00",
+  "baseline_sha256": "18a7c6799a4aa4c661c7ab534636146a10b77e5c924febd83e9ca75a303effa3",
+  "modelo_sklearn_preservado": true,
+  "reajuste_executado": false,
+  "origem": "Candidato do diagnóstico remoto1, AMD EPYC7763",
+  "conversao": "medical_classifier.training.export_onnx",
+  "regressao_sintetica": {
+    "erro_antes": 0.15127276,
+    "verificacao_depois": "9 testes de tests/test_model.py passaram; inclui o cenário e preservação integral do baseline."
+  },
+  "validacao": {
+    "antes": {
+      "erro_maximo": 0.009424056206913889,
+      "concordancia": 1.0,
+      "linhas_divergentes": 2
+    },
+    "depois": {
+      "erro_maximo": 1.9309227050623434e-07,
+      "concordancia": 1.0,
+      "linhas_divergentes": 0
+    }
+  },
+  "teste": {
+    "antes": {
+      "erro_maximo": 0.033729572298424715,
+      "concordancia": 1.0,
+      "linhas_divergentes": 4
+    },
+    "depois": {
+      "erro_maximo": 3.1349054652185515e-07,
+      "concordancia": 1.0,
+      "linhas_divergentes": 0
+    }
+  }
+}

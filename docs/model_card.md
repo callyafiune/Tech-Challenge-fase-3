@@ -65,6 +65,8 @@ Na implementação com `skl2onnx` 1.19, o caminho de frequência sublinear obser
 
 O teste `test_paridade_com_frequencias_de_palavras_distintas`, em [tests/test_model.py](../tests/test_model.py), cobre textos com frequências distintas. A publicação exige, na validação real, erro máximo absoluto de probabilidade de até `1e-4` e concordância de classe de 100%. O pipeline também registra a comparação dos motores no teste oficial. Essa verificação detecta divergência da conversão; não representa uma nova escolha de hiperparâmetros a partir do teste.
 
+Uma segunda incompatibilidade foi reproduzida nos runners: o conversor 1.19.1 confunde um bigrama com um token contendo espaço quando um componente foi removido do vocabulário individual pelo corte de atributos. A exportação agora usa uma cópia do pipeline com tuplas explícitas de palavras, mantendo índices, IDF, coeficientes e baseline intactos. A [investigação por camada](diagnostico_paridade.md) e dois testes de regressão verificam a correção. Empates na seleção de atributos podem produzir vocabulários diferentes entre ambientes; cada ajuste continua sendo validado integralmente contra sua própria exportação.
+
 A exigência de `argmax` idêntico é uma decisão conservadora: probabilidades quase empatadas podem inverter a classe com pequenas diferenças numéricas e reprovar a versão. Esse risco é aceito para não alterar silenciosamente a categoria da API. Quando o hash da validação coincide com o da versão ativa, a publicação também impede queda de F1 macro acima da tolerância `1e-6`.
 
 ## Avaliação e resultados reproduzíveis

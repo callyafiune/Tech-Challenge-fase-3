@@ -13,3 +13,4 @@ dist/
 htmlcov/
 logs/
 .local/
+reports/diagnostico_paridade/candidato/

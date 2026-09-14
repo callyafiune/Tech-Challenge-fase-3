@@ -1,14 +1,62 @@
 """Testes de integração entre treinamento, exportação e carregamento."""
 
 import json
+from functools import partial
 
+import joblib
 import numpy as np
 import pandas as pd
 import pytest
+from sklearn.feature_extraction.text import TfidfVectorizer
 
+from medical_classifier import training
 from medical_classifier.serving import Predictor
-from medical_classifier.training import fit_release, promote_release
+from medical_classifier.training import export_onnx, fit_release, promote_release
 from tests.test_data import corpus
+
+
+def test_exportacao_preserva_bigrama_sem_unigrama_no_vocabulario(tmp_path, monkeypatch):
+    """O corte do vocabulário pode preservar o bigrama e remover uma de suas palavras."""
+    vocabulario = {
+        "gadopentetate": 0,
+        "gadopentetate dimeglumine": 1,
+        "bowel": 2,
+        "nerve": 3,
+        "artery": 4,
+        "fever": 5,
+        "bowel nerve": 6,
+    }
+    monkeypatch.setattr(
+        training, "TfidfVectorizer", partial(TfidfVectorizer, vocabulary=vocabulario)
+    )
+    palavras = ["gadopentetate dimeglumine", "bowel nerve", "nerve", "artery", "fever"]
+    frame = pd.DataFrame(
+        [
+            {"condition_label": classe + 1, "medical_abstract": (palavra + " ") * repeticoes}
+            for classe, palavra in enumerate(palavras)
+            for repeticoes in range(1, 5)
+        ]
+    )
+    release = fit_release(frame, frame, tmp_path, {})
+    original = Predictor.from_release(release, "sklearn")
+    otimizado = Predictor.from_release(release, "onnx")
+    textos = ["gadopentetate dimeglumine", "gadopentetate", "gadopentetate dimeglumine fever"]
+    np.testing.assert_allclose(original.predict(textos), otimizado.predict(textos), atol=1e-5)
+
+
+def test_exportacao_nao_modifica_vocabulario_idf_coeficientes_ou_predicoes(tmp_path):
+    frame = corpus(10)
+    release = fit_release(frame, frame, tmp_path, {}, min_macro_f1=0)
+    modelo = joblib.load(release / "baseline.joblib")
+    textos = ["cancer tumor", "clinical study", "brain nerve"]
+    probabilidades = modelo.predict_proba(textos)
+    estado_anterior = joblib.hash(modelo)
+
+    export_onnx(modelo)
+
+    assert joblib.hash(modelo) == estado_anterior
+    assert all(isinstance(termo, str) for termo in modelo.named_steps["tfidf"].vocabulary_)
+    np.testing.assert_array_equal(modelo.predict_proba(textos), probabilidades)
 
 
 def test_paridade_com_frequencias_de_palavras_distintas(tmp_path):

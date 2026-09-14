@@ -1,0 +1,39 @@
+{
+  "inicio_utc": "2026-09-14T23:16:53.198775+00:00",
+  "comando": [
+    "docker",
+    "run",
+    "--rm",
+    "--network",
+    "none",
+    "--read-only",
+    "--volume",
+    "C:/estudos/Tech-Challenge-fase-3:/trabalho:ro",
+    "--volume",
+    "C:/estudos/Tech-Challenge-fase-3/.local/diagnostico_pos_correcao:/diagnostico",
+    "--env",
+    "PYTHONPATH=/trabalho/src",
+    "--env",
+    "PYTHONHASHSEED=42",
+    "--env",
+    "OPENBLAS_CORETYPE=Haswell",
+    "--env",
+    "NPY_DISABLE_CPU_FEATURES=AVX512F,AVX512CD,AVX512_SKX,AVX512_CLX,AVX512_CNL,AVX512_ICL",
+    "medical-classifier:local",
+    "python",
+    "/trabalho/scripts/diagnosticar_paridade.py",
+    "--dados",
+    "/trabalho/data/raw",
+    "--saida",
+    "/diagnostico"
+  ],
+  "imagem_existente": "sha256:04875aff7dd271b654986a33392e577fe3a09d6c2769875b023ca560fc837377",
+  "montagem_codigo": "Somente leitura; PYTHONPATH seleciona o código atual de src.",
+  "sha256_fontes": {
+    "src/medical_classifier/training.py": "e71b3b99dcdd9c6c5f815ab64236752d7dcf21dcb96a6c7bda68a515f9824042",
+    "scripts/diagnosticar_paridade.py": "4b1221959ed53a44f8b83a8de431c84dcc2199d6bf557aff8cc261da2f9ed77f"
+  },
+  "fim_utc": "2026-09-14T23:17:15.390800+00:00",
+  "duracao_segundos": 22.18699999997625,
+  "codigo_saida": 0
+}

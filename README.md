@@ -256,11 +256,11 @@ O [CI remoto 34905435615](https://github.com/callyafiune/Tech-Challenge-fase-3/a
 
 O [workflow de entrega](.github/workflows/entrega.yml) publica manualmente no GHCR a partir de `main`, depois do CI. Ele baixa a imagem construída e verificada pelo CI, confere SHA-256 e ID, carrega o arquivo e publica **sem reconstrução**, com tag do commit e `latest`. **A publicação GHCR ainda não foi comprovada**. A proposta AWS/ECR também não foi provisionada.
 
-A falha de paridade da execução inicial voltou a ocorrer no [CI 34906533919](reports/ci/34906533919/execucao.json): concordância de classes de 100%, mas diferença máxima de probabilidade de 0,009424, acima do limite de 0,0001. A publicação foi bloqueada. O [workflow de diagnóstico](.github/workflows/diagnostico-paridade.yml) compara as camadas em runners independentes e preserva candidatos isolados para investigação; o modelo e seus critérios não foram alterados para aceitar essa divergência.
+A falha de paridade reproduzida no [CI 34906533919](reports/ci/34906533919/execucao.json) foi localizada na exportação de bigramas com um componente ausente do vocabulário individual. A correção informa tuplas explícitas ao conversor, em uma cópia do modelo. No candidato remoto, o erro caiu de 0,009424 para 1,93 × 10⁻⁷ na validação, sem novo ajuste ou alteração do baseline. O [diagnóstico completo](docs/diagnostico_paridade.md) registra causa, regressão e evidências. O [workflow diagnóstico](.github/workflows/diagnostico-paridade.yml) mantém a comparação por camada em runners independentes; os critérios originais de aprovação foram preservados.
 
 O [agente orquestrador](.claude/agents/orquestrador.md) acompanha os cinco blocos e chama a revisão adversarial Claude Code `fable` usando [scripts/review_block.py](scripts/review_block.py). Os pareceres e manifestos em `reports/reviews/` registram fontes, hashes e modelo reportado. Retorno zero da CLI não significa aprovação automática: os achados são analisados e as correções verificadas.
 
-O [registro das revisões adversariais](docs/revisoes_adversariais.md) relaciona achados, correções e decisões justificadas. A suíte consolidada em [testes.xml](reports/testes.xml) registra **76 casos aprovados, um ignorado e nenhuma falha ou erro**. O caso ignorado exige o ambiente Airflow; a execução real da DAG está registrada separadamente.
+O [registro das revisões adversariais](docs/revisoes_adversariais.md) relaciona achados, correções e decisões justificadas. A suíte consolidada em [testes.xml](reports/testes.xml) registra **78 casos aprovados, um ignorado e nenhuma falha ou erro**. O caso ignorado exige o ambiente Airflow; a execução real da DAG está registrada separadamente.
 
 ## Relação com a fase 2 e documentação
 

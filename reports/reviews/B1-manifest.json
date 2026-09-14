@@ -1,34 +1,44 @@
 {
   "bloco": "B1",
   "modelo_solicitado": "fable",
-  "inicio_utc": "2026-09-14T22:47:32.747377+00:00",
+  "inicio_utc": "2026-09-14T23:15:22.497096+00:00",
   "arquivos": [
     {
       "caminho": "src/medical_classifier/training.py",
-      "sha256": "507dceccc605bc90d6f247eb2a24ac2b9f966945af293defb23515348f853ff1",
-      "bytes": 8269
+      "sha256": "e71b3b99dcdd9c6c5f815ab64236752d7dcf21dcb96a6c7bda68a515f9824042",
+      "bytes": 8883
     },
     {
       "caminho": "tests/test_model.py",
-      "sha256": "a9be02dfcce6603d43502c490b364d7b6b1becc09d31f4a3b136dc67bc12692c",
-      "bytes": 4273
+      "sha256": "928664ac44963fbde26f655f5a7a3d2347f2ecf5daa3d43f422c09c3c8734b8e",
+      "bytes": 6257
     },
     {
-      "caminho": "src/medical_classifier/serving.py",
-      "sha256": "f1c4256d366e95b87473175fcc6bdab20c6e706816574702983324904aa5d0e4",
-      "bytes": 2853
+      "caminho": "scripts/diagnosticar_paridade.py",
+      "sha256": "4b1221959ed53a44f8b83a8de431c84dcc2199d6bf557aff8cc261da2f9ed77f",
+      "bytes": 11146
     },
     {
-      "caminho": "reports/diagnostico_onnx.json",
-      "sha256": "70e9dd628ad8c10c56a447c3e6e7c9f885690ebf0ad34b48df2833ad1507eac0",
-      "bytes": 4193
+      "caminho": ".github/workflows/diagnostico-paridade.yml",
+      "sha256": "7267b722c5149e62a872bfe3edb67ce0b57ef6420395e3b1d9a632285243737e",
+      "bytes": 1552
+    },
+    {
+      "caminho": "docs/diagnostico_paridade.md",
+      "sha256": "1779adf9d0d1b5bc60bfbd2f5911549df4d172e02443ce6741b31a6c97f50d43",
+      "bytes": 3933
+    },
+    {
+      "caminho": "reports/diagnostico_paridade/correcao_paridade_verificada.json",
+      "sha256": "06ca6834afd3639769aaa56645b7cd6dc02dbdd51d3b1b0c6e938653c4ef167b",
+      "bytes": 1090
     }
   ],
-  "prompt_sha256": "10fa2c774d41579687aa349c2850b74eb31ff93011957e0fa92c59919ff03d76",
-  "contexto": "Terceira rodada B1, focada exclusivamente na alteração da mensagem de erro do gate de paridade e na resposta científica à falha intermitente. O commit 9bee7b6 acrescentou erro máximo, concordância, quantidade de valores não finitos e tamanho da validação; preservou modelo, dados, algoritmos e critérios erro máximo<=1e-4, concordância=1 e valores finitos. Primeiro CI Ubuntu falhou duas vezes sem valores diagnósticos; novo CI com a mensagem detalhada passou as quatro etapas da DAG e o smoke sem outra mudança no código. Ensaios locais controlados estão no relatório: três hashseeds no Windows, Linux Docker e reajuste limitando SIMD de NumPy/OpenBLAS mantiveram erro de cerca de1,92e-7 e concordância1. Não atribuímos causa a hardware, não alegamos correção causal e não enfraquecemos o gate. Revise riscos concretos da instrumentação e alegações desse diagnóstico; não reabra escopo B1 já revisado em duas rodadas salvo regressão diretamente causada pela mudança. Não transforme falta de reprodução em confirmação de causa. Limite600palavras.",
+  "prompt_sha256": "4ad4b2bb62ccf581077a4f5bc93f0ba1e8242b36fece2c0b9cf5a3ea8a5271b0",
+  "contexto": "Revisão suplementar B1/B4 após causa raiz reproduzida no CI: conversor 1.19.1 perde bigramas quando componente unigram fica fora do vocabulário. Correção por cópia profunda e tuplas explícitas somente na exportação, sem alterar baseline, pesos, limites ou hiperparâmetros. Dois testes de regressão, 78 testes locais aprovados, candidato remoto reconvertido na validação e teste com erro abaixo de 3.2e-7. Revisar correção e ferramenta diagnóstica isolada, sem ampliar escopo. Modelo solicitado permanece fable.",
   "timeout_segundos": 600,
   "aprovacao_automatica": false,
-  "fim_utc": "2026-09-14T22:47:36.592910+00:00",
+  "fim_utc": "2026-09-14T23:15:25.127368+00:00",
   "comando": [
     "C:\\Users\\Cally\\.vscode\\extensions\\anthropic.claude-code-2.1.270-win32-x64\\resources\\native-binary\\claude.exe",
     "-p",
