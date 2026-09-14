@@ -1,0 +1,13 @@
+{
+  "execucao": 34906533919,
+  "url": "https://github.com/callyafiune/Tech-Challenge-fase-3/actions/runs/34906533919",
+  "commit": "5840c24c9853d1879a9fe090cbe5e5ff5c0aeee3",
+  "conclusao": "failure",
+  "etapa": "Treinamento da DAG",
+  "tentativas": 2,
+  "erro_maximo_probabilidade": 0.00942405621,
+  "concordancia": 1,
+  "valores_nao_finitos": 0,
+  "amostras": 1322,
+  "observacao": "As duas tentativas reproduziram a mesma diferença. A publicação foi bloqueada pelo limite de 0,0001. O diagnóstico seguinte compara vetorização, logits e probabilidades sem modificar esse limite."
+}

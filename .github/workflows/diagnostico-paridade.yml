@@ -1,0 +1,48 @@
+name: Diagnóstico da paridade ONNX
+
+on:
+  workflow_dispatch:
+  push:
+    paths:
+      - .github/workflows/diagnostico-paridade.yml
+      - scripts/diagnosticar_paridade.py
+
+permissions:
+  contents: read
+
+jobs:
+  diagnostico:
+    name: Comparar camadas no runner ${{ matrix.amostra }}
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    strategy:
+      fail-fast: false
+      matrix:
+        amostra: [1, 2]
+    env:
+      OMP_NUM_THREADS: "1"
+      OPENBLAS_NUM_THREADS: "1"
+      MKL_NUM_THREADS: "1"
+      PYTHONHASHSEED: "42"
+    steps:
+      - name: Obter o código
+        uses: actions/checkout@v4
+      - name: Construir a mesma imagem do pipeline
+        run: docker build --tag medical-classifier:diagnostico .
+      - name: Comparar transformações sem publicar modelo
+        run: |
+          mkdir -p reports/diagnostico_paridade
+          docker run --rm --user "$(id -u):$(id -g)" \
+            --env PYTHONHASHSEED=42 \
+            --volume "$PWD/reports/diagnostico_paridade:/diagnostico" \
+            --volume "$PWD/scripts/diagnosticar_paridade.py:/diagnosticar.py:ro" \
+            --entrypoint python medical-classifier:diagnostico \
+            /diagnosticar.py --dados /tmp/corpus --saida /diagnostico
+      - name: Preservar diagnóstico e candidato isolado
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: diagnostico-paridade-${{ matrix.amostra }}-${{ github.run_id }}
+          path: reports/diagnostico_paridade/
+          if-no-files-found: error
+          retention-days: 7

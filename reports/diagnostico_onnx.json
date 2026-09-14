@@ -78,7 +78,13 @@
     "erro_maximo_teste": 2.9755243957652056e-7,
     "versao_modelo": "20260914T224453-22d06ac9"
   },
-  "conclusao": "Falha original não reproduzida. Variações de hashseed, sistema operacional e despacho de NumPy/OpenBLAS testadas não a explicam. Não foi demonstrada causa raiz; não se recomenda enfraquecer os critérios nem alterar o modelo com base em hipótese não confirmada.",
+  "reproducao_posterior": {
+    "execucao": 34906533919,
+    "erro_maximo_probabilidade": 0.00942405621,
+    "concordancia": 1.0,
+    "fonte": "reports/ci/34906533919/execucao.json"
+  },
+  "conclusao": "A divergência voltou a ocorrer no CI 34906533919, nas duas tentativas. Os ensaios locais de hashseed, sistema operacional e despacho NumPy/OpenBLAS não a explicam. Um diagnóstico por camada foi acrescentado para capturar a transformação divergente no runner. Os critérios permanecem preservados.",
   "procedimento": "Carregar baseline.joblib e validacao.csv, reconverter com convert_sklearn, entrada StringTensorType([None, 1]), zipmap=False, opset 17; executar ORT CPU com intra_op_num_threads=1 em lotes de 64 e comparar com predict_proba. Para reajuste, executar fit no treino.csv sob threadpool_limits(1) antes de reconverter. Variar somente as condições registradas em cada ensaio.",
   "script_temporario_nao_versionado": ".local/diagnostico_onnx.py"
 }
