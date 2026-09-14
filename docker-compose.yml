@@ -1,0 +1,121 @@
+name: medical-classifier
+
+x-app: &app
+  build:
+    context: .
+    target: runtime
+  image: medical-classifier:local
+  init: true
+  read_only: true
+  tmpfs:
+    - /tmp:size=256m,mode=1777
+  security_opt:
+    - no-new-privileges:true
+  cap_drop:
+    - ALL
+
+services:
+  pipeline:
+    <<: *app
+    command:
+      - python
+      - -m
+      - medical_classifier.pipeline
+      - executar
+      - --reutilizar
+      - --dados
+      - /app/data/raw
+      - --modelos
+      - /app/models
+      - --relatorios
+      - /app/data/reports
+    volumes:
+      - dados:/app/data
+      - modelos:/app/models
+    healthcheck:
+      disable: true
+    restart: "no"
+
+  api:
+    <<: *app
+    environment:
+      MODEL_DIR: /app/models
+      MODEL_BACKEND: ${MODEL_BACKEND:-onnx}
+    ports:
+      - "127.0.0.1:${API_PORT:-8000}:8000"
+    volumes:
+      - modelos:/app/models:ro
+    depends_on:
+      pipeline:
+        condition: service_completed_successfully
+    restart: unless-stopped
+
+  prometheus:
+    image: prom/prometheus:v3.14.0
+    command:
+      - --config.file=/etc/prometheus/prometheus.yml
+      - --storage.tsdb.path=/prometheus
+      - --storage.tsdb.retention.time=7d
+    ports:
+      - "127.0.0.1:${PROMETHEUS_PORT:-9090}:9090"
+    volumes:
+      - ./monitoring/prometheus/prometheus.yml:/etc/prometheus/prometheus.yml:ro
+      - prometheus-dados:/prometheus
+    read_only: true
+    security_opt:
+      - no-new-privileges:true
+    cap_drop:
+      - ALL
+    depends_on:
+      api:
+        condition: service_started
+    healthcheck:
+      test: ["CMD", "wget", "--quiet", "--spider", "http://127.0.0.1:9090/-/ready"]
+      interval: 10s
+      timeout: 5s
+      retries: 12
+    restart: unless-stopped
+
+  grafana:
+    image: grafana/grafana:13.2.1
+    environment:
+      GF_SECURITY_ADMIN_USER: ${GRAFANA_ADMIN_USER:-admin}
+      GF_SECURITY_ADMIN_PASSWORD: ${GRAFANA_ADMIN_PASSWORD:?Defina GRAFANA_ADMIN_PASSWORD no arquivo .env}
+      GF_USERS_ALLOW_SIGN_UP: "false"
+      GF_AUTH_ANONYMOUS_ENABLED: "false"
+      GF_ANALYTICS_REPORTING_ENABLED: "false"
+      GF_ANALYTICS_CHECK_FOR_UPDATES: "false"
+      GF_ANALYTICS_CHECK_FOR_PLUGIN_UPDATES: "false"
+      GF_PLUGINS_PREINSTALL_DISABLED: "true"
+      GF_LOG_MODE: console
+      GF_DASHBOARDS_DEFAULT_HOME_DASHBOARD_PATH: /var/lib/grafana/dashboards/medical-classifier.json
+    ports:
+      - "127.0.0.1:${GRAFANA_PORT:-3000}:3000"
+    volumes:
+      - grafana-dados:/var/lib/grafana
+      - ./monitoring/grafana/provisioning/datasources:/etc/grafana/provisioning/datasources:ro
+      - ./monitoring/grafana/provisioning/dashboards:/etc/grafana/provisioning/dashboards:ro
+      - ./monitoring/grafana/dashboards:/var/lib/grafana/dashboards:ro
+    read_only: true
+    tmpfs:
+      - /tmp:size=64m,mode=1777
+    security_opt:
+      - no-new-privileges:true
+    cap_drop:
+      - ALL
+    depends_on:
+      prometheus:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD", "wget", "--quiet", "--spider", "http://127.0.0.1:3000/api/health"]
+      interval: 10s
+      timeout: 5s
+      start_period: 20s
+      retries: 12
+    restart: unless-stopped
+
+volumes:
+  dados:
+  modelos:
+  prometheus-dados:
+  grafana-dados:

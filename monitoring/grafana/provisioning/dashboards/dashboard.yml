@@ -1,0 +1,13 @@
+apiVersion: 1
+
+providers:
+  - name: Classificação médica
+    orgId: 1
+    folder: Tech Challenge Fase 3
+    type: file
+    disableDeletion: true
+    allowUiUpdates: false
+    # Acima de 10 s, a releitura independe de eventos ausentes nos volumes do Windows.
+    updateIntervalSeconds: 20
+    options:
+      path: /var/lib/grafana/dashboards
