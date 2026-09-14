@@ -126,7 +126,12 @@ def _fit_bundle(train, validation, release: Path, audit: dict, min_macro_f1: flo
     difference = float(np.max(np.abs(original - optimized)))
     agreement = float(np.mean(original.argmax(1) == optimized.argmax(1)))
     if not np.isfinite(optimized).all() or difference > 1e-4 or agreement != 1.0:
-        raise ValueError("Conversão ONNX reprovada no gate de paridade.")
+        raise ValueError(
+            "Conversão ONNX reprovada no gate de paridade: "
+            f"erro_maximo_probabilidade={difference:.9g}; concordancia={agreement:.9g}; "
+            f"valores_nao_finitos={int((~np.isfinite(optimized)).sum())}; "
+            f"amostras={len(texts)}."
+        )
     metadata = {
         "versao": release.name,
         "classes": list(CLASSES),
