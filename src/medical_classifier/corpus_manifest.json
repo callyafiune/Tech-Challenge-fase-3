@@ -1,0 +1,16 @@
+{
+  "fonte": "https://github.com/sebischair/Medical-Abstracts-TC-Corpus",
+  "revisao": "70a2d9106c724729be8b3c4ddb00d1b14ec300c8",
+  "licenca": "CC BY-SA 3.0",
+  "autores": [
+    "Tim Schopf",
+    "Daniel Braun",
+    "Florian Matthes"
+  ],
+  "sha256": {
+    "LICENSE": "81c302f4c6c76af09ca8883a9159c218eb044205c7a211efd77d6961115415a0",
+    "medical_tc_labels.csv": "8a27ae03339c798103678efa8012f744a723ff71a80f2b2c1355ee249564adc5",
+    "medical_tc_test.csv": "1eecea73c9ecad292c55e10403bd139fab9580545d6878482997c5564d51ac05",
+    "medical_tc_train.csv": "ad53aebc682d6b87a5647f619a079bb446d286fdc93bf0159b812418f5758609"
+  }
+}
