@@ -1,0 +1,14 @@
+ Container medical-classifier-airflow-airflow-run-d9f30152260b Creating 
+ Container medical-classifier-airflow-airflow-run-d9f30152260b Created 
+/opt/airflow-venv/lib/python3.11/site-packages/airflow/metrics/base_stats_logger.py:22 RemovedInAirflow3Warning: Timer and timing metrics publish in seconds were deprecated. It is enabled by default from Airflow 3 onwards. Enable timer_unit_consistency to publish all the timer and timing metrics in milliseconds.
+/opt/airflow-venv/lib/python3.11/site-packages/airflow/triggers/base.py:27 RemovedInAirflow3Warning: Timer and timing metrics publish in seconds were deprecated. It is enabled by default from Airflow 3 onwards. Enable timer_unit_consistency to publish all the timer and timing metrics in milliseconds.
+DB: sqlite:////opt/airflow/estado/airflow.db
+Performing upgrade to the metadata database sqlite:////opt/airflow/estado/airflow.db
+[2026-09-14T22:12:24.863+0000] {migration.py:207} INFO - Context impl SQLiteImpl.
+[2026-09-14T22:12:24.865+0000] {migration.py:210} INFO - Will assume non-transactional DDL.
+[2026-09-14T22:12:24.866+0000] {migration.py:207} INFO - Context impl SQLiteImpl.
+[2026-09-14T22:12:24.866+0000] {migration.py:210} INFO - Will assume non-transactional DDL.
+INFO  [alembic.runtime.migration] Context impl SQLiteImpl.
+INFO  [alembic.runtime.migration] Will assume non-transactional DDL.
+INFO  [alembic.runtime.migration] Running stamp_revision  -> 5f2621c13b39
+Database migrating done!

@@ -1,0 +1,210 @@
+{
+    "inicio_utc":  "2026-09-14T22:49:39.9892528Z",
+    "tipo":  "Apresentação STAR com narração sintética e imagens programáticas",
+    "voz":  "Microsoft Maria Desktop",
+    "velocidade_voz":  3,
+    "versao_modelo":  "20260914T214327-e6c68fc4",
+    "api_url":  "http://127.0.0.1:8004",
+    "api_prontidao":  {
+                          "status":  "pronto",
+                          "versao_modelo":  "20260914T214327-e6c68fc4",
+                          "backend":  "onnx"
+                      },
+    "api_predicao":  {
+                         "classe_id":  4,
+                         "classe":  "Doenças cardiovasculares",
+                         "probabilidades":  {
+                                                "1":  0.0021612246055155993,
+                                                "2":  0.0024595747236162424,
+                                                "3":  0.0022063639480620623,
+                                                "4":  0.9883155822753906,
+                                                "5":  0.004857256077229977
+                                            },
+                         "versao_modelo":  "20260914T214327-e6c68fc4",
+                         "backend":  "onnx"
+                     },
+    "api_erro":  null,
+    "api_mesma_versao_relatorios":  true,
+    "stack_verificada":  true,
+    "versao_modelo_stack":  "20260914T221243-003d412d",
+    "estado_stack":  "Stack API, Prometheus e Grafana: verificada; versão 20260914T221243-003d412d.",
+    "dag_verificada":  true,
+    "versao_modelo_dag":  "20260914T221243-003d412d",
+    "estado_dag":  "Airflow: quatro tarefas concluídas em uma execução real identificada.",
+    "airflow_execucao":  {
+                             "sucesso":  true,
+                             "dag_id":  "retreino_medico",
+                             "run_id":  "manual__2026-09-14T00:00:00+00:00",
+                             "tarefas":  {
+                                             "ingestao":  "success",
+                                             "treinamento":  "success",
+                                             "validacao":  "success",
+                                             "publicacao":  "success"
+                                         },
+                             "airflow":  "2.11.0",
+                             "modelo":  {
+                                            "release":  "releases/20260914T221243-003d412d",
+                                            "anterior":  "releases/20260914T214809-a767fe94"
+                                        },
+                             "verificado_em":  "2026-09-14T22:31:13.640625+00:00",
+                             "fonte_estado":  "reports/docker/airflow_dag_state.json",
+                             "fontes_execucao":  "reports/docker/airflow_execution_steps.json",
+                             "saude":  {
+                                           "dag_processor":  {
+                                                                 "latest_dag_processor_heartbeat":  null,
+                                                                 "status":  null
+                                                             },
+                                           "metadatabase":  {
+                                                                "status":  "healthy"
+                                                            },
+                                           "scheduler":  {
+                                                             "latest_scheduler_heartbeat":  "2026-09-14T22:31:13.625184+00:00",
+                                                             "status":  "healthy"
+                                                         },
+                                           "triggerer":  {
+                                                             "latest_triggerer_heartbeat":  "2026-09-14T22:31:12.824031+00:00",
+                                                             "status":  "healthy"
+                                                         }
+                                       },
+                             "inicializacao_segundos":  25.28,
+                             "disco_livre_mib":  1638.6,
+                             "dag_verificado_em":  "2026-09-14T22:15:39.629801+00:00",
+                             "saude_consultada_em":  "2026-09-14T22:31:13.640625+00:00"
+                         },
+    "airflow_construcao":  {
+                               "comando":  "docker compose -f docker-compose.airflow.yml build airflow",
+                               "codigo_saida":  0,
+                               "interrompido_por_espaco":  false,
+                               "segundos":  124.2,
+                               "livre_host_mib":  1775.1,
+                               "log":  "C:\\estudos\\Tech-Challenge-fase-3\\reports\\docker\\build_airflow.log"
+                           },
+    "fonte_airflow_construcao":  "reports/docker/build_airflow_state.json",
+    "palavras_narracao":  451,
+    "fontes":  [
+                   {
+                       "sha256":  "bfda7b50116e744a336e4c4dbd34bc1e068dff614aa54612acc4e0edf840a53f",
+                       "caminho":  "reports/qualidade.json"
+                   },
+                   {
+                       "sha256":  "60898ed2451a273cda0429da0ad42044de7d8d31afe1ebafba1055f138c7f76e",
+                       "caminho":  "reports/latencia_modelo.json"
+                   },
+                   {
+                       "sha256":  "6675b2ee6255f0c0311e701906b36e4fbad2e4c25f72f7341681b0c973988eb6",
+                       "caminho":  "reports/latencia_http_local.json"
+                   },
+                   {
+                       "sha256":  "557e4ef0fb8510b0df8f285ac95304d02e00a9941b08cf08a699946af3419566",
+                       "caminho":  "dags/retreino_medico.py"
+                   },
+                   {
+                       "sha256":  "d9632b1f862045ffd837ad7397747597a00eee7be2d13131207a45bd348a8d45",
+                       "caminho":  ".github/workflows/ci.yml"
+                   },
+                   {
+                       "sha256":  "349b77bd37623ed538430cf31382f36395e49f97cfe7b8dfed0c1c801b5a1986",
+                       "caminho":  "reports/smoke_stack.json"
+                   },
+                   {
+                       "sha256":  "9df31502cb4bfae4a4f6a2a1c334a245767a7a42f64bee0d4610fb8be40a3142",
+                       "caminho":  "reports/airflow_execucao.json"
+                   },
+                   {
+                       "sha256":  "c9effd7adb7f5e4d2324182193a24e99039e1b41f87cb8e2e99d9339ad0ba383",
+                       "caminho":  "reports/docker/build_airflow_state.json"
+                   }
+               ],
+    "cenas":  [
+                  {
+                      "numero":  1,
+                      "titulo":  "Classificação médica, com evidências",
+                      "imagem":  "C:\\estudos\\Tech-Challenge-fase-3\\.local\\video\\cena-01.png",
+                      "narracao":  "Esta apresentação reúne evidências capturadas nesta execução do Tech Challenge, fase três. O cenário exige um serviço capaz de organizar textos médicos com resposta rápida e operação observável. Usamos resumos públicos em inglês e classificamos cinco condições médicas. A adaptação foi autorizada para o projeto. Trata-se de uma demonstração acadêmica: as saídas não representam urgência, diagnóstico ou orientação clínica.",
+                      "audio":  "C:\\estudos\\Tech-Challenge-fase-3\\.local\\video\\cena-01.wav",
+                      "video":  "C:\\estudos\\Tech-Challenge-fase-3\\.local\\video\\cena-01.mp4",
+                      "duracao_segundos":  29.279501
+                  },
+                  {
+                      "numero":  2,
+                      "titulo":  "Do corpus à operação da API",
+                      "imagem":  "C:\\estudos\\Tech-Challenge-fase-3\\.local\\video\\cena-02.png",
+                      "narracao":  "A tarefa foi implementar o ciclo completo: adquirir dados verificáveis, treinar um modelo leve, converter a inferência para ONNX e servir respostas por FastAPI. Também precisamos de testes e construção automatizada, retreino no Airflow e métricas no Prometheus e Grafana. O treinamento fica fora da API. Na proposta de nuvem, ECS Fargate e um balanceador atenderiam às requisições; essa infraestrutura AWS não foi provisionada.",
+                      "audio":  "C:\\estudos\\Tech-Challenge-fase-3\\.local\\video\\cena-02.wav",
+                      "video":  "C:\\estudos\\Tech-Challenge-fase-3\\.local\\video\\cena-02.mp4",
+                      "duracao_segundos":  29.939002
+                  },
+                  {
+                      "numero":  3,
+                      "titulo":  "A auditoria muda o experimento",
+                      "imagem":  "C:\\estudos\\Tech-Challenge-fase-3\\.local\\video\\cena-03.png",
+                      "narracao":  "O corpus original tem 11.550 linhas de treino e 2.888 de teste. A auditoria removeu do treino 1.097 sobreposições com o teste e 3.846 linhas com rótulos conflitantes. O ajuste usa 5.285 exemplos e a validação usa 1.322. O teste oficial foi preservado. O TF-IDF aprende somente no ajuste, e as escolhas técnicas não usam o teste final.",
+                      "audio":  "C:\\estudos\\Tech-Challenge-fase-3\\.local\\video\\cena-03.wav",
+                      "video":  "C:\\estudos\\Tech-Challenge-fase-3\\.local\\video\\cena-03.mp4",
+                      "duracao_segundos":  32.386485
+                  },
+                  {
+                      "numero":  4,
+                      "titulo":  "Uma resposta que identifica o modelo",
+                      "imagem":  "C:\\estudos\\Tech-Challenge-fase-3\\.local\\video\\cena-04.png",
+                      "narracao":  "Nesta cena, os dados exibidos foram obtidos por chamadas reais aos endpoints de prontidão e classificação no endereço local. O exemplo público está em inglês. A resposta informa a classe, o motor e a versão efetivamente carregada. A entrada aceita de vinte a vinte mil caracteres. As cinco probabilidades são saídas do classificador; não são uma medida calibrada de risco clínico.",
+                      "audio":  "C:\\estudos\\Tech-Challenge-fase-3\\.local\\video\\cena-04.wav",
+                      "video":  "C:\\estudos\\Tech-Challenge-fase-3\\.local\\video\\cena-04.mp4",
+                      "duracao_segundos":  26.405034
+                  },
+                  {
+                      "numero":  5,
+                      "titulo":  "Configuração e execução são evidências diferentes",
+                      "imagem":  "C:\\estudos\\Tech-Challenge-fase-3\\.local\\video\\cena-05.png",
+                      "narracao":  "A verificação real da stack retornou sucesso. Ela enviou chamadas, consultou métricas e confirmou a fonte de dados e os painéis do Grafana. O relatório do Airflow confirma as quatro tarefas concluídas: ingestão, treinamento, validação e publicação, em uma execução identificada. O cartão mostra esses estados reais. O workflow do GitHub aparece como código estático; sua execução remota não é presumida. Essas evidências operacionais incluem outra versão publicada no Docker, distinta da versão do host mostrada nos gráficos.",
+                      "audio":  "C:\\estudos\\Tech-Challenge-fase-3\\.local\\video\\cena-05.wav",
+                      "video":  "C:\\estudos\\Tech-Challenge-fase-3\\.local\\video\\cena-05.mp4",
+                      "duracao_segundos":  36.005397
+                  },
+                  {
+                      "numero":  6,
+                      "titulo":  "Otimização medida no mesmo modelo",
+                      "imagem":  "C:\\estudos\\Tech-Challenge-fase-3\\.local\\video\\cena-06.png",
+                      "narracao":  "No teste oficial, a acurácia foi 63,92 por cento e a F1 macro foi 0,6385. A conversão preservou as classes na validação. Em 400 medições por motor, ONNX foi 3,52 vezes mais rápido na mediana da inferência completa. No HTTP local, fora de Docker, a aceleração foi 1,45 vezes em 200 chamadas por motor. Rede, validação e serialização reduzem o ganho observado na API.",
+                      "audio":  "C:\\estudos\\Tech-Challenge-fase-3\\.local\\video\\cena-06.wav",
+                      "video":  "C:\\estudos\\Tech-Challenge-fase-3\\.local\\video\\cena-06.mp4",
+                      "duracao_segundos":  34.065714
+                  },
+                  {
+                      "numero":  7,
+                      "titulo":  "Reproduzir, verificar e declarar os limites",
+                      "imagem":  "C:\\estudos\\Tech-Challenge-fase-3\\.local\\video\\cena-07.png",
+                      "narracao":  "O principal aprendizado é que otimização precisa preservar comportamento e demonstrar ganho no caminho realmente medido. Os artefatos, relatórios e respostas da API registram a versão usada. Revisões adversariais por bloco ajudam a encontrar falhas e exigem análise dos achados. Os limites de infraestrutura permanecem explícitos. Esta apresentação usa narração sintética e foi montada a partir de evidências locais, sem simular telas de sistemas ou validação clínica.",
+                      "audio":  "C:\\estudos\\Tech-Challenge-fase-3\\.local\\video\\cena-07.wav",
+                      "video":  "C:\\estudos\\Tech-Challenge-fase-3\\.local\\video\\cena-07.mp4",
+                      "duracao_segundos":  31.423583
+                  }
+              ],
+    "fim_utc":  "2026-09-14T22:49:51.2440872Z",
+    "arquivo_final":  "reports/video/apresentacao_star.mp4",
+    "sha256_video":  "41d55f255cd0df8a2b06c6a3de0735d12e94a37e31b1cdbd62fe55c6751b1992",
+    "ffprobe":  {
+                    "programs":  [
+
+                                 ],
+                    "stream_groups":  [
+
+                                      ],
+                    "streams":  [
+                                    {
+                                        "codec_name":  "h264",
+                                        "width":  1280,
+                                        "height":  720
+                                    },
+                                    {
+                                        "codec_name":  "aac"
+                                    }
+                                ],
+                    "format":  {
+                                   "duration":  "219.626395",
+                                   "size":  "2409644"
+                               }
+                },
+    "temporarios_bytes":  13566569,
+    "duracao_validada":  true
+}

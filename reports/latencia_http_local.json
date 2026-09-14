@@ -1,0 +1,44 @@
+{
+  "sklearn": {
+    "amostras": 200,
+    "media_ms": 8.761288,
+    "p50_ms": 7.740500000000001,
+    "p95_ms": 17.088364999999992,
+    "p99_ms": 20.651452
+  },
+  "onnx": {
+    "amostras": 200,
+    "media_ms": 6.121128,
+    "p50_ms": 5.3488,
+    "p95_ms": 10.586189999999998,
+    "p99_ms": 15.366945999999933
+  },
+  "fator_aceleracao_p50": 1.447147023631469,
+  "fator_aceleracao_p95": 1.6142129510239278,
+  "metodo": "HTTP local, lote 1, concorrência 1, conexões persistentes e ordem alternada",
+  "ambiente_servidores": "host",
+  "endpoints": {
+    "sklearn": "http://127.0.0.1:8003",
+    "onnx": "http://127.0.0.1:8000"
+  },
+  "ambiente_cliente": {
+    "plataforma": "Windows-10-10.0.26200-SP0",
+    "processador": "Intel64 Family 6 Model 140 Stepping 1, GenuineIntel",
+    "python": "3.11.9"
+  },
+  "semente": 42,
+  "aquecimento_por_motor": 20,
+  "prontidao": {
+    "sklearn": {
+      "status": "pronto",
+      "versao_modelo": "20260914T214327-e6c68fc4",
+      "backend": "sklearn"
+    },
+    "onnx": {
+      "status": "pronto",
+      "versao_modelo": "20260914T214327-e6c68fc4",
+      "backend": "onnx"
+    }
+  },
+  "instante_utc": "2026-09-14T22:14:52.973674+00:00"
+}

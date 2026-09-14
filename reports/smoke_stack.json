@@ -1,0 +1,97 @@
+{
+  "sucesso": true,
+  "api": {
+    "health": 200,
+    "ready": 200,
+    "predict": 200,
+    "entrada_invalida": 422
+  },
+  "modelo": {
+    "versao": "20260914T221243-003d412d",
+    "backend": "onnx"
+  },
+  "requisicoes_validas_geradas": 21,
+  "prometheus": {
+    "coleta": "ativa",
+    "histograma": "presente",
+    "janela_taxa": "20s",
+    "instante_metricas_utc": "2026-09-14T22:15:37.915000+00:00"
+  },
+  "grafana": {
+    "fonte_dados": "OK",
+    "dashboard": "medical-classifier",
+    "paineis": [
+      {
+        "titulo": "Requisições de classificação",
+        "consultas": [
+          {
+            "expressao": "sum(http_requests_total{job=\"medical-api\",route=\"/predict\",method=\"POST\"}) or vector(0)",
+            "valor": 23.0
+          }
+        ]
+      },
+      {
+        "titulo": "Coleta de métricas",
+        "consultas": [
+          {
+            "expressao": "up{job=\"medical-api\"}",
+            "valor": 1.0
+          }
+        ]
+      },
+      {
+        "titulo": "Modelo pronto",
+        "consultas": [
+          {
+            "expressao": "(model_ready{job=\"medical-api\"} * on(job, instance) up{job=\"medical-api\"}) or vector(0)",
+            "valor": 1.0
+          }
+        ]
+      },
+      {
+        "titulo": "Chamadas de classificação por segundo",
+        "consultas": [
+          {
+            "expressao": "sum(rate(http_requests_total{job=\"medical-api\",route=\"/predict\",method=\"POST\"}[20s])) or vector(0)",
+            "valor": 0.7333822254816988
+          }
+        ]
+      },
+      {
+        "titulo": "Latência HTTP p50 e p95",
+        "consultas": [
+          {
+            "expressao": "histogram_quantile(0.50, sum by (le) (rate(http_request_duration_seconds_bucket{job=\"medical-api\",route=\"/predict\",method=\"POST\"}[20s])))",
+            "valor": 0.0025
+          },
+          {
+            "expressao": "histogram_quantile(0.95, sum by (le) (rate(http_request_duration_seconds_bucket{job=\"medical-api\",route=\"/predict\",method=\"POST\"}[20s])))",
+            "valor": 0.00475
+          }
+        ]
+      },
+      {
+        "titulo": "Proporção de erros de classificação",
+        "consultas": [
+          {
+            "expressao": "100 * (sum(rate(http_requests_total{job=\"medical-api\",route=\"/predict\",method=\"POST\",status=~\"4..\"}[20s])) or vector(0)) / clamp_min((sum(rate(http_requests_total{job=\"medical-api\",route=\"/predict\",method=\"POST\"}[20s])) or vector(0)), 1e-9)",
+            "valor": 9.09090909090909
+          },
+          {
+            "expressao": "100 * (sum(rate(http_requests_total{job=\"medical-api\",route=\"/predict\",method=\"POST\",status=~\"5..\"}[20s])) or vector(0)) / clamp_min((sum(rate(http_requests_total{job=\"medical-api\",route=\"/predict\",method=\"POST\"}[20s])) or vector(0)), 1e-9)",
+            "valor": 0.0
+          }
+        ]
+      }
+    ]
+  },
+  "inicio_utc": "2026-09-14T22:15:08.836760+00:00",
+  "fim_utc": "2026-09-14T22:15:38.408100+00:00",
+  "docker": {
+    "imagem_api": "sha256:04875aff7dd271b654986a33392e577fe3a09d6c2769875b023ca560fc837377",
+    "container_api": "1d2b6ea50d06cf00a097004eb9f3ff15a688f1fbfb3cd603c19219016ff76f1d",
+    "healthcheck": "healthy",
+    "usuario": "10001:10001",
+    "inspecao_utc": "2026-09-14T22:16:03.056328+00:00"
+  }
+}

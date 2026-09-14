@@ -1,0 +1,40 @@
+{
+  "sucesso": true,
+  "dag_id": "retreino_medico",
+  "run_id": "manual__2026-09-14T00:00:00+00:00",
+  "tarefas": {
+    "ingestao": "success",
+    "treinamento": "success",
+    "validacao": "success",
+    "publicacao": "success"
+  },
+  "airflow": "2.11.0",
+  "modelo": {
+    "release": "releases/20260914T221243-003d412d",
+    "anterior": "releases/20260914T214809-a767fe94"
+  },
+  "verificado_em": "2026-09-14T22:31:13.640625+00:00",
+  "fonte_estado": "reports/docker/airflow_dag_state.json",
+  "fontes_execucao": "reports/docker/airflow_execution_steps.json",
+  "saude": {
+    "dag_processor": {
+      "latest_dag_processor_heartbeat": null,
+      "status": null
+    },
+    "metadatabase": {
+      "status": "healthy"
+    },
+    "scheduler": {
+      "latest_scheduler_heartbeat": "2026-09-14T22:31:13.625184+00:00",
+      "status": "healthy"
+    },
+    "triggerer": {
+      "latest_triggerer_heartbeat": "2026-09-14T22:31:12.824031+00:00",
+      "status": "healthy"
+    }
+  },
+  "inicializacao_segundos": 25.28,
+  "disco_livre_mib": 1638.6,
+  "dag_verificado_em": "2026-09-14T22:15:39.629801+00:00",
+  "saude_consultada_em": "2026-09-14T22:31:13.640625+00:00"
+}

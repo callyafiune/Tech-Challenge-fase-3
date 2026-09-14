@@ -1,0 +1,18 @@
+{
+  "airflow": "2.11.0",
+  "dag": "retreino_medico",
+  "run_id": "manual__2026-09-14T00:00:00+00:00",
+  "estado": "success",
+  "inicio": "2026-09-14 00:00:00+00:00",
+  "fim": "2026-09-14 22:13:08.009387+00:00",
+  "tarefas": {
+    "ingestao": "success",
+    "treinamento": "success",
+    "validacao": "success",
+    "publicacao": "success"
+  },
+  "ponteiro_modelo": {
+    "release": "releases/20260914T221243-003d412d",
+    "anterior": "releases/20260914T214809-a767fe94"
+  }
+}

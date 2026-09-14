@@ -1,0 +1,139 @@
+{
+    "registrado_em_utc":  "2026-09-14T22:50:16.7993360Z",
+    "comando":  "powershell.exe -NoProfile -ExecutionPolicy Bypass -File reports/video/verificar_gerador.ps1 -ApiUrl http://127.0.0.1:8004",
+    "sucesso":  true,
+    "verificacoes":  [
+                         {
+                             "caso":  "Execução real completa aceita",
+                             "sucesso":  true
+                         },
+                         {
+                             "caso":  "Tarefa reprovada rejeitada",
+                             "sucesso":  true
+                         },
+                         {
+                             "caso":  "Sucesso textual da DAG rejeitado",
+                             "sucesso":  true
+                         },
+                         {
+                             "caso":  "Execução sem identificador rejeitada",
+                             "sucesso":  true
+                         },
+                         {
+                             "caso":  "Execução sem versão publicada rejeitada",
+                             "sucesso":  true
+                         },
+                         {
+                             "caso":  "Documento vazio rejeitado",
+                             "sucesso":  true
+                         },
+                         {
+                             "caso":  "Sucesso textual da stack rejeitado",
+                             "sucesso":  true
+                         },
+                         {
+                             "caso":  "Sucesso booleano da stack aceito",
+                             "sucesso":  true
+                         },
+                         {
+                             "caso":  "Falha booleana da stack rejeitada",
+                             "sucesso":  true
+                         },
+                         {
+                             "caso":  "API e relatórios da mesma versão aceitos",
+                             "sucesso":  true
+                         },
+                         {
+                             "caso":  "API de versão divergente rejeitada",
+                             "sucesso":  true
+                         },
+                         {
+                             "caso":  "Predict divergente rejeitado: outra-versao/onnx",
+                             "sucesso":  true
+                         },
+                         {
+                             "caso":  "Predict divergente rejeitado: versao-esperada/sklearn",
+                             "sucesso":  true
+                         },
+                         {
+                             "caso":  "Ambientes esperados dos gráficos aceitos",
+                             "sucesso":  true
+                         },
+                         {
+                             "caso":  "Ambiente incorreto rejeitado: docker/Inferência completa, sem HTTP",
+                             "sucesso":  true
+                         },
+                         {
+                             "caso":  "Ambiente incorreto rejeitado: host/Percurso HTTP",
+                             "sucesso":  true
+                         },
+                         {
+                             "caso":  "Vídeo corresponde ao SHA-256 do manifesto",
+                             "sucesso":  true
+                         },
+                         {
+                             "caso":  "Nova leitura ffprobe conclui com sucesso",
+                             "sucesso":  true
+                         },
+                         {
+                             "caso":  "Duração renderizada não excede 300 segundos",
+                             "sucesso":  true
+                         },
+                         {
+                             "caso":  "Duração do manifesto corresponde ao MP4",
+                             "sucesso":  true
+                         },
+                         {
+                             "caso":  "MP4 contém vídeo H.264 1280x720 e áudio AAC",
+                             "sucesso":  true
+                         },
+                         {
+                             "caso":  "Modo SomenteImagens conclui com sucesso",
+                             "sucesso":  true
+                         },
+                         {
+                             "caso":  "Modo SomenteImagens preserva reports/video/apresentacao_star.mp4",
+                             "sucesso":  true
+                         },
+                         {
+                             "caso":  "Modo SomenteImagens preserva reports/video/evidencias.json",
+                             "sucesso":  true
+                         },
+                         {
+                             "caso":  "Modo SomenteImagens preserva os 23 arquivos intermediários do vídeo",
+                             "sucesso":  true
+                         },
+                         {
+                             "caso":  "Modo SomenteImagens capturou a API real",
+                             "sucesso":  true
+                         }
+                     ],
+    "saida_somente_imagens":  "Imagens geradas em C:\\estudos\\Tech-Challenge-fase-3\\.local\\video\\imagens; 451 palavras de narração.",
+    "codigo_saida_somente_imagens":  0,
+    "sha256_script":  "56629c0c9861c16561a88a98b9c9d98e42ae436e1c8bc8298107ebc71f5fc119",
+    "sha256_video":  "41d55f255cd0df8a2b06c6a3de0735d12e94a37e31b1cdbd62fe55c6751b1992",
+    "sha256_manifesto_final":  "784177fec6f6d5f7299c76db9de67a8bd6b9bf0de2b5fb30233103ea09146efb",
+    "duracao_segundos":  219.626395,
+    "ffprobe":  {
+                    "programs":  [
+
+                                 ],
+                    "stream_groups":  [
+
+                                      ],
+                    "streams":  [
+                                    {
+                                        "codec_name":  "h264",
+                                        "width":  1280,
+                                        "height":  720
+                                    },
+                                    {
+                                        "codec_name":  "aac"
+                                    }
+                                ],
+                    "format":  {
+                                   "duration":  "219.626395",
+                                   "size":  "2409644"
+                               }
+                }
+}

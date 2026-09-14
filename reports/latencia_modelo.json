@@ -1,0 +1,25 @@
+{
+  "sklearn": {
+    "amostras": 400,
+    "media_ms": 1.26814575,
+    "p50_ms": 1.2419,
+    "p95_ms": 1.9059949999999997,
+    "p99_ms": 2.2106769999999982
+  },
+  "onnx": {
+    "amostras": 400,
+    "media_ms": 0.37628600000000006,
+    "p50_ms": 0.3532,
+    "p95_ms": 0.5867,
+    "p99_ms": 0.6613569999999998
+  },
+  "fator_aceleracao_p50": 3.516138165345413,
+  "fator_aceleracao_p95": 3.2486705300835172,
+  "metodo": "Inferência completa, lote 1, ordem alternada, mesmos textos, sem HTTP",
+  "aquecimento_por_motor": 30,
+  "semente": 42,
+  "threads_nativas": 1,
+  "plataforma": "Windows-10-10.0.26200-SP0",
+  "processador": "Intel64 Family 6 Model 140 Stepping 1, GenuineIntel",
+  "versao_modelo": "20260914T214327-e6c68fc4"
+}

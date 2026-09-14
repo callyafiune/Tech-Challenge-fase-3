@@ -1,0 +1,14 @@
+{
+  "airflow": "2.11.0",
+  "python": "/opt/airflow-venv/bin/python",
+  "dag": "retreino_medico",
+  "tarefas": [
+    "ingestao",
+    "publicacao",
+    "treinamento",
+    "validacao"
+  ],
+  "max_active_runs": 1,
+  "catchup": false,
+  "erros_importacao": {}
+}

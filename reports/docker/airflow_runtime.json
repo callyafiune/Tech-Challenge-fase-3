@@ -1,0 +1,23 @@
+{
+  "python_airflow": "/opt/airflow-venv/bin/python",
+  "python_modelo": "/usr/local/bin/python3.11",
+  "venv_modelo": "/opt/venv",
+  "uid": 10001,
+  "gid": 0,
+  "imagens": {
+    "medical-classifier:local": {
+      "id": "sha256:04875aff7dd271b654986a33392e577fe3a09d6c2769875b023ca560fc837377",
+      "tamanho_bytes": 246358076,
+      "usuario": "10001:10001"
+    },
+    "medical-classifier-airflow:local": {
+      "id": "sha256:a5324cbd1fe2d6ab0e22e67cabf718a715f049ebd09163dc4af390ce7ee85840",
+      "tamanho_bytes": 303128302,
+      "usuario": "10001:0"
+    }
+  },
+  "ambientes_mib": {
+    "/opt/airflow-venv": 209,
+    "/opt/venv": 686
+  }
+}

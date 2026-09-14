@@ -1,0 +1,27 @@
+[
+  {
+    "verificacao": "actionlint",
+    "comando": [
+      "C:\\Users\\Cally\\AppData\\Local\\Temp\\medical-classifier-actionlint-1.7.7\\actionlint.exe",
+      "-shellcheck=",
+      ".github/workflows/ci.yml",
+      ".github/workflows/entrega.yml"
+    ],
+    "codigo_saida": 0,
+    "saida": "",
+    "erro": ""
+  },
+  {
+    "verificacao": "dependencias_host",
+    "comando": [
+      "uv",
+      "pip",
+      "check",
+      "--python",
+      ".venv/Scripts/python.exe"
+    ],
+    "codigo_saida": 0,
+    "saida": "",
+    "erro": "Checked 50 packages in 3ms\nAll installed packages are compatible"
+  }
+]

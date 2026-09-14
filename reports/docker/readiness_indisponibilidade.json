@@ -1,0 +1,8 @@
+{
+  "sucesso": true,
+  "expressao": "(model_ready{job=\"medical-api\"} * on(job, instance) up{job=\"medical-api\"}) or vector(0)",
+  "antes": 1.0,
+  "durante_parada": 0.0,
+  "apos_reinicio": 1.0,
+  "fim_utc": "2026-09-14T21:41:33.293806+00:00"
+}

@@ -1,0 +1,117 @@
+{
+  "bloco": "B3",
+  "modelo_solicitado": "fable",
+  "inicio_utc": "2026-09-14T21:50:00.744464+00:00",
+  "arquivos": [
+    {
+      "caminho": "Dockerfile",
+      "sha256": "4c28fd14b4361e28f41a176e994dd2e0ef623f01d6dd0eb1cb8effe6f87b3c6c",
+      "bytes": 1265
+    },
+    {
+      "caminho": "docker-compose.yml",
+      "sha256": "87b941cd02fcbd5f0f2ee548501e1e25ad7185bfb66f1da340b55fc5468e7d53",
+      "bytes": 3177
+    },
+    {
+      "caminho": ".dockerignore",
+      "sha256": "7cb4c1877b5e93ca10439f2177b02cd0aa67bbe84f52fa2f863e25dda39b7d8f",
+      "bytes": 240
+    },
+    {
+      "caminho": "scripts/smoke_stack.py",
+      "sha256": "c3f092819f3d2b09f36f8eff17808c2b6061bbdc713db9c90cb762b1fbbf77ea",
+      "bytes": 11233
+    },
+    {
+      "caminho": "pyproject.toml",
+      "sha256": "3175dc8e7215b642cae83e3b704ee8a8b7758ee3b99320519fa86187e33d2748",
+      "bytes": 991
+    },
+    {
+      "caminho": "requirements.lock",
+      "sha256": "7b4708337496ac4725e2fe0227ac7bce9b2912f38b699013d7c43589fe656deb",
+      "bytes": 987
+    },
+    {
+      "caminho": "src/medical_classifier/pipeline.py",
+      "sha256": "edc992ad3315eb4296051262d85c4fa9ada3331077c2d9b2a1136e4bbf8df25d",
+      "bytes": 6593
+    },
+    {
+      "caminho": "docker-compose.benchmark.yml",
+      "sha256": "109bbc8a7c4d8bcb8735c107eddda2eabd4a022266b7eb395c75f261f6bf1c13",
+      "bytes": 445
+    },
+    {
+      "caminho": "reports/smoke_stack.json",
+      "sha256": "7a237d97d70ce2a80da45a8a9ef7398b623483fdfc7d9dab76387656e9fda733",
+      "bytes": 2977
+    },
+    {
+      "caminho": "reports/docker/execucao_stack.json",
+      "sha256": "5e4f448f77ede8f61c11ee6e0ada5451102e05a957efb87da27dc8949ebb1027",
+      "bytes": 656
+    },
+    {
+      "caminho": "reports/docker/latencia_modelo.json",
+      "sha256": "5f7d5eaf3d9c1dd34e9b3765df67f296015062f2f9eebc69c4f4161e103b827c",
+      "bytes": 731
+    },
+    {
+      "caminho": "monitoring/README.md",
+      "sha256": "c0ee545de49c805213ca69661d81a48f4c0f221a65ba72d2c27e4fbef6f375af",
+      "bytes": 4388
+    },
+    {
+      "caminho": "monitoring/prometheus/prometheus.yml",
+      "sha256": "8d16cc422c7e7718a6b4c4d9bc5a989f2796b9d2ac9825f4514f7dc95bab2ace",
+      "bytes": 241
+    },
+    {
+      "caminho": "monitoring/grafana/provisioning/datasources/prometheus.yml",
+      "sha256": "d897736549b5b4d4ed5e79b2907e08d0433f6bc16588a4c30063aaac751a483d",
+      "bytes": 225
+    },
+    {
+      "caminho": "monitoring/grafana/provisioning/dashboards/dashboard.yml",
+      "sha256": "a8c8f6f7494cf14820a93e8bc2155d4043b10524bf0bcdc618c5b764d2e0a24b",
+      "bytes": 344
+    },
+    {
+      "caminho": "monitoring/grafana/dashboards/medical-classifier.json",
+      "sha256": "526fc2cd79f36dccfba73dcaa2fb830f9ae9c203b9c504c78d0114a47a5cf872",
+      "bytes": 10313
+    }
+  ],
+  "prompt_sha256": "59f19edec82ba38bcab2f7f9cf5aef57b28c60153585ec53dc58e1632320f23c",
+  "contexto": "Segundarodada B3: Docker build real+pipeline real offline+API10001readOnly completo; seispaineisdadosfinito smoke real. --reutilizar valido/hashapproved evita retreino boot(defaultCLIaindaexecutaretrem); janela20s e trafegointercalado, model_ready*up or0 testado APIstop0/restart1; docextracaoreports; stderrclassifiedsemvazarsenha; Grafanaprovisionpoll20s Windows. Fonte benchmarksDocker anexada. Reavalie defeitosconcretosremanescentes até800palavras.",
+  "timeout_segundos": 600,
+  "aprovacao_automatica": false,
+  "fim_utc": "2026-09-14T21:53:08.588720+00:00",
+  "comando": [
+    "C:\\Users\\Cally\\.vscode\\extensions\\anthropic.claude-code-2.1.270-win32-x64\\resources\\native-binary\\claude.exe",
+    "-p",
+    "--model",
+    "fable",
+    "--effort",
+    "medium",
+    "--safe-mode",
+    "--strict-mcp-config",
+    "--permission-mode",
+    "dontAsk",
+    "--tools",
+    "",
+    "--output-format",
+    "json",
+    "--no-session-persistence"
+  ],
+  "modelos_reportados": [
+    "claude-fable-5-1",
+    "claude-haiku-4-5-20251001"
+  ],
+  "exit_code": 0,
+  "codigo_saida_script": 0,
+  "stderr": "",
+  "erro": ""
+}

@@ -1,0 +1,572 @@
+ Image medical-classifier-airflow:local Building 
+#1 [internal] load local bake definitions
+#1 reading from stdin 569B 0.1s done
+#1 DONE 0.1s
+
+#2 [internal] load build definition from Dockerfile.airflow
+#2 transferring dockerfile: 1.82kB 0.0s done
+#2 DONE 0.1s
+
+#3 [internal] load metadata for docker.io/library/medical-classifier:local
+#3 DONE 0.1s
+
+#4 [internal] load .dockerignore
+#4 transferring context: 282B done
+#4 DONE 0.0s
+
+#5 [internal] load build context
+#5 DONE 0.0s
+
+#6 [2/7] ADD --checksum=sha256:b32ab3fa687c0e04b2260526fee79813bfb7944da5b6805e429c9f71b07c53f3     https://raw.githubusercontent.com/apache/airflow/338bcef28071e8b833876554c502079adb3739d0/constraints-3.11.txt     /opt/airflow-constraints-3.11.txt
+#6 DONE 0.0s
+
+#7 [1/7] FROM docker.io/library/medical-classifier:local@sha256:04875aff7dd271b654986a33392e577fe3a09d6c2769875b023ca560fc837377
+#7 resolve docker.io/library/medical-classifier:local@sha256:04875aff7dd271b654986a33392e577fe3a09d6c2769875b023ca560fc837377 0.1s done
+#7 DONE 0.2s
+
+#5 [internal] load build context
+#5 transferring context: 1.28kB 0.0s done
+#5 DONE 0.1s
+
+#6 [2/7] ADD --checksum=sha256:b32ab3fa687c0e04b2260526fee79813bfb7944da5b6805e429c9f71b07c53f3     https://raw.githubusercontent.com/apache/airflow/338bcef28071e8b833876554c502079adb3739d0/constraints-3.11.txt     /opt/airflow-constraints-3.11.txt
+#6 DONE 0.5s
+
+#8 [2/7] ADD --checksum=sha256:b32ab3fa687c0e04b2260526fee79813bfb7944da5b6805e429c9f71b07c53f3     https://raw.githubusercontent.com/apache/airflow/338bcef28071e8b833876554c502079adb3739d0/constraints-3.11.txt     /opt/airflow-constraints-3.11.txt
+#8 DONE 0.1s
+
+#9 [3/7] RUN /usr/local/bin/python -m venv /opt/airflow-venv     && /opt/airflow-venv/bin/python -m pip install --no-cache-dir --no-compile         "apache-airflow==2.11.0" --constraint /opt/airflow-constraints-3.11.txt     && /opt/airflow-venv/bin/python -m pip check     && ln -s /opt/venv /opt/model-venv     && mkdir -p /opt/airflow/dags /opt/airflow/estado     && chown -R 10001:0 /opt/airflow     && chmod -R g+rwX /opt/airflow
+#9 10.77 Collecting apache-airflow==2.11.0
+#9 11.02   Downloading apache_airflow-2.11.0-py3-none-any.whl.metadata (45 kB)
+#9 11.03      ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 45.4/45.4 kB 4.5 MB/s eta 0:00:00
+#9 11.51 Collecting alembic<2.0,>=1.13.1 (from apache-airflow==2.11.0)
+#9 11.65   Downloading alembic-1.15.2-py3-none-any.whl.metadata (7.3 kB)
+#9 11.70 Collecting argcomplete>=1.10 (from apache-airflow==2.11.0)
+#9 11.84   Downloading argcomplete-3.6.2-py3-none-any.whl.metadata (16 kB)
+#9 11.88 Collecting asgiref>=2.3.0 (from apache-airflow==2.11.0)
+#9 11.89   Downloading asgiref-3.8.1-py3-none-any.whl.metadata (9.3 kB)
+#9 11.93 Collecting attrs>=22.1.0 (from apache-airflow==2.11.0)
+#9 11.94   Downloading attrs-25.3.0-py3-none-any.whl.metadata (10 kB)
+#9 11.97 Collecting blinker>=1.6.2 (from apache-airflow==2.11.0)
+#9 11.98   Downloading blinker-1.9.0-py3-none-any.whl.metadata (1.6 kB)
+#9 12.02 Collecting colorlog>=6.8.2 (from apache-airflow==2.11.0)
+#9 12.03   Downloading colorlog-6.9.0-py3-none-any.whl.metadata (10 kB)
+#9 12.19 Collecting configupdater>=3.1.1 (from apache-airflow==2.11.0)
+#9 12.20   Downloading ConfigUpdater-3.2-py2.py3-none-any.whl.metadata (10 kB)
+#9 12.44 Collecting connexion<3.0,>=2.14.2 (from connexion[flask]<3.0,>=2.14.2->apache-airflow==2.11.0)
+#9 12.45   Downloading connexion-2.14.2-py2.py3-none-any.whl.metadata (28 kB)
+#9 12.48 Collecting cron-descriptor>=1.2.24 (from apache-airflow==2.11.0)
+#9 12.49   Downloading cron_descriptor-1.4.5-py3-none-any.whl.metadata (5.7 kB)
+#9 12.56 Collecting croniter>=2.0.2 (from apache-airflow==2.11.0)
+#9 12.57   Downloading croniter-6.0.0-py2.py3-none-any.whl.metadata (32 kB)
+#9 13.03 Collecting cryptography>=41.0.0 (from apache-airflow==2.11.0)
+#9 13.05   Downloading cryptography-42.0.8-cp39-abi3-manylinux_2_28_x86_64.whl.metadata (5.3 kB)
+#9 13.08 Collecting deprecated>=1.2.13 (from apache-airflow==2.11.0)
+#9 13.09   Downloading Deprecated-1.2.18-py2.py3-none-any.whl.metadata (5.7 kB)
+#9 13.12 Collecting dill>=0.2.2 (from apache-airflow==2.11.0)
+#9 13.14   Downloading dill-0.3.1.1.tar.gz (151 kB)
+#9 13.15      ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 152.0/152.0 kB 11.9 MB/s eta 0:00:00
+#9 13.18   Installing build dependencies: started
+#9 16.90   Installing build dependencies: finished with status 'done'
+#9 16.90   Getting requirements to build wheel: started
+#9 17.26   Getting requirements to build wheel: finished with status 'done'
+#9 17.26   Preparing metadata (pyproject.toml): started
+#9 17.59   Preparing metadata (pyproject.toml): finished with status 'done'
+#9 17.63 Collecting flask-caching>=2.0.0 (from apache-airflow==2.11.0)
+#9 17.64   Downloading Flask_Caching-2.3.1-py3-none-any.whl.metadata (2.2 kB)
+#9 17.80 Collecting flask-session<0.6,>=0.4.0 (from apache-airflow==2.11.0)
+#9 17.81   Downloading flask_session-0.5.0-py3-none-any.whl.metadata (1.4 kB)
+#9 17.97 Collecting flask-wtf>=1.1.0 (from apache-airflow==2.11.0)
+#9 17.98   Downloading flask_wtf-1.2.2-py3-none-any.whl.metadata (3.4 kB)
+#9 18.02 Collecting flask<2.3,>=2.2.1 (from apache-airflow==2.11.0)
+#9 18.03   Downloading Flask-2.2.5-py3-none-any.whl.metadata (3.9 kB)
+#9 18.09 Collecting fsspec>=2023.10.0 (from apache-airflow==2.11.0)
+#9 18.10   Downloading fsspec-2025.3.2-py3-none-any.whl.metadata (11 kB)
+#9 18.34 Collecting google-re2>=1.0 (from apache-airflow==2.11.0)
+#9 18.48   Downloading google_re2-1.1.20240702-1-cp311-cp311-manylinux_2_24_x86_64.manylinux_2_28_x86_64.whl.metadata (2.2 kB)
+#9 18.51 Collecting gunicorn>=20.1.0 (from apache-airflow==2.11.0)
+#9 18.52   Downloading gunicorn-23.0.0-py3-none-any.whl.metadata (4.4 kB)
+#9 18.57 Collecting httpx>=0.25.0 (from apache-airflow==2.11.0)
+#9 18.58   Downloading httpx-0.27.0-py3-none-any.whl.metadata (7.2 kB)
+#9 18.66 Collecting importlib_metadata>=6.5 (from apache-airflow==2.11.0)
+#9 18.67   Downloading importlib_metadata-6.11.0-py3-none-any.whl.metadata (4.9 kB)
+#9 18.69 Collecting itsdangerous>=2.0 (from apache-airflow==2.11.0)
+#9 18.72   Downloading itsdangerous-2.2.0-py3-none-any.whl.metadata (1.9 kB)
+#9 18.78 Collecting jinja2>=3.0.0 (from apache-airflow==2.11.0)
+#9 18.79   Downloading jinja2-3.1.6-py3-none-any.whl.metadata (2.9 kB)
+#9 18.85 Collecting jsonschema>=4.18.0 (from apache-airflow==2.11.0)
+#9 18.86   Downloading jsonschema-4.23.0-py3-none-any.whl.metadata (7.9 kB)
+#9 18.92 Collecting lazy-object-proxy>=1.2.0 (from apache-airflow==2.11.0)
+#9 19.07   Downloading lazy_object_proxy-1.11.0-py3-none-any.whl.metadata (8.2 kB)
+#9 19.09 Collecting linkify-it-py>=2.0.0 (from apache-airflow==2.11.0)
+#9 19.10   Downloading linkify_it_py-2.0.3-py3-none-any.whl.metadata (8.5 kB)
+#9 19.25 Collecting lockfile>=0.12.2 (from apache-airflow==2.11.0)
+#9 19.27   Downloading lockfile-0.12.2-py2.py3-none-any.whl.metadata (2.4 kB)
+#9 19.34 Collecting markdown-it-py>=2.1.0 (from apache-airflow==2.11.0)
+#9 19.35   Downloading markdown_it_py-3.0.0-py3-none-any.whl.metadata (6.9 kB)
+#9 19.44 Collecting markupsafe>=1.1.1 (from apache-airflow==2.11.0)
+#9 19.45   Downloading MarkupSafe-3.0.2-cp311-cp311-manylinux_2_17_x86_64.manylinux2014_x86_64.whl.metadata (4.0 kB)
+#9 19.61 Collecting marshmallow-oneofschema>=2.0.1 (from apache-airflow==2.11.0)
+#9 19.62   Downloading marshmallow_oneofschema-3.2.0-py3-none-any.whl.metadata (5.3 kB)
+#9 19.65 Collecting mdit-py-plugins>=0.3.0 (from apache-airflow==2.11.0)
+#9 19.66   Downloading mdit_py_plugins-0.4.2-py3-none-any.whl.metadata (2.8 kB)
+#9 19.68 Collecting methodtools>=0.4.7 (from apache-airflow==2.11.0)
+#9 19.69   Downloading methodtools-0.4.7-py2.py3-none-any.whl.metadata (3.0 kB)
+#9 19.74 Collecting opentelemetry-api>=1.24.0 (from apache-airflow==2.11.0)
+#9 19.75   Downloading opentelemetry_api-1.27.0-py3-none-any.whl.metadata (1.4 kB)
+#9 19.79 Collecting opentelemetry-exporter-otlp>=1.24.0 (from apache-airflow==2.11.0)
+#9 19.80   Downloading opentelemetry_exporter_otlp-1.27.0-py3-none-any.whl.metadata (2.3 kB)
+#9 19.84 Collecting packaging>=23.0 (from apache-airflow==2.11.0)
+#9 19.85   Downloading packaging-25.0-py3-none-any.whl.metadata (3.3 kB)
+#9 19.88 Collecting pathspec>=0.9.0 (from apache-airflow==2.11.0)
+#9 19.89   Downloading pathspec-0.12.1-py3-none-any.whl.metadata (21 kB)
+#9 19.97 Collecting pendulum<4.0,>=2.1.2 (from apache-airflow==2.11.0)
+#9 20.11   Downloading pendulum-3.1.0-cp311-cp311-manylinux_2_17_x86_64.manylinux2014_x86_64.whl.metadata (6.8 kB)
+#9 20.14 Collecting pluggy>=1.5.0 (from apache-airflow==2.11.0)
+#9 20.15   Downloading pluggy-1.6.0-py3-none-any.whl.metadata (4.8 kB)
+#9 20.30 Collecting psutil>=5.8.0 (from apache-airflow==2.11.0)
+#9 20.31   Downloading psutil-7.0.0-cp36-abi3-manylinux_2_12_x86_64.manylinux2010_x86_64.manylinux_2_17_x86_64.manylinux2014_x86_64.whl.metadata (22 kB)
+#9 20.36 Collecting pygments>=2.0.1 (from apache-airflow==2.11.0)
+#9 20.37   Downloading pygments-2.19.1-py3-none-any.whl.metadata (2.5 kB)
+#9 20.41 Collecting pyjwt>=2.0.0 (from apache-airflow==2.11.0)
+#9 20.43   Downloading PyJWT-2.10.1-py3-none-any.whl.metadata (4.0 kB)
+#9 20.47 Collecting python-daemon>=3.0.0 (from apache-airflow==2.11.0)
+#9 20.48   Downloading python_daemon-3.1.2-py3-none-any.whl.metadata (4.8 kB)
+#9 20.52 Collecting python-dateutil>=2.7.0 (from apache-airflow==2.11.0)
+#9 20.53   Downloading python_dateutil-2.9.0.post0-py2.py3-none-any.whl.metadata (8.4 kB)
+#9 20.70 Collecting python-nvd3>=0.15.0 (from apache-airflow==2.11.0)
+#9 20.71   Downloading python-nvd3-0.16.0.tar.gz (34 kB)
+#9 20.73   Installing build dependencies: started
+#9 22.76   Installing build dependencies: finished with status 'done'
+#9 22.76   Getting requirements to build wheel: started
+#9 23.08   Getting requirements to build wheel: finished with status 'done'
+#9 23.08   Preparing metadata (pyproject.toml): started
+#9 23.35   Preparing metadata (pyproject.toml): finished with status 'done'
+#9 23.40 Collecting python-slugify>=5.0 (from apache-airflow==2.11.0)
+#9 23.41   Downloading python_slugify-8.0.4-py2.py3-none-any.whl.metadata (8.5 kB)
+#9 23.48 Collecting requests<3,>=2.27.0 (from apache-airflow==2.11.0)
+#9 23.49   Downloading requests-2.32.3-py3-none-any.whl.metadata (4.6 kB)
+#9 23.52 Collecting requests-toolbelt>=0.4.0 (from apache-airflow==2.11.0)
+#9 23.53   Downloading requests_toolbelt-1.0.0-py2.py3-none-any.whl.metadata (14 kB)
+#9 23.70 Collecting rfc3339-validator>=0.1.4 (from apache-airflow==2.11.0)
+#9 23.71   Downloading rfc3339_validator-0.1.4-py2.py3-none-any.whl.metadata (1.5 kB)
+#9 23.74 Collecting rich-argparse>=1.0.0 (from apache-airflow==2.11.0)
+#9 23.89   Downloading rich_argparse-1.7.0-py3-none-any.whl.metadata (14 kB)
+#9 24.01 Collecting rich>=12.4.4 (from apache-airflow==2.11.0)
+#9 24.02   Downloading rich-13.9.4-py3-none-any.whl.metadata (18 kB)
+#9 24.20 Collecting setproctitle>=1.3.3 (from apache-airflow==2.11.0)
+#9 24.35   Downloading setproctitle-1.3.6-cp311-cp311-manylinux_2_5_x86_64.manylinux1_x86_64.manylinux_2_17_x86_64.manylinux2014_x86_64.whl.metadata (10 kB)
+#9 25.17 Collecting sqlalchemy<2.0,>=1.4.36 (from apache-airflow==2.11.0)
+#9 25.18   Downloading SQLAlchemy-1.4.54-cp311-cp311-manylinux_2_5_x86_64.manylinux1_x86_64.manylinux_2_17_x86_64.manylinux2014_x86_64.whl.metadata (10 kB)
+#9 25.36 Collecting sqlalchemy-jsonfield>=1.0 (from apache-airflow==2.11.0)
+#9 25.51   Downloading SQLAlchemy_JSONField-1.0.2-py3-none-any.whl.metadata (5.2 kB)
+#9 25.54 Collecting tabulate>=0.7.5 (from apache-airflow==2.11.0)
+#9 25.56   Downloading tabulate-0.9.0-py3-none-any.whl.metadata (34 kB)
+#9 25.63 Collecting tenacity!=8.2.0,>=8.0.0 (from apache-airflow==2.11.0)
+#9 25.64   Downloading tenacity-9.1.2-py3-none-any.whl.metadata (1.2 kB)
+#9 25.69 Collecting termcolor>=1.1.0 (from apache-airflow==2.11.0)
+#9 25.70   Downloading termcolor-3.1.0-py3-none-any.whl.metadata (6.4 kB)
+#9 25.75 Collecting universal-pathlib!=0.2.4,>=0.2.2 (from apache-airflow==2.11.0)
+#9 25.77   Downloading universal_pathlib-0.2.6-py3-none-any.whl.metadata (25 kB)
+#9 25.85 Collecting werkzeug<3,>=2.0 (from apache-airflow==2.11.0)
+#9 25.87   Downloading Werkzeug-2.2.3-py3-none-any.whl.metadata (4.4 kB)
+#9 25.95 Collecting apache-airflow-providers-common-compat (from apache-airflow==2.11.0)
+#9 26.10   Downloading apache_airflow_providers_common_compat-1.7.0-py3-none-any.whl.metadata (5.3 kB)
+#9 26.23 Collecting apache-airflow-providers-common-io (from apache-airflow==2.11.0)
+#9 26.38   Downloading apache_airflow_providers_common_io-1.6.0-py3-none-any.whl.metadata (5.2 kB)
+#9 26.46 Collecting apache-airflow-providers-common-sql (from apache-airflow==2.11.0)
+#9 26.47   Downloading apache_airflow_providers_common_sql-1.27.1-py3-none-any.whl.metadata (5.3 kB)
+#9 26.54 Collecting apache-airflow-providers-fab>=1.0.2 (from apache-airflow==2.11.0)
+#9 26.55   Downloading apache_airflow_providers_fab-1.5.3-py3-none-any.whl.metadata (6.4 kB)
+#9 26.73 Collecting apache-airflow-providers-ftp (from apache-airflow==2.11.0)
+#9 26.88   Downloading apache_airflow_providers_ftp-3.13.0-py3-none-any.whl.metadata (5.2 kB)
+#9 26.94 Collecting apache-airflow-providers-http (from apache-airflow==2.11.0)
+#9 27.08   Downloading apache_airflow_providers_http-5.3.0-py3-none-any.whl.metadata (4.1 kB)
+#9 27.26 Collecting apache-airflow-providers-imap (from apache-airflow==2.11.0)
+#9 27.40   Downloading apache_airflow_providers_imap-3.9.0-py3-none-any.whl.metadata (3.8 kB)
+#9 27.45 Collecting apache-airflow-providers-smtp (from apache-airflow==2.11.0)
+#9 27.47   Downloading apache_airflow_providers_smtp-2.1.0-py3-none-any.whl.metadata (5.1 kB)
+#9 27.65 Collecting apache-airflow-providers-sqlite (from apache-airflow==2.11.0)
+#9 27.66   Downloading apache_airflow_providers_sqlite-4.1.0-py3-none-any.whl.metadata (5.0 kB)
+#9 27.77 Collecting Mako (from alembic<2.0,>=1.13.1->apache-airflow==2.11.0)
+#9 27.78   Downloading mako-1.3.10-py3-none-any.whl.metadata (2.9 kB)
+#9 27.81 Collecting typing-extensions>=4.12 (from alembic<2.0,>=1.13.1->apache-airflow==2.11.0)
+#9 27.82   Downloading typing_extensions-4.13.2-py3-none-any.whl.metadata (3.0 kB)
+#9 28.11 Collecting flask-appbuilder==4.5.3 (from apache-airflow-providers-fab>=1.0.2->apache-airflow==2.11.0)
+#9 28.12   Downloading Flask_AppBuilder-4.5.3-py3-none-any.whl.metadata (8.9 kB)
+#9 28.30 Collecting flask-login>=0.6.2 (from apache-airflow-providers-fab>=1.0.2->apache-airflow==2.11.0)
+#9 28.31   Downloading Flask_Login-0.6.3-py3-none-any.whl.metadata (5.8 kB)
+#9 28.34 Collecting jmespath>=0.7.0 (from apache-airflow-providers-fab>=1.0.2->apache-airflow==2.11.0)
+#9 28.35   Downloading jmespath-0.10.0-py2.py3-none-any.whl.metadata (8.0 kB)
+#9 28.56 Collecting apispec<7,>=6.0.0 (from apispec[yaml]<7,>=6.0.0->flask-appbuilder==4.5.3->apache-airflow-providers-fab>=1.0.2->apache-airflow==2.11.0)
+#9 28.70   Downloading apispec-6.8.2-py3-none-any.whl.metadata (10 kB)
+#9 28.73 Collecting colorama<1,>=0.3.9 (from flask-appbuilder==4.5.3->apache-airflow-providers-fab>=1.0.2->apache-airflow==2.11.0)
+#9 28.74   Downloading colorama-0.4.6-py2.py3-none-any.whl.metadata (17 kB)
+#9 28.78 Collecting click<9,>=8 (from flask-appbuilder==4.5.3->apache-airflow-providers-fab>=1.0.2->apache-airflow==2.11.0)
+#9 28.92   Downloading click-8.2.0-py3-none-any.whl.metadata (2.5 kB)
+#9 28.95 Collecting email-validator>=1.0.5 (from flask-appbuilder==4.5.3->apache-airflow-providers-fab>=1.0.2->apache-airflow==2.11.0)
+#9 28.96   Downloading email_validator-2.2.0-py3-none-any.whl.metadata (25 kB)
+#9 29.12 Collecting Flask-Babel<3,>=1 (from flask-appbuilder==4.5.3->apache-airflow-providers-fab>=1.0.2->apache-airflow==2.11.0)
+#9 29.13   Downloading Flask_Babel-2.0.0-py3-none-any.whl.metadata (2.1 kB)
+#9 29.30 Collecting Flask-Limiter<4,>3 (from flask-appbuilder==4.5.3->apache-airflow-providers-fab>=1.0.2->apache-airflow==2.11.0)
+#9 29.32   Downloading flask_limiter-3.12-py3-none-any.whl.metadata (6.3 kB)
+#9 29.48 Collecting Flask-SQLAlchemy<3,>=2.4 (from flask-appbuilder==4.5.3->apache-airflow-providers-fab>=1.0.2->apache-airflow==2.11.0)
+#9 29.49   Downloading Flask_SQLAlchemy-2.5.1-py2.py3-none-any.whl.metadata (3.1 kB)
+#9 29.66 Collecting Flask-JWT-Extended<5.0.0,>=4.0.0 (from flask-appbuilder==4.5.3->apache-airflow-providers-fab>=1.0.2->apache-airflow==2.11.0)
+#9 29.67   Downloading Flask_JWT_Extended-4.7.1-py2.py3-none-any.whl.metadata (3.8 kB)
+#9 29.75 Collecting marshmallow<4,>=3.18.0 (from flask-appbuilder==4.5.3->apache-airflow-providers-fab>=1.0.2->apache-airflow==2.11.0)
+#9 29.76   Downloading marshmallow-3.26.1-py3-none-any.whl.metadata (7.3 kB)
+#9 29.79 Collecting marshmallow-sqlalchemy<0.29.0,>=0.22.0 (from flask-appbuilder==4.5.3->apache-airflow-providers-fab>=1.0.2->apache-airflow==2.11.0)
+#9 29.93   Downloading marshmallow_sqlalchemy-0.28.2-py2.py3-none-any.whl.metadata (6.8 kB)
+#9 30.09 Collecting prison<1.0.0,>=0.2.1 (from flask-appbuilder==4.5.3->apache-airflow-providers-fab>=1.0.2->apache-airflow==2.11.0)
+#9 30.10   Downloading prison-0.2.1-py2.py3-none-any.whl.metadata (973 bytes)
+#9 30.17 Collecting sqlalchemy-utils<1,>=0.32.21 (from flask-appbuilder==4.5.3->apache-airflow-providers-fab>=1.0.2->apache-airflow==2.11.0)
+#9 30.18   Downloading SQLAlchemy_Utils-0.41.2-py3-none-any.whl.metadata (4.2 kB)
+#9 30.34 Collecting WTForms<4 (from flask-appbuilder==4.5.3->apache-airflow-providers-fab>=1.0.2->apache-airflow==2.11.0)
+#9 30.35   Downloading wtforms-3.2.1-py3-none-any.whl.metadata (5.3 kB)
+#9 30.64 Collecting clickclick<21,>=1.2 (from connexion<3.0,>=2.14.2->connexion[flask]<3.0,>=2.14.2->apache-airflow==2.11.0)
+#9 30.78   Downloading clickclick-20.10.2-py2.py3-none-any.whl.metadata (7.6 kB)
+#9 31.08 Collecting PyYAML<7,>=5.1 (from connexion<3.0,>=2.14.2->connexion[flask]<3.0,>=2.14.2->apache-airflow==2.11.0)
+#9 31.09   Downloading PyYAML-6.0.2-cp311-cp311-manylinux_2_17_x86_64.manylinux2014_x86_64.whl.metadata (2.1 kB)
+#9 31.25 Collecting inflection<0.6,>=0.3.1 (from connexion<3.0,>=2.14.2->connexion[flask]<3.0,>=2.14.2->apache-airflow==2.11.0)
+#9 31.26   Downloading inflection-0.5.1-py2.py3-none-any.whl.metadata (1.7 kB)
+#9 31.47 Collecting pytz>2021.1 (from croniter>=2.0.2->apache-airflow==2.11.0)
+#9 31.48   Downloading pytz-2025.2-py2.py3-none-any.whl.metadata (22 kB)
+#9 31.75 Collecting cffi>=1.12 (from cryptography>=41.0.0->apache-airflow==2.11.0)
+#9 31.76   Downloading cffi-1.17.1-cp311-cp311-manylinux_2_17_x86_64.manylinux2014_x86_64.whl.metadata (1.5 kB)
+#9 32.38 Collecting wrapt<2,>=1.10 (from deprecated>=1.2.13->apache-airflow==2.11.0)
+#9 32.52   Downloading wrapt-1.17.2-cp311-cp311-manylinux_2_5_x86_64.manylinux1_x86_64.manylinux_2_17_x86_64.manylinux2014_x86_64.whl.metadata (6.4 kB)
+#9 32.58 Collecting cachelib>=0.9.0 (from flask-caching>=2.0.0->apache-airflow==2.11.0)
+#9 32.72   Downloading cachelib-0.13.0-py3-none-any.whl.metadata (2.0 kB)
+#9 32.88 Collecting anyio (from httpx>=0.25.0->apache-airflow==2.11.0)
+#9 32.90   Downloading anyio-4.9.0-py3-none-any.whl.metadata (4.7 kB)
+#9 32.93 Collecting certifi (from httpx>=0.25.0->apache-airflow==2.11.0)
+#9 32.94   Downloading certifi-2025.4.26-py3-none-any.whl.metadata (2.5 kB)
+#9 32.98 Collecting httpcore==1.* (from httpx>=0.25.0->apache-airflow==2.11.0)
+#9 32.99   Downloading httpcore-1.0.9-py3-none-any.whl.metadata (21 kB)
+#9 33.03 Collecting idna (from httpx>=0.25.0->apache-airflow==2.11.0)
+#9 33.04   Downloading idna-3.10-py3-none-any.whl.metadata (10 kB)
+#9 33.06 Collecting sniffio (from httpx>=0.25.0->apache-airflow==2.11.0)
+#9 33.07   Downloading sniffio-1.3.1-py3-none-any.whl.metadata (3.9 kB)
+#9 33.24 Collecting h11>=0.16 (from httpcore==1.*->httpx>=0.25.0->apache-airflow==2.11.0)
+#9 33.25   Downloading h11-0.16.0-py3-none-any.whl.metadata (8.3 kB)
+#9 33.32 Collecting zipp>=0.5 (from importlib_metadata>=6.5->apache-airflow==2.11.0)
+#9 33.33   Downloading zipp-3.21.0-py3-none-any.whl.metadata (3.7 kB)
+#9 33.41 Collecting jsonschema-specifications>=2023.03.6 (from jsonschema>=4.18.0->apache-airflow==2.11.0)
+#9 33.42   Downloading jsonschema_specifications-2025.4.1-py3-none-any.whl.metadata (2.9 kB)
+#9 33.48 Collecting referencing>=0.28.4 (from jsonschema>=4.18.0->apache-airflow==2.11.0)
+#9 33.49   Downloading referencing-0.36.2-py3-none-any.whl.metadata (2.8 kB)
+#9 34.02 Collecting rpds-py>=0.7.1 (from jsonschema>=4.18.0->apache-airflow==2.11.0)
+#9 34.16   Downloading rpds_py-0.25.0-cp311-cp311-manylinux_2_17_x86_64.manylinux2014_x86_64.whl.metadata (4.1 kB)
+#9 34.21 Collecting uc-micro-py (from linkify-it-py>=2.0.0->apache-airflow==2.11.0)
+#9 34.22   Downloading uc_micro_py-1.0.3-py3-none-any.whl.metadata (2.0 kB)
+#9 34.27 Collecting mdurl~=0.1 (from markdown-it-py>=2.1.0->apache-airflow==2.11.0)
+#9 34.28   Downloading mdurl-0.1.2-py3-none-any.whl.metadata (1.6 kB)
+#9 34.39 Collecting wirerope>=0.4.7 (from methodtools>=0.4.7->apache-airflow==2.11.0)
+#9 34.40   Downloading wirerope-1.0.0-py2.py3-none-any.whl.metadata (3.3 kB)
+#9 34.48 Collecting opentelemetry-exporter-otlp-proto-grpc==1.27.0 (from opentelemetry-exporter-otlp>=1.24.0->apache-airflow==2.11.0)
+#9 34.49   Downloading opentelemetry_exporter_otlp_proto_grpc-1.27.0-py3-none-any.whl.metadata (2.3 kB)
+#9 34.53 Collecting opentelemetry-exporter-otlp-proto-http==1.27.0 (from opentelemetry-exporter-otlp>=1.24.0->apache-airflow==2.11.0)
+#9 34.54   Downloading opentelemetry_exporter_otlp_proto_http-1.27.0-py3-none-any.whl.metadata (2.3 kB)
+#9 34.60 Collecting googleapis-common-protos~=1.52 (from opentelemetry-exporter-otlp-proto-grpc==1.27.0->opentelemetry-exporter-otlp>=1.24.0->apache-airflow==2.11.0)
+#9 34.61   Downloading googleapis_common_protos-1.70.0-py3-none-any.whl.metadata (9.3 kB)
+#9 35.84 Collecting grpcio<2.0.0,>=1.0.0 (from opentelemetry-exporter-otlp-proto-grpc==1.27.0->opentelemetry-exporter-otlp>=1.24.0->apache-airflow==2.11.0)
+#9 35.98   Downloading grpcio-1.71.0-cp311-cp311-manylinux_2_17_x86_64.manylinux2014_x86_64.whl.metadata (3.8 kB)
+#9 36.04 Collecting opentelemetry-exporter-otlp-proto-common==1.27.0 (from opentelemetry-exporter-otlp-proto-grpc==1.27.0->opentelemetry-exporter-otlp>=1.24.0->apache-airflow==2.11.0)
+#9 36.05   Downloading opentelemetry_exporter_otlp_proto_common-1.27.0-py3-none-any.whl.metadata (1.8 kB)
+#9 36.11 Collecting opentelemetry-proto==1.27.0 (from opentelemetry-exporter-otlp-proto-grpc==1.27.0->opentelemetry-exporter-otlp>=1.24.0->apache-airflow==2.11.0)
+#9 36.13   Downloading opentelemetry_proto-1.27.0-py3-none-any.whl.metadata (2.3 kB)
+#9 36.37 Collecting opentelemetry-sdk~=1.27.0 (from opentelemetry-exporter-otlp-proto-grpc==1.27.0->opentelemetry-exporter-otlp>=1.24.0->apache-airflow==2.11.0)
+#9 36.38   Downloading opentelemetry_sdk-1.27.0-py3-none-any.whl.metadata (1.5 kB)
+#9 36.96 Collecting protobuf<5.0,>=3.19 (from opentelemetry-proto==1.27.0->opentelemetry-exporter-otlp-proto-grpc==1.27.0->opentelemetry-exporter-otlp>=1.24.0->apache-airflow==2.11.0)
+#9 37.12   Downloading protobuf-4.25.7-cp37-abi3-manylinux2014_x86_64.whl.metadata (541 bytes)
+#9 37.25 Collecting tzdata>=2020.1 (from pendulum<4.0,>=2.1.2->apache-airflow==2.11.0)
+#9 37.26   Downloading tzdata-2025.2-py2.py3-none-any.whl.metadata (1.4 kB)
+#9 37.61 Collecting six>=1.5 (from python-dateutil>=2.7.0->apache-airflow==2.11.0)
+#9 37.63   Downloading six-1.17.0-py2.py3-none-any.whl.metadata (1.7 kB)
+#9 37.73 Collecting text-unidecode>=1.3 (from python-slugify>=5.0->apache-airflow==2.11.0)
+#9 37.75   Downloading text_unidecode-1.3-py2.py3-none-any.whl.metadata (2.4 kB)
+#9 38.15 Collecting charset-normalizer<4,>=2 (from requests<3,>=2.27.0->apache-airflow==2.11.0)
+#9 38.17   Downloading charset_normalizer-3.4.2-cp311-cp311-manylinux_2_17_x86_64.manylinux2014_x86_64.whl.metadata (35 kB)
+#9 38.27 Collecting urllib3<3,>=1.21.1 (from requests<3,>=2.27.0->apache-airflow==2.11.0)
+#9 38.28   Downloading urllib3-2.4.0-py3-none-any.whl.metadata (6.5 kB)
+#9 39.12 Collecting greenlet!=0.4.17 (from sqlalchemy<2.0,>=1.4.36->apache-airflow==2.11.0)
+#9 39.27   Downloading greenlet-3.2.2-cp311-cp311-manylinux_2_24_x86_64.manylinux_2_28_x86_64.whl.metadata (4.1 kB)
+#9 39.49 Collecting sqlparse>=0.5.1 (from apache-airflow-providers-common-sql->apache-airflow==2.11.0)
+#9 39.50   Downloading sqlparse-0.5.3-py3-none-any.whl.metadata (3.9 kB)
+#9 39.54 Collecting more-itertools>=9.0.0 (from apache-airflow-providers-common-sql->apache-airflow==2.11.0)
+#9 39.55   Downloading more_itertools-10.7.0-py3-none-any.whl.metadata (37 kB)
+#9 40.57 Collecting aiohttp!=3.11.0,>=3.9.2 (from apache-airflow-providers-http->apache-airflow==2.11.0)
+#9 40.71   Downloading aiohttp-3.11.18-cp311-cp311-manylinux_2_17_x86_64.manylinux2014_x86_64.whl.metadata (7.7 kB)
+#9 40.85 Collecting aiohappyeyeballs>=2.3.0 (from aiohttp!=3.11.0,>=3.9.2->apache-airflow-providers-http->apache-airflow==2.11.0)
+#9 40.86   Downloading aiohappyeyeballs-2.6.1-py3-none-any.whl.metadata (5.9 kB)
+#9 40.88 Collecting aiosignal>=1.1.2 (from aiohttp!=3.11.0,>=3.9.2->apache-airflow-providers-http->apache-airflow==2.11.0)
+#9 40.89   Downloading aiosignal-1.3.2-py2.py3-none-any.whl.metadata (3.8 kB)
+#9 41.02 Collecting frozenlist>=1.1.1 (from aiohttp!=3.11.0,>=3.9.2->apache-airflow-providers-http->apache-airflow==2.11.0)
+#9 41.16   Downloading frozenlist-1.6.0-cp311-cp311-manylinux_2_5_x86_64.manylinux1_x86_64.manylinux_2_17_x86_64.manylinux2014_x86_64.whl.metadata (16 kB)
+#9 41.61 Collecting multidict<7.0,>=4.5 (from aiohttp!=3.11.0,>=3.9.2->apache-airflow-providers-http->apache-airflow==2.11.0)
+#9 41.75   Downloading multidict-6.4.4-cp311-cp311-manylinux_2_17_x86_64.manylinux2014_x86_64.whl.metadata (5.3 kB)
+#9 42.00 Collecting propcache>=0.2.0 (from aiohttp!=3.11.0,>=3.9.2->apache-airflow-providers-http->apache-airflow==2.11.0)
+#9 42.15   Downloading propcache-0.3.1-cp311-cp311-manylinux_2_17_x86_64.manylinux2014_x86_64.whl.metadata (10 kB)
+#9 42.73 Collecting yarl<2.0,>=1.17.0 (from aiohttp!=3.11.0,>=3.9.2->apache-airflow-providers-http->apache-airflow==2.11.0)
+#9 42.87   Downloading yarl-1.20.0-cp311-cp311-manylinux_2_17_x86_64.manylinux2014_x86_64.whl.metadata (72 kB)
+#9 42.94      ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 72.4/72.4 kB 97.2 MB/s eta 0:00:00
+#9 43.06 Collecting pycparser (from cffi>=1.12->cryptography>=41.0.0->apache-airflow==2.11.0)
+#9 43.07   Downloading pycparser-2.22-py3-none-any.whl.metadata (943 bytes)
+#9 44.32 Collecting dnspython>=2.0.0 (from email-validator>=1.0.5->flask-appbuilder==4.5.3->apache-airflow-providers-fab>=1.0.2->apache-airflow==2.11.0)
+#9 44.34   Downloading dnspython-2.7.0-py3-none-any.whl.metadata (5.8 kB)
+#9 44.41 Collecting Babel>=2.3 (from Flask-Babel<3,>=1->flask-appbuilder==4.5.3->apache-airflow-providers-fab>=1.0.2->apache-airflow==2.11.0)
+#9 44.42   Downloading babel-2.17.0-py3-none-any.whl.metadata (2.0 kB)
+#9 44.56 Collecting limits>=3.13 (from Flask-Limiter<4,>3->flask-appbuilder==4.5.3->apache-airflow-providers-fab>=1.0.2->apache-airflow==2.11.0)
+#9 44.70   Downloading limits-5.2.0-py3-none-any.whl.metadata (10 kB)
+#9 44.85 Collecting ordered-set<5,>4 (from Flask-Limiter<4,>3->flask-appbuilder==4.5.3->apache-airflow-providers-fab>=1.0.2->apache-airflow==2.11.0)
+#9 44.86   Downloading ordered_set-4.1.0-py3-none-any.whl.metadata (5.3 kB)
+#9 45.22 Collecting opentelemetry-semantic-conventions==0.48b0 (from opentelemetry-sdk~=1.27.0->opentelemetry-exporter-otlp-proto-grpc==1.27.0->opentelemetry-exporter-otlp>=1.24.0->apache-airflow==2.11.0)
+#9 45.23   Downloading opentelemetry_semantic_conventions-0.48b0-py3-none-any.whl.metadata (2.4 kB)
+#9 45.92 Downloading apache_airflow-2.11.0-py3-none-any.whl (13.5 MB)
+#9 51.79    ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 13.5/13.5 MB 2.5 MB/s eta 0:00:00
+#9 51.80 Downloading alembic-1.15.2-py3-none-any.whl (231 kB)
+#9 51.82    ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 231.9/231.9 kB 15.9 MB/s eta 0:00:00
+#9 51.84 Downloading apache_airflow_providers_fab-1.5.3-py3-none-any.whl (98 kB)
+#9 51.85    ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 98.1/98.1 kB 14.5 MB/s eta 0:00:00
+#9 51.86 Downloading Flask_AppBuilder-4.5.3-py3-none-any.whl (2.2 MB)
+#9 52.09    ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 2.2/2.2 MB 10.0 MB/s eta 0:00:00
+#9 52.23 Downloading apache_airflow_providers_common_compat-1.7.0-py3-none-any.whl (30 kB)
+#9 52.38 Downloading argcomplete-3.6.2-py3-none-any.whl (43 kB)
+#9 52.39    ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 43.7/43.7 kB 9.4 MB/s eta 0:00:00
+#9 52.40 Downloading asgiref-3.8.1-py3-none-any.whl (23 kB)
+#9 52.42 Downloading attrs-25.3.0-py3-none-any.whl (63 kB)
+#9 52.45    ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 63.8/63.8 kB 2.6 MB/s eta 0:00:00
+#9 52.50 Downloading blinker-1.9.0-py3-none-any.whl (8.5 kB)
+#9 52.52 Downloading colorlog-6.9.0-py3-none-any.whl (11 kB)
+#9 52.55 Downloading ConfigUpdater-3.2-py2.py3-none-any.whl (34 kB)
+#9 52.56 Downloading connexion-2.14.2-py2.py3-none-any.whl (95 kB)
+#9 52.58    ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 95.1/95.1 kB 8.4 MB/s eta 0:00:00
+#9 52.59 Downloading cron_descriptor-1.4.5-py3-none-any.whl (50 kB)
+#9 52.60    ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 50.4/50.4 kB 9.6 MB/s eta 0:00:00
+#9 52.62 Downloading croniter-6.0.0-py2.py3-none-any.whl (25 kB)
+#9 52.63 Downloading cryptography-42.0.8-cp39-abi3-manylinux_2_28_x86_64.whl (3.9 MB)
+#9 52.93    ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 3.9/3.9 MB 12.8 MB/s eta 0:00:00
+#9 52.95 Downloading Deprecated-1.2.18-py2.py3-none-any.whl (10.0 kB)
+#9 52.96 Downloading Flask-2.2.5-py3-none-any.whl (101 kB)
+#9 52.97    ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 101.8/101.8 kB 13.5 MB/s eta 0:00:00
+#9 52.98 Downloading Flask_Caching-2.3.1-py3-none-any.whl (28 kB)
+#9 53.00 Downloading flask_session-0.5.0-py3-none-any.whl (7.2 kB)
+#9 53.01 Downloading flask_wtf-1.2.2-py3-none-any.whl (12 kB)
+#9 53.02 Downloading fsspec-2025.3.2-py3-none-any.whl (194 kB)
+#9 53.04    ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 194.4/194.4 kB 14.3 MB/s eta 0:00:00
+#9 53.20 Downloading google_re2-1.1.20240702-1-cp311-cp311-manylinux_2_24_x86_64.manylinux_2_28_x86_64.whl (548 kB)
+#9 53.24    ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 548.4/548.4 kB 17.4 MB/s eta 0:00:00
+#9 53.25 Downloading gunicorn-23.0.0-py3-none-any.whl (85 kB)
+#9 53.26    ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 85.0/85.0 kB 13.7 MB/s eta 0:00:00
+#9 53.27 Downloading httpx-0.27.0-py3-none-any.whl (75 kB)
+#9 53.28    ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 75.6/75.6 kB 17.9 MB/s eta 0:00:00
+#9 53.30 Downloading httpcore-1.0.9-py3-none-any.whl (78 kB)
+#9 53.31    ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 78.8/78.8 kB 19.8 MB/s eta 0:00:00
+#9 53.32 Downloading importlib_metadata-6.11.0-py3-none-any.whl (23 kB)
+#9 53.33 Downloading itsdangerous-2.2.0-py3-none-any.whl (16 kB)
+#9 53.35 Downloading jinja2-3.1.6-py3-none-any.whl (134 kB)
+#9 53.36    ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 134.9/134.9 kB 15.4 MB/s eta 0:00:00
+#9 53.37 Downloading jsonschema-4.23.0-py3-none-any.whl (88 kB)
+#9 53.39    ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 88.5/88.5 kB 10.0 MB/s eta 0:00:00
+#9 53.53 Downloading lazy_object_proxy-1.11.0-py3-none-any.whl (16 kB)
+#9 53.54 Downloading linkify_it_py-2.0.3-py3-none-any.whl (19 kB)
+#9 53.55 Downloading lockfile-0.12.2-py2.py3-none-any.whl (13 kB)
+#9 53.57 Downloading markdown_it_py-3.0.0-py3-none-any.whl (87 kB)
+#9 53.58    ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 87.5/87.5 kB 13.2 MB/s eta 0:00:00
+#9 53.59 Downloading MarkupSafe-3.0.2-cp311-cp311-manylinux_2_17_x86_64.manylinux2014_x86_64.whl (23 kB)
+#9 53.61 Downloading marshmallow_oneofschema-3.2.0-py3-none-any.whl (5.9 kB)
+#9 53.62 Downloading mdit_py_plugins-0.4.2-py3-none-any.whl (55 kB)
+#9 53.63    ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 55.3/55.3 kB 11.7 MB/s eta 0:00:00
+#9 53.64 Downloading methodtools-0.4.7-py2.py3-none-any.whl (4.0 kB)
+#9 53.65 Downloading opentelemetry_api-1.27.0-py3-none-any.whl (63 kB)
+#9 53.66    ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 64.0/64.0 kB 18.7 MB/s eta 0:00:00
+#9 53.67 Downloading opentelemetry_exporter_otlp-1.27.0-py3-none-any.whl (7.0 kB)
+#9 53.82 Downloading opentelemetry_exporter_otlp_proto_grpc-1.27.0-py3-none-any.whl (18 kB)
+#9 53.84 Downloading opentelemetry_exporter_otlp_proto_http-1.27.0-py3-none-any.whl (17 kB)
+#9 54.02 Downloading opentelemetry_exporter_otlp_proto_common-1.27.0-py3-none-any.whl (17 kB)
+#9 54.03 Downloading opentelemetry_proto-1.27.0-py3-none-any.whl (52 kB)
+#9 54.04    ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 52.5/52.5 kB 19.9 MB/s eta 0:00:00
+#9 54.05 Downloading packaging-25.0-py3-none-any.whl (66 kB)
+#9 54.06    ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 66.5/66.5 kB 9.0 MB/s eta 0:00:00
+#9 54.07 Downloading pathspec-0.12.1-py3-none-any.whl (31 kB)
+#9 54.22 Downloading pendulum-3.1.0-cp311-cp311-manylinux_2_17_x86_64.manylinux2014_x86_64.whl (353 kB)
+#9 54.24    ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 353.7/353.7 kB 15.4 MB/s eta 0:00:00
+#9 54.26 Downloading pluggy-1.6.0-py3-none-any.whl (20 kB)
+#9 54.27 Downloading psutil-7.0.0-cp36-abi3-manylinux_2_12_x86_64.manylinux2010_x86_64.manylinux_2_17_x86_64.manylinux2014_x86_64.whl (277 kB)
+#9 54.29    ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 278.0/278.0 kB 18.3 MB/s eta 0:00:00
+#9 54.30 Downloading pygments-2.19.1-py3-none-any.whl (1.2 MB)
+#9 54.41    ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 1.2/1.2 MB 11.2 MB/s eta 0:00:00
+#9 54.43 Downloading PyJWT-2.10.1-py3-none-any.whl (22 kB)
+#9 54.44 Downloading python_daemon-3.1.2-py3-none-any.whl (30 kB)
+#9 54.46 Downloading python_dateutil-2.9.0.post0-py2.py3-none-any.whl (229 kB)
+#9 54.47    ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 229.9/229.9 kB 17.8 MB/s eta 0:00:00
+#9 54.48 Downloading python_slugify-8.0.4-py2.py3-none-any.whl (10 kB)
+#9 54.49 Downloading requests-2.32.3-py3-none-any.whl (64 kB)
+#9 54.50    ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 64.9/64.9 kB 21.5 MB/s eta 0:00:00
+#9 54.51 Downloading requests_toolbelt-1.0.0-py2.py3-none-any.whl (54 kB)
+#9 54.52    ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 54.5/54.5 kB 18.0 MB/s eta 0:00:00
+#9 54.53 Downloading rfc3339_validator-0.1.4-py2.py3-none-any.whl (3.5 kB)
+#9 54.54 Downloading rich-13.9.4-py3-none-any.whl (242 kB)
+#9 54.57    ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 242.4/242.4 kB 11.8 MB/s eta 0:00:00
+#9 54.59 Downloading rich_argparse-1.7.0-py3-none-any.whl (25 kB)
+#9 54.74 Downloading setproctitle-1.3.6-cp311-cp311-manylinux_2_5_x86_64.manylinux1_x86_64.manylinux_2_17_x86_64.manylinux2014_x86_64.whl (31 kB)
+#9 54.78 Downloading SQLAlchemy-1.4.54-cp311-cp311-manylinux_2_5_x86_64.manylinux1_x86_64.manylinux_2_17_x86_64.manylinux2014_x86_64.whl (1.6 MB)
+#9 55.00    ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 1.6/1.6 MB 7.5 MB/s eta 0:00:00
+#9 55.01 Downloading SQLAlchemy_JSONField-1.0.2-py3-none-any.whl (10 kB)
+#9 55.02 Downloading tabulate-0.9.0-py3-none-any.whl (35 kB)
+#9 55.04 Downloading tenacity-9.1.2-py3-none-any.whl (28 kB)
+#9 55.06 Downloading termcolor-3.1.0-py3-none-any.whl (7.7 kB)
+#9 55.07 Downloading universal_pathlib-0.2.6-py3-none-any.whl (50 kB)
+#9 55.08    ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 50.1/50.1 kB 15.2 MB/s eta 0:00:00
+#9 55.09 Downloading Werkzeug-2.2.3-py3-none-any.whl (233 kB)
+#9 55.11    ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 233.6/233.6 kB 14.8 MB/s eta 0:00:00
+#9 55.12 Downloading apache_airflow_providers_common_io-1.6.0-py3-none-any.whl (19 kB)
+#9 55.27 Downloading apache_airflow_providers_common_sql-1.27.1-py3-none-any.whl (63 kB)
+#9 55.28    ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 64.0/64.0 kB 9.8 MB/s eta 0:00:00
+#9 55.42 Downloading apache_airflow_providers_ftp-3.13.0-py3-none-any.whl (18 kB)
+#9 55.57 Downloading apache_airflow_providers_http-5.3.0-py3-none-any.whl (27 kB)
+#9 55.71 Downloading apache_airflow_providers_imap-3.9.0-py3-none-any.whl (16 kB)
+#9 55.72 Downloading apache_airflow_providers_smtp-2.1.0-py3-none-any.whl (21 kB)
+#9 55.87 Downloading apache_airflow_providers_sqlite-4.1.0-py3-none-any.whl (11 kB)
+#9 56.03 Downloading aiohttp-3.11.18-cp311-cp311-manylinux_2_17_x86_64.manylinux2014_x86_64.whl (1.7 MB)
+#9 56.24    ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 1.7/1.7 MB 8.2 MB/s eta 0:00:00
+#9 56.25 Downloading cachelib-0.13.0-py3-none-any.whl (20 kB)
+#9 56.27 Downloading certifi-2025.4.26-py3-none-any.whl (159 kB)
+#9 56.30    ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 159.6/159.6 kB 7.8 MB/s eta 0:00:00
+#9 56.31 Downloading cffi-1.17.1-cp311-cp311-manylinux_2_17_x86_64.manylinux2014_x86_64.whl (467 kB)
+#9 56.36    ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 467.2/467.2 kB 13.3 MB/s eta 0:00:00
+#9 56.39 Downloading charset_normalizer-3.4.2-cp311-cp311-manylinux_2_17_x86_64.manylinux2014_x86_64.whl (147 kB)
+#9 56.42    ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 147.3/147.3 kB 5.9 MB/s eta 0:00:00
+#9 56.57 Downloading click-8.2.0-py3-none-any.whl (102 kB)
+#9 56.58    ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 102.2/102.2 kB 18.7 MB/s eta 0:00:00
+#9 56.59 Downloading clickclick-20.10.2-py2.py3-none-any.whl (7.4 kB)
+#9 56.60 Downloading Flask_Login-0.6.3-py3-none-any.whl (17 kB)
+#9 56.77 Downloading greenlet-3.2.2-cp311-cp311-manylinux_2_24_x86_64.manylinux_2_28_x86_64.whl (583 kB)
+#9 56.86    ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 583.9/583.9 kB 6.5 MB/s eta 0:00:00
+#9 56.88 Downloading idna-3.10-py3-none-any.whl (70 kB)
+#9 56.90    ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 70.4/70.4 kB 5.4 MB/s eta 0:00:00
+#9 56.91 Downloading inflection-0.5.1-py2.py3-none-any.whl (9.5 kB)
+#9 56.92 Downloading jmespath-0.10.0-py2.py3-none-any.whl (24 kB)
+#9 56.94 Downloading jsonschema_specifications-2025.4.1-py3-none-any.whl (18 kB)
+#9 56.95 Downloading marshmallow-3.26.1-py3-none-any.whl (50 kB)
+#9 56.96    ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 50.9/50.9 kB 15.5 MB/s eta 0:00:00
+#9 56.97 Downloading mdurl-0.1.2-py3-none-any.whl (10.0 kB)
+#9 56.99 Downloading more_itertools-10.7.0-py3-none-any.whl (65 kB)
+#9 57.01    ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 65.3/65.3 kB 3.5 MB/s eta 0:00:00
+#9 57.02 Downloading pytz-2025.2-py2.py3-none-any.whl (509 kB)
+#9 57.09    ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 509.2/509.2 kB 9.7 MB/s eta 0:00:00
+#9 57.11 Downloading PyYAML-6.0.2-cp311-cp311-manylinux_2_17_x86_64.manylinux2014_x86_64.whl (762 kB)
+#9 57.20    ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 763.0/763.0 kB 8.8 MB/s eta 0:00:00
+#9 57.22 Downloading referencing-0.36.2-py3-none-any.whl (26 kB)
+#9 57.23 Downloading rpds_py-0.25.0-cp311-cp311-manylinux_2_17_x86_64.manylinux2014_x86_64.whl (387 kB)
+#9 57.27    ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 387.1/387.1 kB 13.2 MB/s eta 0:00:00
+#9 57.28 Downloading six-1.17.0-py2.py3-none-any.whl (11 kB)
+#9 57.29 Downloading sqlparse-0.5.3-py3-none-any.whl (44 kB)
+#9 57.30    ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 44.4/44.4 kB 6.2 MB/s eta 0:00:00
+#9 57.32 Downloading text_unidecode-1.3-py2.py3-none-any.whl (78 kB)
+#9 57.34    ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 78.2/78.2 kB 8.9 MB/s eta 0:00:00
+#9 57.35 Downloading typing_extensions-4.13.2-py3-none-any.whl (45 kB)
+#9 57.36    ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 45.8/45.8 kB 14.4 MB/s eta 0:00:00
+#9 57.37 Downloading tzdata-2025.2-py2.py3-none-any.whl (347 kB)
+#9 57.40    ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 347.8/347.8 kB 14.2 MB/s eta 0:00:00
+#9 57.42 Downloading urllib3-2.4.0-py3-none-any.whl (128 kB)
+#9 57.43    ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 128.7/128.7 kB 13.0 MB/s eta 0:00:00
+#9 57.45 Downloading wirerope-1.0.0-py2.py3-none-any.whl (9.2 kB)
+#9 57.46 Downloading wrapt-1.17.2-cp311-cp311-manylinux_2_5_x86_64.manylinux1_x86_64.manylinux_2_17_x86_64.manylinux2014_x86_64.whl (83 kB)
+#9 57.47    ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 83.2/83.2 kB 15.1 MB/s eta 0:00:00
+#9 57.49 Downloading wtforms-3.2.1-py3-none-any.whl (152 kB)
+#9 57.51    ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 152.5/152.5 kB 10.6 MB/s eta 0:00:00
+#9 57.52 Downloading zipp-3.21.0-py3-none-any.whl (9.6 kB)
+#9 57.55 Downloading anyio-4.9.0-py3-none-any.whl (100 kB)
+#9 57.59    ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 100.9/100.9 kB 4.0 MB/s eta 0:00:00
+#9 57.60 Downloading sniffio-1.3.1-py3-none-any.whl (10 kB)
+#9 57.62 Downloading mako-1.3.10-py3-none-any.whl (78 kB)
+#9 57.63    ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 78.5/78.5 kB 23.4 MB/s eta 0:00:00
+#9 57.64 Downloading uc_micro_py-1.0.3-py3-none-any.whl (6.2 kB)
+#9 57.65 Downloading aiohappyeyeballs-2.6.1-py3-none-any.whl (15 kB)
+#9 57.67 Downloading aiosignal-1.3.2-py2.py3-none-any.whl (7.6 kB)
+#9 57.68 Downloading apispec-6.8.2-py3-none-any.whl (30 kB)
+#9 57.69 Downloading colorama-0.4.6-py2.py3-none-any.whl (25 kB)
+#9 57.72 Downloading email_validator-2.2.0-py3-none-any.whl (33 kB)
+#9 57.74 Downloading Flask_Babel-2.0.0-py3-none-any.whl (9.3 kB)
+#9 57.75 Downloading Flask_JWT_Extended-4.7.1-py2.py3-none-any.whl (22 kB)
+#9 57.77 Downloading flask_limiter-3.12-py3-none-any.whl (28 kB)
+#9 57.78 Downloading Flask_SQLAlchemy-2.5.1-py2.py3-none-any.whl (17 kB)
+#9 57.94 Downloading frozenlist-1.6.0-cp311-cp311-manylinux_2_5_x86_64.manylinux1_x86_64.manylinux_2_17_x86_64.manylinux2014_x86_64.whl (313 kB)
+#9 57.98    ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 313.6/313.6 kB 8.8 MB/s eta 0:00:00
+#9 58.00 Downloading googleapis_common_protos-1.70.0-py3-none-any.whl (294 kB)
+#9 58.06    ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 294.5/294.5 kB 5.2 MB/s eta 0:00:00
+#9 58.07 Downloading grpcio-1.71.0-cp311-cp311-manylinux_2_17_x86_64.manylinux2014_x86_64.whl (5.9 MB)
+#9 58.96    ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 5.9/5.9 MB 6.7 MB/s eta 0:00:00
+#9 58.98 Downloading h11-0.16.0-py3-none-any.whl (37 kB)
+#9 59.00 Downloading marshmallow_sqlalchemy-0.28.2-py2.py3-none-any.whl (16 kB)
+#9 59.01 Downloading multidict-6.4.4-cp311-cp311-manylinux_2_17_x86_64.manylinux2014_x86_64.whl (223 kB)
+#9 59.06    ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 223.7/223.7 kB 6.2 MB/s eta 0:00:00
+#9 59.21 Downloading opentelemetry_sdk-1.27.0-py3-none-any.whl (110 kB)
+#9 59.23    ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 110.5/110.5 kB 8.0 MB/s eta 0:00:00
+#9 59.24 Downloading opentelemetry_semantic_conventions-0.48b0-py3-none-any.whl (149 kB)
+#9 59.26    ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 149.7/149.7 kB 11.5 MB/s eta 0:00:00
+#9 59.28 Downloading prison-0.2.1-py2.py3-none-any.whl (5.8 kB)
+#9 59.42 Downloading propcache-0.3.1-cp311-cp311-manylinux_2_17_x86_64.manylinux2014_x86_64.whl (232 kB)
+#9 59.45    ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 232.5/232.5 kB 14.1 MB/s eta 0:00:00
+#9 59.46 Downloading SQLAlchemy_Utils-0.41.2-py3-none-any.whl (93 kB)
+#9 59.47    ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 93.1/93.1 kB 25.9 MB/s eta 0:00:00
+#9 59.62 Downloading yarl-1.20.0-cp311-cp311-manylinux_2_17_x86_64.manylinux2014_x86_64.whl (358 kB)
+#9 59.66    ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 358.1/358.1 kB 9.6 MB/s eta 0:00:00
+#9 59.68 Downloading pycparser-2.22-py3-none-any.whl (117 kB)
+#9 59.70    ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 117.6/117.6 kB 8.9 MB/s eta 0:00:00
+#9 59.71 Downloading babel-2.17.0-py3-none-any.whl (10.2 MB)
+#9 60.75    ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 10.2/10.2 MB 9.9 MB/s eta 0:00:00
+#9 60.76 Downloading dnspython-2.7.0-py3-none-any.whl (313 kB)
+#9 60.80    ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 313.6/313.6 kB 9.5 MB/s eta 0:00:00
+#9 60.94 Downloading limits-5.2.0-py3-none-any.whl (60 kB)
+#9 60.95    ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 60.8/60.8 kB 32.6 MB/s eta 0:00:00
+#9 60.96 Downloading ordered_set-4.1.0-py3-none-any.whl (7.6 kB)
+#9 61.10 Downloading protobuf-4.25.7-cp37-abi3-manylinux2014_x86_64.whl (294 kB)
+#9 61.13    ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 294.6/294.6 kB 17.7 MB/s eta 0:00:00
+#9 61.40 Building wheels for collected packages: dill, python-nvd3
+#9 61.41   Building wheel for dill (pyproject.toml): started
+#9 61.77   Building wheel for dill (pyproject.toml): finished with status 'done'
+#9 61.77   Created wheel for dill: filename=dill-0.3.1.1-py3-none-any.whl size=78634 sha256=a972d8678e8bacc6b0c66db18b883504a4591d8c57a532ef12b886a74c91f4b5
+#9 61.77   Stored in directory: /tmp/pip-ephem-wheel-cache-pcrlkje_/wheels/01/60/80/1622338bcecce31a5664ef01c203cc5a7b09f59588d9c07376
+#9 61.78   Building wheel for python-nvd3 (pyproject.toml): started
+#9 62.14   Building wheel for python-nvd3 (pyproject.toml): finished with status 'done'
+#9 62.14   Created wheel for python-nvd3: filename=python_nvd3-0.16.0-py3-none-any.whl size=37651 sha256=79d36e6f8603496b0c6f6344504d092a07619620b438544ab33a7e82f776e323
+#9 62.14   Stored in directory: /tmp/pip-ephem-wheel-cache-pcrlkje_/wheels/88/26/3f/0695457939a8025f982dca665d4d7018468ccf8ccf43e45c5f
+#9 62.15 Successfully built dill python-nvd3
+#9 64.08 Installing collected packages: text-unidecode, pytz, lockfile, cron-descriptor, zipp, wrapt, urllib3, uc-micro-py, tzdata, typing-extensions, termcolor, tenacity, tabulate, sqlparse, sniffio, six, setproctitle, rpds-py, PyYAML, python-slugify, python-daemon, pyjwt, pygments, pycparser, psutil, protobuf, propcache, pluggy, pathspec, packaging, ordered-set, multidict, more-itertools, mdurl, markupsafe, lazy-object-proxy, jmespath, itsdangerous, inflection, idna, h11, grpcio, greenlet, google-re2, fsspec, frozenlist, dnspython, dill, configupdater, colorlog, colorama, click, charset-normalizer, certifi, cachelib, blinker, Babel, attrs, asgiref, argcomplete, aiohappyeyeballs, yarl, WTForms, wirerope, werkzeug, universal-pathlib, sqlalchemy, rfc3339-validator, requests, referencing, python-dateutil, prison, opentelemetry-proto, marshmallow, markdown-it-py, Mako, linkify-it-py, jinja2, importlib_metadata, httpcore, gunicorn, googleapis-common-protos, email-validator, deprecated, clickclick, cffi, apispec, anyio, aiosignal, sqlalchemy-utils, sqlalchemy-jsonfield, rich, requests-toolbelt, python-nvd3, pendulum, opentelemetry-exporter-otlp-proto-common, opentelemetry-api, methodtools, mdit-py-plugins, marshmallow-sqlalchemy, marshmallow-oneofschema, limits, jsonschema-specifications, httpx, flask, cryptography, croniter, alembic, aiohttp, rich-argparse, opentelemetry-semantic-conventions, jsonschema, flask-wtf, Flask-SQLAlchemy, flask-session, flask-login, Flask-Limiter, Flask-JWT-Extended, flask-caching, Flask-Babel, opentelemetry-sdk, flask-appbuilder, connexion, opentelemetry-exporter-otlp-proto-http, opentelemetry-exporter-otlp-proto-grpc, opentelemetry-exporter-otlp, apache-airflow-providers-common-sql, apache-airflow-providers-common-compat, apache-airflow-providers-sqlite, apache-airflow-providers-smtp, apache-airflow-providers-imap, apache-airflow-providers-http, apache-airflow-providers-ftp, apache-airflow-providers-fab, apache-airflow-providers-common-io, apache-airflow
+#9 77.55 Successfully installed Babel-2.17.0 Flask-Babel-2.0.0 Flask-JWT-Extended-4.7.1 Flask-Limiter-3.12 Flask-SQLAlchemy-2.5.1 Mako-1.3.10 PyYAML-6.0.2 WTForms-3.2.1 aiohappyeyeballs-2.6.1 aiohttp-3.11.18 aiosignal-1.3.2 alembic-1.15.2 anyio-4.9.0 apache-airflow-2.11.0 apache-airflow-providers-common-compat-1.7.0 apache-airflow-providers-common-io-1.6.0 apache-airflow-providers-common-sql-1.27.1 apache-airflow-providers-fab-1.5.3 apache-airflow-providers-ftp-3.13.0 apache-airflow-providers-http-5.3.0 apache-airflow-providers-imap-3.9.0 apache-airflow-providers-smtp-2.1.0 apache-airflow-providers-sqlite-4.1.0 apispec-6.8.2 argcomplete-3.6.2 asgiref-3.8.1 attrs-25.3.0 blinker-1.9.0 cachelib-0.13.0 certifi-2025.4.26 cffi-1.17.1 charset-normalizer-3.4.2 click-8.2.0 clickclick-20.10.2 colorama-0.4.6 colorlog-6.9.0 configupdater-3.2 connexion-2.14.2 cron-descriptor-1.4.5 croniter-6.0.0 cryptography-42.0.8 deprecated-1.2.18 dill-0.3.1.1 dnspython-2.7.0 email-validator-2.2.0 flask-2.2.5 flask-appbuilder-4.5.3 flask-caching-2.3.1 flask-login-0.6.3 flask-session-0.5.0 flask-wtf-1.2.2 frozenlist-1.6.0 fsspec-2025.3.2 google-re2-1.1.20240702 googleapis-common-protos-1.70.0 greenlet-3.2.2 grpcio-1.71.0 gunicorn-23.0.0 h11-0.16.0 httpcore-1.0.9 httpx-0.27.0 idna-3.10 importlib_metadata-6.11.0 inflection-0.5.1 itsdangerous-2.2.0 jinja2-3.1.6 jmespath-0.10.0 jsonschema-4.23.0 jsonschema-specifications-2025.4.1 lazy-object-proxy-1.11.0 limits-5.2.0 linkify-it-py-2.0.3 lockfile-0.12.2 markdown-it-py-3.0.0 markupsafe-3.0.2 marshmallow-3.26.1 marshmallow-oneofschema-3.2.0 marshmallow-sqlalchemy-0.28.2 mdit-py-plugins-0.4.2 mdurl-0.1.2 methodtools-0.4.7 more-itertools-10.7.0 multidict-6.4.4 opentelemetry-api-1.27.0 opentelemetry-exporter-otlp-1.27.0 opentelemetry-exporter-otlp-proto-common-1.27.0 opentelemetry-exporter-otlp-proto-grpc-1.27.0 opentelemetry-exporter-otlp-proto-http-1.27.0 opentelemetry-proto-1.27.0 opentelemetry-sdk-1.27.0 opentelemetry-semantic-conventions-0.48b0 ordered-set-4.1.0 packaging-25.0 pathspec-0.12.1 pendulum-3.1.0 pluggy-1.6.0 prison-0.2.1 propcache-0.3.1 protobuf-4.25.7 psutil-7.0.0 pycparser-2.22 pygments-2.19.1 pyjwt-2.10.1 python-daemon-3.1.2 python-dateutil-2.9.0.post0 python-nvd3-0.16.0 python-slugify-8.0.4 pytz-2025.2 referencing-0.36.2 requests-2.32.3 requests-toolbelt-1.0.0 rfc3339-validator-0.1.4 rich-13.9.4 rich-argparse-1.7.0 rpds-py-0.25.0 setproctitle-1.3.6 six-1.17.0 sniffio-1.3.1 sqlalchemy-1.4.54 sqlalchemy-jsonfield-1.0.2 sqlalchemy-utils-0.41.2 sqlparse-0.5.3 tabulate-0.9.0 tenacity-9.1.2 termcolor-3.1.0 text-unidecode-1.3 typing-extensions-4.13.2 tzdata-2025.2 uc-micro-py-1.0.3 universal-pathlib-0.2.6 urllib3-2.4.0 werkzeug-2.2.3 wirerope-1.0.0 wrapt-1.17.2 yarl-1.20.0 zipp-3.21.0
+#9 82.81 No broken requirements found.
+#9 DONE 98.0s
+
+#10 [4/7] COPY --chown=10001:0 dags /opt/airflow/dags
+#10 DONE 0.8s
+
+#11 [5/7] WORKDIR /opt/airflow
+#11 DONE 0.6s
+
+#12 [6/7] RUN ["/opt/model-venv/bin/python", "-c", "import medical_classifier.airflow_tasks, onnxruntime"]
+#12 1.039 [0;93m2026-09-14 22:10:21.146419499 [W:onnxruntime:Default, device_discovery.cc:164 DiscoverDevicesForPlatform] GPU device discovery failed: device_discovery.cc:89 ReadFileContents Failed to open file: "/sys/class/drm/card0/device/vendor"[m
+#12 DONE 1.1s
+
+#13 [7/7] RUN ["/opt/airflow-venv/bin/python", "-c", "import airflow; from airflow.operators.bash import BashOperator"]
+#13 2.297 /opt/airflow-venv/lib/python3.11/site-packages/airflow/metrics/base_stats_logger.py:22 RemovedInAirflow3Warning: Timer and timing metrics publish in seconds were deprecated. It is enabled by default from Airflow 3 onwards. Enable timer_unit_consistency to publish all the timer and timing metrics in milliseconds.
+#13 2.916 /opt/airflow-venv/lib/python3.11/site-packages/airflow/triggers/base.py:27 RemovedInAirflow3Warning: Timer and timing metrics publish in seconds were deprecated. It is enabled by default from Airflow 3 onwards. Enable timer_unit_consistency to publish all the timer and timing metrics in milliseconds.
+#13 DONE 3.3s
+
+#14 exporting to image
+#14 exporting layers
+#14 exporting layers 12.8s done
+#14 exporting manifest sha256:e0cc5c939bd8795e2488538b6525d665a796ace2a574ad5f1802d60f86d1d349 0.0s done
+#14 exporting config sha256:b6306cdd1cb06c3c4082a3d16db09110277072063e1e0a151928e8237adba16c 0.0s done
+#14 exporting attestation manifest sha256:a9bfba1511b80e1a90a83f89eb88e12608d46f36ea9829e7804c440bbe8f40d7 0.0s done
+#14 exporting manifest list sha256:a5324cbd1fe2d6ab0e22e67cabf718a715f049ebd09163dc4af390ce7ee85840 0.0s done
+#14 naming to docker.io/library/medical-classifier-airflow:local
+#14 naming to docker.io/library/medical-classifier-airflow:local done
+#14 unpacking to docker.io/library/medical-classifier-airflow:local
+#14 unpacking to docker.io/library/medical-classifier-airflow:local 3.9s done
+#14 DONE 16.9s
+
+#15 resolving provenance for metadata file
+#15 DONE 0.1s
+ Image medical-classifier-airflow:local Built 

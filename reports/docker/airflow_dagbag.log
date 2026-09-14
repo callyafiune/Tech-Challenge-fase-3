@@ -1,0 +1,10 @@
+ Network medical-classifier-airflow_default Creating 
+ Network medical-classifier-airflow_default Created 
+ Volume medical-classifier-airflow_airflow-estado Creating 
+ Volume medical-classifier-airflow_airflow-estado Created 
+ Container medical-classifier-airflow-airflow-run-10aef5115d1b Creating 
+ Container medical-classifier-airflow-airflow-run-10aef5115d1b Created 
+/opt/airflow-venv/lib/python3.11/site-packages/airflow/metrics/base_stats_logger.py:22 RemovedInAirflow3Warning: Timer and timing metrics publish in seconds were deprecated. It is enabled by default from Airflow 3 onwards. Enable timer_unit_consistency to publish all the timer and timing metrics in milliseconds.
+[2026-09-14T22:12:17.611+0000] {dagbag.py:588} INFO - Filling up the DagBag from /opt/airflow/dags
+/opt/airflow-venv/lib/python3.11/site-packages/airflow/triggers/base.py:27 RemovedInAirflow3Warning: Timer and timing metrics publish in seconds were deprecated. It is enabled by default from Airflow 3 onwards. Enable timer_unit_consistency to publish all the timer and timing metrics in milliseconds.
+EVIDENCIA_JSON={"airflow": "2.11.0", "python": "/opt/airflow-venv/bin/python", "dag": "retreino_medico", "tarefas": ["ingestao", "publicacao", "treinamento", "validacao"], "max_active_runs": 1, "catchup": false, "erros_importacao": {}}

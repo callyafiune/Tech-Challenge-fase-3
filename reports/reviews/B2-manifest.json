@@ -1,0 +1,57 @@
+{
+  "bloco": "B2",
+  "modelo_solicitado": "fable",
+  "inicio_utc": "2026-09-14T21:45:21.559204+00:00",
+  "arquivos": [
+    {
+      "caminho": "src/medical_classifier/api.py",
+      "sha256": "ba6efc451b1e9a5f304713f9fd7f1536f7a0c6fb691e015239bbe74b17a79367",
+      "bytes": 9545
+    },
+    {
+      "caminho": "src/medical_classifier/metrics.py",
+      "sha256": "dd1c444790ed1f8df39cbe719aa440445795fdff4f0fe79831363e7a0d651fc4",
+      "bytes": 2743
+    },
+    {
+      "caminho": "src/medical_classifier/serving.py",
+      "sha256": "d1dabe35c6ab5931853d60d00af3fc27d861df22e65cf49d40bc2179db922773",
+      "bytes": 2844
+    },
+    {
+      "caminho": "tests/test_api.py",
+      "sha256": "d0161efdd888d743c14df1fbda103ca45aa55dea069d3c694c5069b0552c7a57",
+      "bytes": 16321
+    }
+  ],
+  "prompt_sha256": "6ddb069c7ad028f2d137a1e1b891cc3b19ff4fe0712d2011ed3c046f337a4340",
+  "contexto": "Segunda rodada B2 depois achados: probesasync; warmuplifespan shapeNx5 ordemclasses finitude,soma,intervalo; logsSOtipoexcecao(naomensagenspaciente); metricaInfo; fallback/outra, rootpathmetrics, bodylimit128KiB incluindo fluxosemContentLength.36testespassam incluindomodelorealONNX. Failfastrejeitado liveness200readiness503 intencionalDockerHEALTHCHECKusa/ready. Reavalie bugs concretos remanescentes, até800palavras. Não pedirfeaturesexternas.",
+  "timeout_segundos": 600,
+  "aprovacao_automatica": false,
+  "fim_utc": "2026-09-14T21:47:20.705463+00:00",
+  "comando": [
+    "C:\\Users\\Cally\\.vscode\\extensions\\anthropic.claude-code-2.1.270-win32-x64\\resources\\native-binary\\claude.exe",
+    "-p",
+    "--model",
+    "fable",
+    "--effort",
+    "medium",
+    "--safe-mode",
+    "--strict-mcp-config",
+    "--permission-mode",
+    "dontAsk",
+    "--tools",
+    "",
+    "--output-format",
+    "json",
+    "--no-session-persistence"
+  ],
+  "modelos_reportados": [
+    "claude-fable-5-1",
+    "claude-haiku-4-5-20251001"
+  ],
+  "exit_code": 0,
+  "codigo_saida_script": 0,
+  "stderr": "",
+  "erro": ""
+}

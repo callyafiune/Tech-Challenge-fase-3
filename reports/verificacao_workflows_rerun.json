@@ -1,0 +1,37 @@
+{
+  "actionlint_versao": "v1.7.12",
+  "actionlint_codigo_saida": 0,
+  "yaml_valido": true,
+  "nome_produtor_preservado": "imagem-validada-${{ github.sha }}-${{ github.run_id }}-${{ github.run_attempt }}",
+  "download_por_id_do_produtor": "${{ needs.qualidade.outputs.imagem_artefato_id }}",
+  "diretorio_download": "imagem",
+  "flatten_download": true,
+  "validacao_id_bash": [
+    {
+      "valor": "123456789",
+      "codigo_saida": 0
+    },
+    {
+      "valor": "",
+      "codigo_saida": 1
+    },
+    {
+      "valor": "1,2",
+      "codigo_saida": 1
+    },
+    {
+      "valor": "abc",
+      "codigo_saida": 1
+    },
+    {
+      "valor": "123\n456",
+      "codigo_saida": 1
+    }
+  ],
+  "fontes": [
+    "https://docs.github.com/en/actions/reference/workflows-and-actions/contexts#github-context",
+    "https://docs.github.com/en/actions/how-tos/reuse-automations/reuse-workflows#using-outputs-from-a-reusable-workflow",
+    "https://raw.githubusercontent.com/actions/upload-artifact/v4/README.md",
+    "https://raw.githubusercontent.com/actions/download-artifact/v4/README.md"
+  ]
+}

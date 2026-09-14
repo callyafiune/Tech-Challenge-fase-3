@@ -1,0 +1,8 @@
+{
+  "comando": "docker compose -f docker-compose.airflow.yml build airflow",
+  "codigo_saida": 1,
+  "interrompido_por_espaco": true,
+  "segundos": 197.5,
+  "livre_host_mib": 269.8,
+  "log": "C:\\estudos\\Tech-Challenge-fase-3\\reports\\airflow_build.log"
+}

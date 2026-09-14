@@ -1,0 +1,202 @@
+{
+  "bloco": "B5",
+  "modelo_solicitado": "fable",
+  "inicio_utc": "2026-09-14T22:44:37.853672+00:00",
+  "arquivos": [
+    {
+      "caminho": "README.md",
+      "sha256": "f4f06d1ea8e2cee739660e56b44595af279af591660dc1381d9c34194a848682",
+      "bytes": 24955
+    },
+    {
+      "caminho": "docs/arquitetura.md",
+      "sha256": "e64b38c900fb8691b719e7748ddd6053bc7b1eb99a2ce3e23fba786ffd6e2f6b",
+      "bytes": 12868
+    },
+    {
+      "caminho": "docs/model_card.md",
+      "sha256": "d1c345b0fe71c14b9431f486df7b8261b0e8e1999f8a24cabd8b7e1ba1456544",
+      "bytes": 14397
+    },
+    {
+      "caminho": "docs/roteiro_star.md",
+      "sha256": "b8242e02ce83ec69ecdccd3249aa5fae73ec5af29de3ccacae31767836256061",
+      "bytes": 7483
+    },
+    {
+      "caminho": "docs/revisoes_adversariais.md",
+      "sha256": "687aa6451db03fa1db51295ab4c494040b781094d95ce57cf69933dff9d24d1d",
+      "bytes": 11440
+    },
+    {
+      "caminho": "docs/plano_implementacao.md",
+      "sha256": "1be5cd6ebfbd43d8282e7f8f42a6f46672cf3dd0e7f3608ba0bca8cef056dc0b",
+      "bytes": 23032
+    },
+    {
+      "caminho": "docs/matriz_rastreabilidade.md",
+      "sha256": "1e192cd3b3240d18bf694f3191164bb353f5f96f7a73dc7f4eb075651bbf6596",
+      "bytes": 9699
+    },
+    {
+      "caminho": "scripts/gerar_video.ps1",
+      "sha256": "295e38027a73743354729329a47e0512bba789d7a68d818229f16f22b7141af4",
+      "bytes": 28016
+    },
+    {
+      "caminho": "reports/video/verificar_gerador.ps1",
+      "sha256": "360c643d0bbff0cf3796e6cbb8e9db139599d49f9d0ad9ecb92f6ce55ace6180",
+      "bytes": 5927
+    },
+    {
+      "caminho": "scripts/benchmark_http.py",
+      "sha256": "138ffb0f4f45d0fffbca9f065bcfdf3cfde2ae8d56571b212e21dee958f15f76",
+      "bytes": 4418
+    },
+    {
+      "caminho": "reports/qualidade.json",
+      "sha256": "bfda7b50116e744a336e4c4dbd34bc1e068dff614aa54612acc4e0edf840a53f",
+      "bytes": 9412
+    },
+    {
+      "caminho": "reports/latencia_modelo.json",
+      "sha256": "60898ed2451a273cda0429da0ad42044de7d8d31afe1ebafba1055f138c7f76e",
+      "bytes": 749
+    },
+    {
+      "caminho": "reports/latencia_http_local.json",
+      "sha256": "6675b2ee6255f0c0311e701906b36e4fbad2e4c25f72f7341681b0c973988eb6",
+      "bytes": 1217
+    },
+    {
+      "caminho": "reports/docker/latencia_modelo.json",
+      "sha256": "5f7d5eaf3d9c1dd34e9b3765df67f296015062f2f9eebc69c4f4161e103b827c",
+      "bytes": 731
+    },
+    {
+      "caminho": "reports/docker/latencia_http.json",
+      "sha256": "7a7555cb9279b2eee44cad0eb0feac3641103ad67f208bad355894b1897d7ef0",
+      "bytes": 1209
+    },
+    {
+      "caminho": "reports/smoke_stack.json",
+      "sha256": "349b77bd37623ed538430cf31382f36395e49f97cfe7b8dfed0c1c801b5a1986",
+      "bytes": 3394
+    },
+    {
+      "caminho": "reports/video/evidencias.json",
+      "sha256": "c1836806fd56f3d7d3a68ab609d01a7e97fc64a44e81aae9424c38dfce8d783d",
+      "bytes": 14915
+    },
+    {
+      "caminho": "reports/video/verificacao.json",
+      "sha256": "1748fb3eb09da260f5552c679b0b32eed2dc235d7d4ed6f11dcc09d57be1b6e8",
+      "bytes": 5155
+    },
+    {
+      "caminho": "reports/video/inspecao_visual.json",
+      "sha256": "66b33228f41cb1defd3d315381947bc84ebea6419e6dcfa739c2827bb5a9f207",
+      "bytes": 2265
+    },
+    {
+      "caminho": "reports/airflow_execucao.json",
+      "sha256": "9df31502cb4bfae4a4f6a2a1c334a245767a7a42f64bee0d4610fb8be40a3142",
+      "bytes": 1204
+    },
+    {
+      "caminho": "reports/airflow_build_state.json",
+      "sha256": "788a1ed5046b2db0a93c15fbcf4ac52cacf96fdf2adc7750c5ff1846b51d9d6d",
+      "bytes": 263
+    },
+    {
+      "caminho": "reports/docker/build_airflow_state.json",
+      "sha256": "c9effd7adb7f5e4d2324182193a24e99039e1b41f87cb8e2e99d9339ad0ba383",
+      "bytes": 273
+    },
+    {
+      "caminho": "reports/docker/airflow_dag_state.json",
+      "sha256": "b96d25eb8606bb05ebb0e15090e1497435085a935fd526ec4964d23b1675aba8",
+      "bytes": 493
+    },
+    {
+      "caminho": "reports/docker/airflow_execution_steps.json",
+      "sha256": "0c8813478165dc1900b3cdda043b282027e5402abc54dbb09073d822b5c1df43",
+      "bytes": 724
+    },
+    {
+      "caminho": "reports/docker/airflow_dags_test.log",
+      "sha256": "543340ff513637b3bf415b5c09541083b95051b8fa7eb28348e4f8355fc617d6",
+      "bytes": 14966
+    },
+    {
+      "caminho": "reports/docker/airflow_dag_state.log",
+      "sha256": "e3ddeba55eb4638739817ed393eb59dc6c008026149d69c94663a76df8426776",
+      "bytes": 1203
+    },
+    {
+      "caminho": "reports/docker/execucao_stack.json",
+      "sha256": "3be0f2832a9b230e721583e4521c00c88b17f5093eb88b90227fb4a1273a7558",
+      "bytes": 1314
+    },
+    {
+      "caminho": "reports/docker/readiness_indisponibilidade.json",
+      "sha256": "7445a2cf3837f4a334812898720c310f647aae6023317d3d34cfeb121b061cbc",
+      "bytes": 254
+    },
+    {
+      "caminho": "src/medical_classifier/corpus_manifest.json",
+      "sha256": "d6aa6a4c309812e01774dc511f7017d4eb2a41d1b53922f666a23ff73fe7f139",
+      "bytes": 644
+    },
+    {
+      "caminho": "dags/retreino_medico.py",
+      "sha256": "557e4ef0fb8510b0df8f285ac95304d02e00a9941b08cf08a699946af3419566",
+      "bytes": 1201
+    },
+    {
+      "caminho": ".github/workflows/ci.yml",
+      "sha256": "d9632b1f862045ffd837ad7397747597a00eee7be2d13131207a45bd348a8d45",
+      "bytes": 6062
+    },
+    {
+      "caminho": "reports/testes.xml",
+      "sha256": "a5f9c8163da44f3e32e1c9f4b71bc7f7f03c9928984a31313ae9130c7b71a9f9",
+      "bytes": 9409
+    },
+    {
+      "caminho": "reports/reviews/rodada-2/B5.md",
+      "sha256": "7ce13719117726a8a4ed1d51806bed0509df9fc25cd81cdc486c9f869c90cc8b",
+      "bytes": 6849
+    }
+  ],
+  "prompt_sha256": "32ac0ad99c81a89fdcbac4550425a16fd247014f8275c6b4a84ecf5e0ef95dce",
+  "contexto": "Terceira rodada focada B5 após as duas revisões anteriores. Verificar especialmente: SomenteImagens preserva manifesto e MP4 final comprovado por hashes antes/depois; versões host e Docker da stack/DAG distintas na tela/narração/manifesto; sucesso booleano estrito; data da consulta Airflow posterior aos heartbeats; build posterior concluído preserva falha histórica; benchmark host documentado 8003/8004 com histórico em 8000; modo contratos reproduzível e ffprobe independente. Sete quadros extraídos do MP4 foram inspecionados, vídeo final 219.626395 s H264/AAC 1280x720, 451 palavras. Revisão é estática, não assumir que você viu MP4/imagens. CI remoto inicial realmente falhou na paridade ONNX da DAG e root investiga execução diagnóstica posterior; não aprovar CI nem exigir resolver B1 dentro de B5. O Airflow 2.11 no CI realmente aplicou retries em dags test, contrariando hipótese da rodada anterior; documentação foi corrigida por evidência. Priorizem defeitos concretos novos ou não resolvidos de B5 e evitem reabrir fatos explicitamente identificados como históricos ou limitações já documentadas.",
+  "timeout_segundos": 600,
+  "aprovacao_automatica": false,
+  "fim_utc": "2026-09-14T22:47:40.885332+00:00",
+  "comando": [
+    "C:\\Users\\Cally\\.vscode\\extensions\\anthropic.claude-code-2.1.270-win32-x64\\resources\\native-binary\\claude.exe",
+    "-p",
+    "--model",
+    "fable",
+    "--effort",
+    "medium",
+    "--safe-mode",
+    "--strict-mcp-config",
+    "--permission-mode",
+    "dontAsk",
+    "--tools",
+    "",
+    "--output-format",
+    "json",
+    "--no-session-persistence"
+  ],
+  "modelos_reportados": [
+    "claude-fable-5-1",
+    "claude-haiku-4-5-20251001"
+  ],
+  "exit_code": 0,
+  "codigo_saida_script": 0,
+  "stderr": "",
+  "erro": ""
+}

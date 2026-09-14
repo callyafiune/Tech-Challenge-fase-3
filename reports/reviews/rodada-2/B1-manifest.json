@@ -1,0 +1,107 @@
+{
+  "bloco": "B1",
+  "modelo_solicitado": "fable",
+  "inicio_utc": "2026-09-14T21:45:11.464354+00:00",
+  "arquivos": [
+    {
+      "caminho": "src/medical_classifier/data.py",
+      "sha256": "d9a33831823ea17d5c32b71f998e54eee2d2fad6c181d48e82a571eb17481114",
+      "bytes": 5679
+    },
+    {
+      "caminho": "src/medical_classifier/corpus_manifest.json",
+      "sha256": "d6aa6a4c309812e01774dc511f7017d4eb2a41d1b53922f666a23ff73fe7f139",
+      "bytes": 644
+    },
+    {
+      "caminho": "src/medical_classifier/training.py",
+      "sha256": "8de63be89dafb62c4d6b2dd0acb02e6578d56d33ef93a637d2de238dcb28091f",
+      "bytes": 8042
+    },
+    {
+      "caminho": "src/medical_classifier/serving.py",
+      "sha256": "d1dabe35c6ab5931853d60d00af3fc27d861df22e65cf49d40bc2179db922773",
+      "bytes": 2844
+    },
+    {
+      "caminho": "src/medical_classifier/pipeline.py",
+      "sha256": "edc992ad3315eb4296051262d85c4fa9ada3331077c2d9b2a1136e4bbf8df25d",
+      "bytes": 6593
+    },
+    {
+      "caminho": "src/medical_classifier/benchmark.py",
+      "sha256": "67b15f1288603196637499e0c98dffdc49c42f550a33805966a8d797abe446af",
+      "bytes": 2281
+    },
+    {
+      "caminho": "tests/test_data.py",
+      "sha256": "99449888b01b2cdea05535da0c97cc8995acebf344f4c6e0d400c283fdfefd7a",
+      "bytes": 3028
+    },
+    {
+      "caminho": "tests/test_model.py",
+      "sha256": "1f1a439b9c45bd4573eba80043deffb2dd98682cb68b6d1d235d4add611f150b",
+      "bytes": 3389
+    },
+    {
+      "caminho": "tests/test_pipeline.py",
+      "sha256": "1e6c3c3ab0d77817f488d1941b0b4b9ee31bea043d962cc27e751b319a1870c2",
+      "bytes": 1963
+    },
+    {
+      "caminho": "reports/qualidade.json",
+      "sha256": "bfda7b50116e744a336e4c4dbd34bc1e068dff614aa54612acc4e0edf840a53f",
+      "bytes": 9412
+    },
+    {
+      "caminho": "reports/latencia_modelo.json",
+      "sha256": "60898ed2451a273cda0429da0ad42044de7d8d31afe1ebafba1055f138c7f76e",
+      "bytes": 749
+    },
+    {
+      "caminho": "pyproject.toml",
+      "sha256": "3175dc8e7215b642cae83e3b704ee8a8b7758ee3b99320519fa86187e33d2748",
+      "bytes": 991
+    },
+    {
+      "caminho": "requirements.lock",
+      "sha256": "7b4708337496ac4725e2fe0227ac7bce9b2912f38b699013d7c43589fe656deb",
+      "bytes": 987
+    },
+    {
+      "caminho": "models/current.json",
+      "sha256": "a9106860355d9d4266562b05a0f854624c6efbace43c40a133b63fca3b99240b",
+      "bytes": 106
+    }
+  ],
+  "prompt_sha256": "cf3373fa72133adcd39ab359d8046cd7e52c894acbfc7270849b08bc7338ea95",
+  "contexto": "Segunda rodada: achados corrigidos auditateste(2770unicos231ambiguos teto95.91%),metadataparametrosreais/conversor/niter, release temporaria atomicacomcleanup, verificacaohashprepared+vinculoaocandidato, F1naomesmavalnaoregride, historicoanterior, gateaceleracaop50>=1, reaproveitamentoboot hash+aprovacao.17testesB1passaram e pipeline realreexecutado. Tetoambiguidadenaoexplicatodogap validacao/teste,documentaremos sem causalidade. Recusado afrouxargateargmax(exigimosequivalencia), rebaixar integridadeautorebaixando arquivo localcorrupto(failclosed intencional), metrica teste nuncaescolhemodelo. Formataçãocorrigida. Reavalie blockers concretos remanescentes, sem ampliare escopo nem especular outras fases; max800palavras.",
+  "timeout_segundos": 600,
+  "aprovacao_automatica": false,
+  "fim_utc": "2026-09-14T21:48:01.820632+00:00",
+  "comando": [
+    "C:\\Users\\Cally\\.vscode\\extensions\\anthropic.claude-code-2.1.270-win32-x64\\resources\\native-binary\\claude.exe",
+    "-p",
+    "--model",
+    "fable",
+    "--effort",
+    "medium",
+    "--safe-mode",
+    "--strict-mcp-config",
+    "--permission-mode",
+    "dontAsk",
+    "--tools",
+    "",
+    "--output-format",
+    "json",
+    "--no-session-persistence"
+  ],
+  "modelos_reportados": [
+    "claude-fable-5-1",
+    "claude-haiku-4-5-20251001"
+  ],
+  "exit_code": 0,
+  "codigo_saida_script": 0,
+  "stderr": "",
+  "erro": ""
+}

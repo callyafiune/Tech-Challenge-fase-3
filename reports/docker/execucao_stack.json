@@ -1,0 +1,43 @@
+{
+  "imagem": "sha256:7d38ef63d2fef92e29b7f552013cea65f4dc8b6a18d11453d16e7e900fa746f8",
+  "treino_sem_rede": {
+    "modo_rede": "none",
+    "usuario": "10001:10001",
+    "raiz_somente_leitura": true,
+    "codigo_saida": 0,
+    "inicio": "2026-09-14T21:48:01.22443641Z",
+    "fim": "2026-09-14T21:48:24.817788076Z"
+  },
+  "reinicio_sem_retreino": {
+    "codigo_saida": 0,
+    "reutilizado": true,
+    "versao_modelo": "20260914T214809-a767fe94"
+  },
+  "api": {
+    "imagem": "sha256:04875aff7dd271b654986a33392e577fe3a09d6c2769875b023ca560fc837377",
+    "container": "1d2b6ea50d06cf00a097004eb9f3ff15a688f1fbfb3cd603c19219016ff76f1d",
+    "versao_modelo": "20260914T221243-003d412d",
+    "origem_modelo": "DAG Airflow, posterior ao treino sem rede registrado acima",
+    "usuario": "10001:10001",
+    "raiz_somente_leitura": true,
+    "volumes": [
+      {
+        "destino": "/app/models",
+        "gravavel": false
+      }
+    ],
+    "healthcheck": "healthy",
+    "porta_publicada": [
+      {
+        "HostIp": "127.0.0.1",
+        "HostPort": "8002"
+      }
+    ],
+    "smoke": "reports/smoke_stack.json",
+    "pip_check": {
+      "codigo_saida": 0,
+      "resultado": "No broken requirements found."
+    },
+    "inspecao_utc": "2026-09-14T22:16:03.056328+00:00"
+  }
+}

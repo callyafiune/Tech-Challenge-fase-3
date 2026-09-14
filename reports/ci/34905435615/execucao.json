@@ -1,0 +1,173 @@
+{
+  "execucao": 34905435615,
+  "url": "https://github.com/callyafiune/Tech-Challenge-fase-3/actions/runs/34905435615",
+  "commit": "9bee7b6a7e181689b8395c3cfc5d3fa6b1b1ee3d",
+  "conclusao": "success",
+  "fonte": "API GitHub Actions e artefato de evidências baixado pela integração GitHub",
+  "jobs": [
+    {
+      "id": 104180884282,
+      "name": "Testes, contêineres e retreino real",
+      "status": "completed",
+      "conclusion": "success",
+      "run_id": 34905435615,
+      "logs_url": null,
+      "steps": [
+        {
+          "name": "Set up job",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 1
+        },
+        {
+          "name": "Obter o código desta revisão",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 2
+        },
+        {
+          "name": "Preparar Python 3.11",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 3
+        },
+        {
+          "name": "Instalar as dependências fixadas",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 4
+        },
+        {
+          "name": "Executar análise estática e testes",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 5
+        },
+        {
+          "name": "Validar as configurações Compose",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 6
+        },
+        {
+          "name": "Construir a aplicação e o Airflow",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 7
+        },
+        {
+          "name": "Importar a DAG com o Airflow real",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 8
+        },
+        {
+          "name": "Executar as quatro etapas sobre o corpus público",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 9
+        },
+        {
+          "name": "Iniciar API, Prometheus e Grafana com a versão publicada",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 10
+        },
+        {
+          "name": "Verificar a stack de ponta a ponta",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 11
+        },
+        {
+          "name": "Preservar a imagem que passou em todas as verificações",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 12
+        },
+        {
+          "name": "Disponibilizar a imagem validada para entrega",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 13
+        },
+        {
+          "name": "Recolher relatórios e logs",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 14
+        },
+        {
+          "name": "Preservar evidências da execução",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 15
+        },
+        {
+          "name": "Encerrar os serviços do runner",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 16
+        },
+        {
+          "name": "Post Preparar Python 3.11",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 31
+        },
+        {
+          "name": "Post Obter o código desta revisão",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 32
+        },
+        {
+          "name": "Complete job",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 33
+        }
+      ]
+    }
+  ],
+  "artefatos": [
+    {
+      "id": 10372592999,
+      "name": "imagem-validada-9bee7b6a7e181689b8395c3cfc5d3fa6b1b1ee3d-34905435615-1",
+      "size_in_bytes": 275816024,
+      "url": "https://api.github.com/repos/callyafiune/Tech-Challenge-fase-3/actions/artifacts/10372592999",
+      "archive_download_url": "https://api.github.com/repos/callyafiune/Tech-Challenge-fase-3/actions/artifacts/10372592999/zip",
+      "expired": false,
+      "created_at": "2026-09-14T22:46:16Z",
+      "expires_at": "2026-09-21T22:46:13Z",
+      "updated_at": "2026-09-14T22:46:16Z",
+      "digest": "sha256:9f8e14a231b85dce106baba491ba97a29738c53d11d97020faf4b9dc66ea4fae",
+      "workflow_run": {
+        "id": 34905435615,
+        "repository_id": 1370511453,
+        "head_repository_id": 1370511453,
+        "head_branch": "main",
+        "head_sha": "9bee7b6a7e181689b8395c3cfc5d3fa6b1b1ee3d"
+      }
+    },
+    {
+      "id": 10372408611,
+      "name": "evidencias-ci-34905435615-1",
+      "size_in_bytes": 46835,
+      "url": "https://api.github.com/repos/callyafiune/Tech-Challenge-fase-3/actions/artifacts/10372408611",
+      "archive_download_url": "https://api.github.com/repos/callyafiune/Tech-Challenge-fase-3/actions/artifacts/10372408611/zip",
+      "expired": false,
+      "created_at": "2026-09-14T22:46:19Z",
+      "expires_at": "2026-09-28T22:46:18Z",
+      "updated_at": "2026-09-14T22:46:19Z",
+      "digest": "sha256:c68e9be3f779fb3a24861140d375e23b81492b2c0782878edbb22842bcf4f3df",
+      "workflow_run": {
+        "id": 34905435615,
+        "repository_id": 1370511453,
+        "head_repository_id": 1370511453,
+        "head_branch": "main",
+        "head_sha": "9bee7b6a7e181689b8395c3cfc5d3fa6b1b1ee3d"
+      }
+    }
+  ]
+}

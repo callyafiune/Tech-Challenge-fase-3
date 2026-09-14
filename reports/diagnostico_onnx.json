@@ -1,0 +1,84 @@
+{
+  "objetivo": "Investigar a falha remota de paridade sem alterar modelo ou critérios de aprovação.",
+  "data_utc": "2026-09-14T22:47:32.495432+00:00",
+  "baseline": "20260914T214327-e6c68fc4",
+  "validacao_amostras": 1322,
+  "criterios_preservados": {
+    "erro_maximo_probabilidade": 0.0001,
+    "concordancia_exigida": 1.0,
+    "valores_finitos": true
+  },
+  "ensaios": [
+    {
+      "ambiente": "Windows, Python 3.11.9",
+      "operacao": "Reconverter o baseline e comparar probabilidades na validação completa",
+      "pythonhashseed": 1,
+      "erro_maximo": 1.9207700852064136e-07,
+      "concordancia": 1.0,
+      "indice_pior_linha": 437
+    },
+    {
+      "ambiente": "Windows, Python 3.11.9",
+      "operacao": "Reconverter o baseline e comparar probabilidades na validação completa",
+      "pythonhashseed": 42,
+      "erro_maximo": 1.9207700852064136e-07,
+      "concordancia": 1.0,
+      "indice_pior_linha": 437
+    },
+    {
+      "ambiente": "Windows, Python 3.11.9",
+      "operacao": "Reconverter o baseline e comparar probabilidades na validação completa",
+      "pythonhashseed": 1234,
+      "erro_maximo": 1.9207700852064136e-07,
+      "concordancia": 1.0,
+      "indice_pior_linha": 437
+    },
+    {
+      "ambiente": "Imagem medical-classifier:local, Linux WSL2 x86_64, Python 3.11.16",
+      "operacao": "Reconverter o mesmo baseline em contêiner sem rede, raiz e montagem somente leitura",
+      "pythonhashseed": 42,
+      "erro_maximo": 1.9207700852064136e-07,
+      "concordancia": 1.0,
+      "indice_pior_linha": 437
+    },
+    {
+      "ambiente": "Imagem medical-classifier:local, Linux WSL2 x86_64, Python 3.11.16",
+      "operacao": "Reajustar o modelo na partição de treino, reconverter e avaliar a validação completa",
+      "pythonhashseed": 42,
+      "openblas_coretype": "Haswell",
+      "np_disable_cpu_features": "AVX512F,AVX512CD,AVX512_SKX,AVX512_CLX,AVX512_CNL,AVX512_ICL",
+      "erro_maximo": 1.9210818480441816e-07,
+      "concordancia": 1.0,
+      "indice_pior_linha": 437,
+      "limite_do_ensaio": "As variáveis restringem NumPy e OpenBLAS; não emulam outra CPU nem restringem o despacho SIMD do ONNX Runtime."
+    }
+  ],
+  "margem_minima_baseline": {
+    "descricao": "Diferença mínima entre as duas maiores probabilidades de uma amostra da validação.",
+    "valor_aproximado": 0.00139046,
+    "interpretacao": "Os resultados locais não sustentam a hipótese de troca de classe causada apenas por arredondamentos de aproximadamente 1e-7."
+  },
+  "execucao_remota_inicial": {
+    "run_id": 34904519738,
+    "job_id": 104177957768,
+    "runner": "2.337.0",
+    "imagem_runner": "ubuntu-24.04",
+    "resultado": "Falha de paridade nas duas tentativas de treinamento da DAG.",
+    "limitacao": "O erro anterior não registrava as diferenças numéricas. O log não identifica o modelo de CPU, impedindo atribuir a falha ao hardware."
+  },
+  "execucao_remota_com_diagnostico": {
+    "run_id": 34905435615,
+    "job_id": 104180884282,
+    "commit": "9bee7b6a7e181689b8395c3cfc5d3fa6b1b1ee3d",
+    "observacao": "A alteração acrescentou apenas valores numéricos à mensagem de reprovação; manteve o treinamento e todos os critérios de aprovação.",
+    "estado_observado": "Execução completa concluída com success, incluindo as quatro tarefas da DAG, smoke da stack e artefato da imagem validada.",
+    "fonte_relatorios": "reports/ci/34905435615/execucao.json",
+    "erro_maximo_validacao": 1.9207895529671504e-7,
+    "concordancia_validacao": 1.0,
+    "erro_maximo_teste": 2.9755243957652056e-7,
+    "versao_modelo": "20260914T224453-22d06ac9"
+  },
+  "conclusao": "Falha original não reproduzida. Variações de hashseed, sistema operacional e despacho de NumPy/OpenBLAS testadas não a explicam. Não foi demonstrada causa raiz; não se recomenda enfraquecer os critérios nem alterar o modelo com base em hipótese não confirmada.",
+  "procedimento": "Carregar baseline.joblib e validacao.csv, reconverter com convert_sklearn, entrada StringTensorType([None, 1]), zipmap=False, opset 17; executar ORT CPU com intra_op_num_threads=1 em lotes de 64 e comparar com predict_proba. Para reajuste, executar fit no treino.csv sob threadpool_limits(1) antes de reconverter. Variar somente as condições registradas em cada ensaio.",
+  "script_temporario_nao_versionado": ".local/diagnostico_onnx.py"
+}

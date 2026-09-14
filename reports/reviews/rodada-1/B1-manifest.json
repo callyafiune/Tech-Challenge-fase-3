@@ -1,0 +1,85 @@
+{
+  "bloco": "B1",
+  "modelo_solicitado": "fable",
+  "inicio_utc": "2026-09-14T21:28:11.950380+00:00",
+  "arquivos": [
+    {
+      "caminho": "src/medical_classifier/data.py",
+      "sha256": "0565270da014973d9b81a3bffb163fb8ddca727de12ba6f0be4fbfae0407a893",
+      "bytes": 5155
+    },
+    {
+      "caminho": "src/medical_classifier/corpus_manifest.json",
+      "sha256": "d6aa6a4c309812e01774dc511f7017d4eb2a41d1b53922f666a23ff73fe7f139",
+      "bytes": 644
+    },
+    {
+      "caminho": "src/medical_classifier/training.py",
+      "sha256": "c0e6847c1a515270d8ae1192107be3129fd82d3dcb75362addc1d4c107da5f29",
+      "bytes": 6224
+    },
+    {
+      "caminho": "src/medical_classifier/serving.py",
+      "sha256": "16b4aca4bebfbf1af3eda427d6d547e74f172b350270611c6fe942a59668ea6a",
+      "bytes": 2671
+    },
+    {
+      "caminho": "src/medical_classifier/pipeline.py",
+      "sha256": "00661cff65a000db87fd8f1bf6dad746b775f4b4de7d6b7f09efd8ed39a8f778",
+      "bytes": 4536
+    },
+    {
+      "caminho": "src/medical_classifier/benchmark.py",
+      "sha256": "67b15f1288603196637499e0c98dffdc49c42f550a33805966a8d797abe446af",
+      "bytes": 2281
+    },
+    {
+      "caminho": "tests/test_data.py",
+      "sha256": "421497a9fe14912722fd36fe96b83a552d49d497646aff28a6b1718440468c14",
+      "bytes": 1937
+    },
+    {
+      "caminho": "tests/test_model.py",
+      "sha256": "94ee21adc11292c13bf310a1f52d01e955d3e8ce8625e698908aff8cfe3d817b",
+      "bytes": 2223
+    },
+    {
+      "caminho": "reports/qualidade.json",
+      "sha256": "5f0836461f43653b690715453a8e36b119843949aac2f3f9faf17617034f7dfb",
+      "bytes": 7689
+    },
+    {
+      "caminho": "reports/latencia_modelo.json",
+      "sha256": "ceef0708a20a5dcf7225e2cbedc4290cabc51aeb9ed27202395e4608f934e8dc",
+      "bytes": 744
+    }
+  ],
+  "prompt_sha256": "975aca5480ac3c21429af3b95c0dbdcb6788570f6f05450fa23d5b746581cad2",
+  "contexto": "Modelo final real passou gates e treino completo. Removidas sobreposicoes e ambiguidades apenas treino, teste oficial intacto. Bug sublinear conversor corrigido TFlinear com regressao. F1teste .6385, ONNX3.55x p50. Revise dados modelo pipeline benchmarks e integridade, outros blocos terao revisao independente.",
+  "timeout_segundos": 600,
+  "aprovacao_automatica": false,
+  "fim_utc": "2026-09-14T21:38:06.297598+00:00",
+  "comando": [
+    "C:\\Users\\Cally\\.vscode\\extensions\\anthropic.claude-code-2.1.270-win32-x64\\resources\\native-binary\\claude.exe",
+    "-p",
+    "--model",
+    "fable",
+    "--safe-mode",
+    "--strict-mcp-config",
+    "--permission-mode",
+    "dontAsk",
+    "--tools",
+    "",
+    "--output-format",
+    "json",
+    "--no-session-persistence"
+  ],
+  "modelos_reportados": [
+    "claude-fable-5-1",
+    "claude-haiku-4-5-20251001"
+  ],
+  "exit_code": 0,
+  "codigo_saida_script": 0,
+  "stderr": "",
+  "erro": ""
+}

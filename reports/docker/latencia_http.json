@@ -1,0 +1,44 @@
+{
+  "sklearn": {
+    "amostras": 200,
+    "media_ms": 5.7821045,
+    "p50_ms": 5.41015,
+    "p95_ms": 8.251045,
+    "p99_ms": 10.328997999999979
+  },
+  "onnx": {
+    "amostras": 200,
+    "media_ms": 4.4379990000000005,
+    "p50_ms": 4.0585,
+    "p95_ms": 6.1370349999999965,
+    "p99_ms": 9.334124
+  },
+  "fator_aceleracao_p50": 1.3330417641985954,
+  "fator_aceleracao_p95": 1.344467646021247,
+  "metodo": "HTTP local, lote 1, concorrência 1, conexões persistentes e ordem alternada",
+  "ambiente_servidores": "docker",
+  "endpoints": {
+    "sklearn": "http://127.0.0.1:8001",
+    "onnx": "http://127.0.0.1:8002"
+  },
+  "ambiente_cliente": {
+    "plataforma": "Windows-10-10.0.26200-SP0",
+    "processador": "Intel64 Family 6 Model 140 Stepping 1, GenuineIntel",
+    "python": "3.11.9"
+  },
+  "semente": 42,
+  "aquecimento_por_motor": 20,
+  "prontidao": {
+    "sklearn": {
+      "status": "pronto",
+      "versao_modelo": "20260914T221243-003d412d",
+      "backend": "sklearn"
+    },
+    "onnx": {
+      "status": "pronto",
+      "versao_modelo": "20260914T221243-003d412d",
+      "backend": "onnx"
+    }
+  },
+  "instante_utc": "2026-09-14T22:16:43.768023+00:00"
+}

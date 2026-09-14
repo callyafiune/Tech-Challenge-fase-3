@@ -1,0 +1,137 @@
+{
+  "bloco": "B5",
+  "modelo_solicitado": "fable",
+  "inicio_utc": "2026-09-14T22:27:02.899280+00:00",
+  "arquivos": [
+    {
+      "caminho": "README.md",
+      "sha256": "a85953f5bfa210482775a14ccba4e68bb2320f2bb547bb9dfa6bd91defaad0ca",
+      "bytes": 23139
+    },
+    {
+      "caminho": "docs/arquitetura.md",
+      "sha256": "5c5d6339b79143a0591dd9efe578c5a4df9cc3d7533a973abb5a170021714ead",
+      "bytes": 12641
+    },
+    {
+      "caminho": "docs/model_card.md",
+      "sha256": "d1c345b0fe71c14b9431f486df7b8261b0e8e1999f8a24cabd8b7e1ba1456544",
+      "bytes": 14397
+    },
+    {
+      "caminho": "docs/roteiro_star.md",
+      "sha256": "3a81b5d48b7ffe36e3cc0d1f93feec56d6eb8e21edb4d74a935f08a791ade6a5",
+      "bytes": 6420
+    },
+    {
+      "caminho": "docs/revisoes_adversariais.md",
+      "sha256": "df6b230bc335f780c3e1cc7ed10e1a13b8f92163d1dabf1eebda9d7b43731662",
+      "bytes": 10372
+    },
+    {
+      "caminho": "docs/plano_implementacao.md",
+      "sha256": "1be5cd6ebfbd43d8282e7f8f42a6f46672cf3dd0e7f3608ba0bca8cef056dc0b",
+      "bytes": 23032
+    },
+    {
+      "caminho": "docs/matriz_rastreabilidade.md",
+      "sha256": "336ac1fa493d9fa6bc2e7dd7e98e3a26eb6dd43daa2f65f172ef8850eaba7c2f",
+      "bytes": 9343
+    },
+    {
+      "caminho": "scripts/gerar_video.ps1",
+      "sha256": "889d164eee6c1dc82c168d877d1bccb09f063709286486f201bc4f75dd96fa50",
+      "bytes": 26752
+    },
+    {
+      "caminho": "scripts/benchmark_http.py",
+      "sha256": "138ffb0f4f45d0fffbca9f065bcfdf3cfde2ae8d56571b212e21dee958f15f76",
+      "bytes": 4418
+    },
+    {
+      "caminho": "reports/qualidade.json",
+      "sha256": "bfda7b50116e744a336e4c4dbd34bc1e068dff614aa54612acc4e0edf840a53f",
+      "bytes": 9412
+    },
+    {
+      "caminho": "reports/latencia_modelo.json",
+      "sha256": "60898ed2451a273cda0429da0ad42044de7d8d31afe1ebafba1055f138c7f76e",
+      "bytes": 749
+    },
+    {
+      "caminho": "reports/latencia_http_local.json",
+      "sha256": "6675b2ee6255f0c0311e701906b36e4fbad2e4c25f72f7341681b0c973988eb6",
+      "bytes": 1217
+    },
+    {
+      "caminho": "reports/docker/latencia_http.json",
+      "sha256": "7a7555cb9279b2eee44cad0eb0feac3641103ad67f208bad355894b1897d7ef0",
+      "bytes": 1209
+    },
+    {
+      "caminho": "reports/airflow_execucao.json",
+      "sha256": "72aa12a8f984378bc240ebfcc1c45a0eb2dc016826300d92131aeb52de49e27d",
+      "bytes": 1082
+    },
+    {
+      "caminho": "reports/docker/airflow_execution_steps.json",
+      "sha256": "0c8813478165dc1900b3cdda043b282027e5402abc54dbb09073d822b5c1df43",
+      "bytes": 724
+    },
+    {
+      "caminho": "reports/smoke_stack.json",
+      "sha256": "349b77bd37623ed538430cf31382f36395e49f97cfe7b8dfed0c1c801b5a1986",
+      "bytes": 3394
+    },
+    {
+      "caminho": "reports/testes.xml",
+      "sha256": "26fad2f331113adee619a80481faf36f00ae08327d7d505425f28f3189d947d8",
+      "bytes": 9409
+    },
+    {
+      "caminho": "reports/video/evidencias.json",
+      "sha256": "d5c1d496aff38c496b305f55dbd8a929c3fd14eb8c676a7ab536515176a78a6b",
+      "bytes": 14390
+    },
+    {
+      "caminho": "reports/video/verificacao.json",
+      "sha256": "0b036f0a04f9524f582d5f8e21014a0052f4bec05a63dd5da47ad558adc37582",
+      "bytes": 1637
+    },
+    {
+      "caminho": "reports/reviews/rodada-1/B5.md",
+      "sha256": "661c87a9aeb0c17546f4c098d9914f69aa43f86f08f015edb6b328b284374400",
+      "bytes": 6828
+    }
+  ],
+  "prompt_sha256": "a6a464f36c4ee6e108666acfcdc7480ce1070dc462f91de02535acaa888b5913",
+  "contexto": "Segunda revisão adversarial B5. Compare cada achado anterior com as correções e as evidências reais fornecidas. O vídeo final tem 212,056417 segundos, H264/AAC, sete cartões programáticos inspecionados, narração sintética Maria; o MP4 não está neste bundle textual. API divergente 8002 retornou 1 antes de render, API correta 8000 completou. A DAG real concluiu as quatro tarefas; use 66,6s do registro de comandos, nunca diferença da data lógica. HTTP host e Docker são medições separadas identificadas. GitHub remoto ainda não executado neste snapshot; commits locais estão sendo consolidados pelo agente principal. Não marque ausência de GitHub remoto como falso sucesso se documentada corretamente. Verifique consistência documental, autoria corpus, limites de vídeo/retentativa, versões, integridade das evidências. Liste apenas achados concretos com severidade, arquivo/linha, reprodução e impacto; não edite arquivos, não execute comandos e não considere retorno zero como aprovação.",
+  "timeout_segundos": 600,
+  "aprovacao_automatica": false,
+  "fim_utc": "2026-09-14T22:29:26.726337+00:00",
+  "comando": [
+    "C:\\Users\\Cally\\.vscode\\extensions\\anthropic.claude-code-2.1.270-win32-x64\\resources\\native-binary\\claude.exe",
+    "-p",
+    "--model",
+    "fable",
+    "--effort",
+    "medium",
+    "--safe-mode",
+    "--strict-mcp-config",
+    "--permission-mode",
+    "dontAsk",
+    "--tools",
+    "",
+    "--output-format",
+    "json",
+    "--no-session-persistence"
+  ],
+  "modelos_reportados": [
+    "claude-fable-5-1",
+    "claude-haiku-4-5-20251001"
+  ],
+  "exit_code": 0,
+  "codigo_saida_script": 0,
+  "stderr": "",
+  "erro": ""
+}

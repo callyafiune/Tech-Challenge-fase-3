@@ -1,0 +1,82 @@
+{
+  "bloco": "B3",
+  "modelo_solicitado": "fable",
+  "inicio_utc": "2026-09-14T21:33:51.612391+00:00",
+  "arquivos": [
+    {
+      "caminho": "Dockerfile",
+      "sha256": "4c28fd14b4361e28f41a176e994dd2e0ef623f01d6dd0eb1cb8effe6f87b3c6c",
+      "bytes": 1265
+    },
+    {
+      "caminho": "docker-compose.yml",
+      "sha256": "7078d596cb66a193a9d9858272b79a1904ae345e2f6c9058ce88e21dd84acf55",
+      "bytes": 3039
+    },
+    {
+      "caminho": ".dockerignore",
+      "sha256": "7cb4c1877b5e93ca10439f2177b02cd0aa67bbe84f52fa2f863e25dda39b7d8f",
+      "bytes": 240
+    },
+    {
+      "caminho": "scripts/smoke_stack.py",
+      "sha256": "eacaf97ad1f31e7780b411aea689957d630747c2d584afc61d679f16f1f7919a",
+      "bytes": 10155
+    },
+    {
+      "caminho": "monitoring/README.md",
+      "sha256": "35761fbddc85c013e21e91401fdb80c3c5dfd88cb16cb5e25d1fb5e3b7ba9cad",
+      "bytes": 3289
+    },
+    {
+      "caminho": "monitoring/prometheus/prometheus.yml",
+      "sha256": "8d16cc422c7e7718a6b4c4d9bc5a989f2796b9d2ac9825f4514f7dc95bab2ace",
+      "bytes": 241
+    },
+    {
+      "caminho": "monitoring/grafana/provisioning/datasources/prometheus.yml",
+      "sha256": "d897736549b5b4d4ed5e79b2907e08d0433f6bc16588a4c30063aaac751a483d",
+      "bytes": 225
+    },
+    {
+      "caminho": "monitoring/grafana/provisioning/dashboards/dashboard.yml",
+      "sha256": "0ea77fedc357bc7cb95a4ce9bdaff436fb5ecd45860d669036715b148401fedb",
+      "bytes": 257
+    },
+    {
+      "caminho": "monitoring/grafana/dashboards/medical-classifier.json",
+      "sha256": "f84634021ef6a67d48ad6dbedcb63ac347eee6c7298ad64cde16375f1ec17eff",
+      "bytes": 10221
+    }
+  ],
+  "prompt_sha256": "f3c49563cf10e6cddbd5fc773673b67c2dd89728e5ef4444a88f884e4731584b",
+  "contexto": "B3 infraestrutura DockerCompose monitoramento. Prom/Grafana reais health200 fonteOK6paineis, API teste local45pass1skip. Treino real passou ONNX TFlinear3.55x. Host disco cheio bloqueou fimdobuild, problema ambiental registrado, retestara depois. Procure bugs concretos config/painel/smoke, nao trate bloco incompleto de evidencia como bugcodigo.",
+  "timeout_segundos": 600,
+  "aprovacao_automatica": false,
+  "fim_utc": "2026-09-14T21:36:38.184073+00:00",
+  "comando": [
+    "C:\\Users\\Cally\\.vscode\\extensions\\anthropic.claude-code-2.1.270-win32-x64\\resources\\native-binary\\claude.exe",
+    "-p",
+    "--model",
+    "fable",
+    "--effort",
+    "medium",
+    "--safe-mode",
+    "--strict-mcp-config",
+    "--permission-mode",
+    "dontAsk",
+    "--tools",
+    "",
+    "--output-format",
+    "json",
+    "--no-session-persistence"
+  ],
+  "modelos_reportados": [
+    "claude-fable-5-1",
+    "claude-haiku-4-5-20251001"
+  ],
+  "exit_code": 0,
+  "codigo_saida_script": 0,
+  "stderr": "",
+  "erro": ""
+}

@@ -1,0 +1,26 @@
+[
+  {
+    "etapa": "airflow_dagbag",
+    "codigo_saida": 0,
+    "segundos": 5.5,
+    "log": "C:\\estudos\\Tech-Challenge-fase-3\\reports\\docker\\airflow_dagbag.log"
+  },
+  {
+    "etapa": "airflow_db_migrate",
+    "codigo_saida": 0,
+    "segundos": 8.0,
+    "log": "C:\\estudos\\Tech-Challenge-fase-3\\reports\\docker\\airflow_db_migrate.log"
+  },
+  {
+    "etapa": "airflow_dags_test",
+    "codigo_saida": 0,
+    "segundos": 66.6,
+    "log": "C:\\estudos\\Tech-Challenge-fase-3\\reports\\docker\\airflow_dags_test.log"
+  },
+  {
+    "etapa": "airflow_dag_state",
+    "codigo_saida": 0,
+    "segundos": 4.5,
+    "log": "C:\\estudos\\Tech-Challenge-fase-3\\reports\\docker\\airflow_dag_state.log"
+  }
+]

@@ -1,0 +1,55 @@
+{
+    "verificado_em_utc":  "2026-09-14T22:51:48.3594989Z",
+    "sha256_video":  "41d55f255cd0df8a2b06c6a3de0735d12e94a37e31b1cdbd62fe55c6751b1992",
+    "extracao":  "ffmpeg -ss \u003cinstante_segundos\u003e -i reports/video/apresentacao_star.mp4 -frames:v 1 .local/video/final-cena-\u003ccena\u003e.png",
+    "quadros":  [
+                    {
+                        "cena":  1,
+                        "instante_segundos":  0.5,
+                        "sha256":  "6584b3daf0a03198846ec9b8b94730c1f783cdc763a77a8b25a45b093d7a3bdf",
+                        "resultado":  "Cinco classes médicas legíveis; texto de uso educacional sem urgência ou diagnóstico."
+                    },
+                    {
+                        "cena":  2,
+                        "instante_segundos":  29.78,
+                        "sha256":  "ce9fbd6ff7dd0384a0eb853a2cbd75952d6b79ed2dfa889b96d213e81091cf5e",
+                        "resultado":  "Fluxo Corpus → Treino → Versão → FastAPI → Resposta e cadeia Airflow legíveis."
+                    },
+                    {
+                        "cena":  3,
+                        "instante_segundos":  59.719,
+                        "sha256":  "7f2464c58911bd89a39fcffd81704c351387c44e927e4b901195f1a34a3e288d",
+                        "resultado":  "Contagens 5.285/1.322/2.888 e remoções 1.097/3.846 legíveis."
+                    },
+                    {
+                        "cena":  4,
+                        "instante_segundos":  92.105,
+                        "sha256":  "00f5bf9e1d0701f83054e9a96063feb86a650688c59bf62ee969d612e35b2ea0",
+                        "resultado":  "Resposta cardiovascular de classe 4; motor onnx; versão 20260914T214327-e6c68fc4 e instante da captura legíveis."
+                    },
+                    {
+                        "cena":  5,
+                        "instante_segundos":  118.51,
+                        "sha256":  "aebe54b2bf84052a598500ae292dc1b9605c1d3d23bd699b7949bf7b05652f51",
+                        "resultado":  "DAG com quatro success e versão 20260914T221243-003d412d; rodapé distingue Docker do host; CI rotulado estático."
+                    },
+                    {
+                        "cena":  6,
+                        "instante_segundos":  154.515,
+                        "sha256":  "b1d77de8c3a96367bef48503651d3a0a1dfb8f3c30bbe7a5f22078884bf39a0f",
+                        "resultado":  "Acurácia 63,92%, F1 0,6385, ganhos 3,52× e 1,45× legíveis; HTTP do host identificado."
+                    },
+                    {
+                        "cena":  7,
+                        "instante_segundos":  188.581,
+                        "sha256":  "cf75031e6331157fa237d25b50b39b42670dcc6476907ac2d3bb8d6549df3764",
+                        "resultado":  "Quatro aprendizados legíveis; narração sintética e uso acadêmico explícitos."
+                    }
+                ],
+    "audio":  {
+                  "codigo_saida_ffmpeg":  0,
+                  "volume_medio_db":  -23.9,
+                  "pico_db":  -4.6,
+                  "limite":  "Presença, codificação e amplitude verificadas. Não foi feita avaliação perceptiva da locução."
+              }
+}

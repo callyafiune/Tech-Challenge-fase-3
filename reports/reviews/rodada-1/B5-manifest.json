@@ -1,0 +1,112 @@
+{
+  "bloco": "B5",
+  "modelo_solicitado": "fable",
+  "inicio_utc": "2026-09-14T22:07:50.396057+00:00",
+  "arquivos": [
+    {
+      "caminho": "README.md",
+      "sha256": "7c224f7d886cc40694651b0104a9dcbbd9d812f9d6185ae98d037bb6869479d3",
+      "bytes": 21418
+    },
+    {
+      "caminho": "docs/arquitetura.md",
+      "sha256": "9b93d1c624813968ede638007aa303747e987e5b72a6f7764cac7cb8f50f8bbb",
+      "bytes": 12009
+    },
+    {
+      "caminho": "docs/model_card.md",
+      "sha256": "5b31cf0183c2142c77bc5273fa9d21104a7652d0af5b2ce7166541a82f2618e5",
+      "bytes": 13963
+    },
+    {
+      "caminho": "docs/roteiro_star.md",
+      "sha256": "1bb2c99f729b6d02dee99512a4767474548bc5b0c26132625ef9379f534acb7c",
+      "bytes": 8814
+    },
+    {
+      "caminho": "docs/revisoes_adversariais.md",
+      "sha256": "3708bbcb2f6f53eced814fffaabf7bf1e436390ba2f2678381b0131b622c5212",
+      "bytes": 8659
+    },
+    {
+      "caminho": "docs/plano_implementacao.md",
+      "sha256": "1f13a0c3527043fac2b5b882091215271d6f842952311e5ace144e801386e2e4",
+      "bytes": 23322
+    },
+    {
+      "caminho": "docs/matriz_rastreabilidade.md",
+      "sha256": "8da06bd99e9f06dd5011c6b3ab179a4cbb90c38cd7bedb1f68974672db04f50e",
+      "bytes": 8401
+    },
+    {
+      "caminho": "scripts/gerar_video.ps1",
+      "sha256": "3a3f48e31a5d97526f792401b450a6a678986eb7e02485afd943f295940e6f96",
+      "bytes": 23809
+    },
+    {
+      "caminho": "scripts/review_block.py",
+      "sha256": "92b4bdd241ca1790b496ba33884cf2de25d24671b5efbe73be3dffb75a30cabf",
+      "bytes": 12623
+    },
+    {
+      "caminho": "scripts/benchmark_http.py",
+      "sha256": "d926f100394f876bfb2d156342bcaa99088a05c2370283362879c60db61654f9",
+      "bytes": 3836
+    },
+    {
+      "caminho": ".claude/agents/orquestrador.md",
+      "sha256": "f33fb09753b9f6144ce0fddc052da0d5bb5be1eea4a45f02876ab1aa4790fc78",
+      "bytes": 4631
+    },
+    {
+      "caminho": "reports/qualidade.json",
+      "sha256": "bfda7b50116e744a336e4c4dbd34bc1e068dff614aa54612acc4e0edf840a53f",
+      "bytes": 9412
+    },
+    {
+      "caminho": "reports/latencia_modelo.json",
+      "sha256": "60898ed2451a273cda0429da0ad42044de7d8d31afe1ebafba1055f138c7f76e",
+      "bytes": 749
+    },
+    {
+      "caminho": "reports/latencia_http_local.json",
+      "sha256": "7258d7864fa64e7160910846b048aa0d6823f649cb070e806870da085a097cb6",
+      "bytes": 884
+    },
+    {
+      "caminho": "reports/smoke_stack.json",
+      "sha256": "1853d02ddce8cf2ee30a1f5a571b9352a73680757124110d940be7cf72b683ab",
+      "bytes": 3006
+    }
+  ],
+  "prompt_sha256": "d6c3f3b5387864906be7787324e7efe50e7c6e1e3e73e8c56a248c9328af8ce7",
+  "contexto": "Revisão adversarial de integração e documentação. As revisões B1 a B4 já aconteceram com fable, com correções e testes reais. A nova imagem Airflow está sendo construída em paralelo após uma falta real de disco; a documentação identifica isso como pendente e será atualizada somente com evidências reais. O vídeo ainda será regenerado após a DAG, portanto não trate o rascunho anterior como entrega final nem prometa publicação externa. Procure inconsistências de contratos, números, reprodução, direitos do corpus e alegações de evidência. Toda resposta em português Brasil. Não proponha desabilitar gates válidos apenas para produzir sucesso.",
+  "timeout_segundos": 600,
+  "aprovacao_automatica": false,
+  "fim_utc": "2026-09-14T22:11:00.699287+00:00",
+  "comando": [
+    "C:\\Users\\Cally\\.vscode\\extensions\\anthropic.claude-code-2.1.270-win32-x64\\resources\\native-binary\\claude.exe",
+    "-p",
+    "--model",
+    "fable",
+    "--effort",
+    "medium",
+    "--safe-mode",
+    "--strict-mcp-config",
+    "--permission-mode",
+    "dontAsk",
+    "--tools",
+    "",
+    "--output-format",
+    "json",
+    "--no-session-persistence"
+  ],
+  "modelos_reportados": [
+    "claude-fable-5-1",
+    "claude-haiku-4-5-20251001"
+  ],
+  "exit_code": 0,
+  "codigo_saida_script": 0,
+  "stderr": "",
+  "erro": ""
+}

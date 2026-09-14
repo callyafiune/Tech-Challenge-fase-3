@@ -1,0 +1,20 @@
+{
+  "execucao": 34904519738,
+  "url": "https://github.com/callyafiune/Tech-Challenge-fase-3/actions/runs/34904519738",
+  "commit": "a81c50cb40a0cd3acaacbf25994487af467b2582",
+  "conclusao": "failure",
+  "etapa": "Executar as quatro etapas sobre o corpus público",
+  "causa_registrada": "Gate de paridade ONNX reprovou o treinamento nas duas tentativas; o erro original não informou as medidas.",
+  "trechos_log": [
+    "2026-09-14T22:33:35.0404172Z [2026-09-14 22:33:35,040] {subprocess.py:88} INFO - Running command: ['/usr/bin/bash', '-c', \"/opt/model-venv/bin/python -m medical_classifier.airflow_tasks treinamento --execucao '20260914T000000'\"]",
+    "2026-09-14T22:33:35.0406424Z [2026-09-14T22:33:35.040+0000] {subprocess.py:88} INFO - Running command: ['/usr/bin/bash', '-c', \"/opt/model-venv/bin/python -m medical_classifier.airflow_tasks treinamento --execucao '20260914T000000'\"]",
+    "2026-09-14T22:33:41.7016053Z [2026-09-14 22:33:41,699] {subprocess.py:106} INFO - ValueError: Conversão ONNX reprovada no gate de paridade.",
+    "2026-09-14T22:33:41.7017003Z [2026-09-14T22:33:41.699+0000] {subprocess.py:106} INFO - ValueError: Conversão ONNX reprovada no gate de paridade.",
+    "2026-09-14T22:33:41.9375104Z [2026-09-14T22:33:41.935+0000] {taskinstance.py:1242} INFO - Marking task as UP_FOR_RETRY. dag_id=retreino_medico, task_id=treinamento, run_id=manual__2026-09-14T00:00:00+00:00, execution_date=20260914T000000, start_date=, end_date=20260914T223341",
+    "2026-09-14T22:34:42.5752646Z [2026-09-14 22:34:42,574] {subprocess.py:88} INFO - Running command: ['/usr/bin/bash', '-c', \"/opt/model-venv/bin/python -m medical_classifier.airflow_tasks treinamento --execucao '20260914T000000'\"]",
+    "2026-09-14T22:34:42.5755355Z [2026-09-14T22:34:42.574+0000] {subprocess.py:88} INFO - Running command: ['/usr/bin/bash', '-c', \"/opt/model-venv/bin/python -m medical_classifier.airflow_tasks treinamento --execucao '20260914T000000'\"]",
+    "2026-09-14T22:34:49.2430304Z [2026-09-14 22:34:49,241] {subprocess.py:106} INFO - ValueError: Conversão ONNX reprovada no gate de paridade.",
+    "2026-09-14T22:34:49.2431520Z [2026-09-14T22:34:49.241+0000] {subprocess.py:106} INFO - ValueError: Conversão ONNX reprovada no gate de paridade."
+  ],
+  "tratamento": "Acrescentadas as medidas à mensagem de erro. Treinamento e critérios preservados. A execução seguinte passou; causa raiz da ocorrência inicial não demonstrada."
+}

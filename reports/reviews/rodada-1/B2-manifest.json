@@ -1,0 +1,50 @@
+{
+  "bloco": "B2",
+  "modelo_solicitado": "fable",
+  "inicio_utc": "2026-09-14T21:31:24.470269+00:00",
+  "arquivos": [
+    {
+      "caminho": "src/medical_classifier/api.py",
+      "sha256": "1e3414fc25766de7f30e676978ac79d6d6245a208484e64f85a1db0dbe9355fa",
+      "bytes": 6307
+    },
+    {
+      "caminho": "src/medical_classifier/metrics.py",
+      "sha256": "14608cab88512867e211ed3b6a09bf1af70ba8625c641f81d984838c491255b8",
+      "bytes": 2467
+    },
+    {
+      "caminho": "tests/test_api.py",
+      "sha256": "e72f88b573705816b586bff3612ea89fdfc57685de13321db9a92a4dca4438e3",
+      "bytes": 10601
+    }
+  ],
+  "prompt_sha256": "3df3e47d1dab9a6d8a2541e1bf56cbda88c5577137f12460ad5598aa3ac2898b",
+  "contexto": "Revisao somente B2 HTTP metricas. 24 testes passaram. Predictor retorna matriz Nx5 version backend; inclui hash nos artefatos. Outros requisitos sao blocos B1 B3 B4 B5. Responda com no maximo 8 achados concretos e 1200 palavras.",
+  "timeout_segundos": 600,
+  "aprovacao_automatica": false,
+  "fim_utc": "2026-09-14T21:35:42.175415+00:00",
+  "comando": [
+    "C:\\Users\\Cally\\.vscode\\extensions\\anthropic.claude-code-2.1.270-win32-x64\\resources\\native-binary\\claude.exe",
+    "-p",
+    "--model",
+    "fable",
+    "--safe-mode",
+    "--strict-mcp-config",
+    "--permission-mode",
+    "dontAsk",
+    "--tools",
+    "",
+    "--output-format",
+    "json",
+    "--no-session-persistence"
+  ],
+  "modelos_reportados": [
+    "claude-fable-5-1",
+    "claude-haiku-4-5-20251001"
+  ],
+  "exit_code": 0,
+  "codigo_saida_script": 0,
+  "stderr": "",
+  "erro": ""
+}
