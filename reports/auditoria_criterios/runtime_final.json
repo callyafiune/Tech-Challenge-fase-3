@@ -1,0 +1,494 @@
+{
+  "inicio_utc": "2026-09-15T02:25:33.454834+00:00",
+  "objetivo": "Atualizar imagens e serviços com as fontes finais, reutilizando o modelo publicado.",
+  "modelo_esperado": "20260914T232434-92cce529",
+  "sucesso": true,
+  "comandos": [
+    {
+      "etapa": "containers_antes",
+      "argumentos": [
+        "docker",
+        "inspect",
+        "--format",
+        "{\"nome\":{{json .Name}},\"imagem\":{{json .Image}},\"estado\":{{json .State.Status}},\"saude\":{{json .State.Health.Status}},\"usuario\":{{json .Config.User}},\"inicio\":{{json .State.StartedAt}}}",
+        "medical-classifier-api-1",
+        "medical-classifier-prometheus-1",
+        "medical-classifier-grafana-1",
+        "medical-classifier-airflow-airflow-1"
+      ],
+      "inicio_utc": "2026-09-15T02:25:33.477831+00:00",
+      "saida_local": ".local/correcao_criterios/runtime_final/containers_antes.stdout.log",
+      "erros_local": ".local/correcao_criterios/runtime_final/containers_antes.stderr.log",
+      "fim_utc": "2026-09-15T02:25:33.563292+00:00",
+      "codigo_saida": 0,
+      "espaco_livre_bytes": 2736164864
+    },
+    {
+      "etapa": "modelo_antes",
+      "argumentos": [
+        "docker",
+        "compose",
+        "exec",
+        "-T",
+        "api",
+        "python",
+        "-c",
+        "\nimport hashlib, json\nfrom pathlib import Path\nimport medical_classifier.training as treinamento\nimport medical_classifier.pipeline as pipeline\nraiz = Path('/app/models')\nponteiro = json.loads((raiz / 'current.json').read_text('utf-8'))\nrelease = raiz / ponteiro['release']\nmetadata = json.loads((release / 'metadata.json').read_text('utf-8'))\narquivos = ('baseline.joblib', 'model.onnx', 'metadata.json', 'avaliacao.json', 'latencia.json')\nprint(json.dumps({\n    'versao': metadata['versao'],\n    'ponteiro': ponteiro,\n    'sha256_arquivos': {nome: hashlib.sha256((release / nome).read_bytes()).hexdigest()\n                       for nome in arquivos},\n    'sha256_fontes': {'training.py': hashlib.sha256(Path(treinamento.__file__).read_bytes()).hexdigest(),\n                      'pipeline.py': hashlib.sha256(Path(pipeline.__file__).read_bytes()).hexdigest()}\n}))\n"
+      ],
+      "inicio_utc": "2026-09-15T02:25:33.569245+00:00",
+      "saida_local": ".local/correcao_criterios/runtime_final/modelo_antes.stdout.log",
+      "erros_local": ".local/correcao_criterios/runtime_final/modelo_antes.stderr.log",
+      "fim_utc": "2026-09-15T02:25:35.361287+00:00",
+      "codigo_saida": 0,
+      "espaco_livre_bytes": 2736087040
+    },
+    {
+      "etapa": "build_api",
+      "argumentos": [
+        "docker",
+        "compose",
+        "build",
+        "api"
+      ],
+      "inicio_utc": "2026-09-15T02:25:35.363337+00:00",
+      "saida_local": ".local/correcao_criterios/runtime_final/build_api.stdout.log",
+      "erros_local": ".local/correcao_criterios/runtime_final/build_api.stderr.log",
+      "fim_utc": "2026-09-15T02:25:41.877594+00:00",
+      "codigo_saida": 0,
+      "espaco_livre_bytes": 2733879296
+    },
+    {
+      "etapa": "build_airflow",
+      "argumentos": [
+        "docker",
+        "compose",
+        "-f",
+        "docker-compose.airflow.yml",
+        "build",
+        "airflow"
+      ],
+      "inicio_utc": "2026-09-15T02:25:41.878114+00:00",
+      "saida_local": ".local/correcao_criterios/runtime_final/build_airflow.stdout.log",
+      "erros_local": ".local/correcao_criterios/runtime_final/build_airflow.stderr.log",
+      "fim_utc": "2026-09-15T02:27:04.824392+00:00",
+      "codigo_saida": 0,
+      "espaco_livre_bytes": 2733744128
+    },
+    {
+      "etapa": "pipeline_reutilizar",
+      "argumentos": [
+        "docker",
+        "compose",
+        "run",
+        "--rm",
+        "--no-deps",
+        "pipeline",
+        "python",
+        "-m",
+        "medical_classifier.pipeline",
+        "executar",
+        "--reutilizar",
+        "--dados",
+        "/app/data/raw",
+        "--modelos",
+        "/app/models",
+        "--relatorios",
+        "/app/data/reports"
+      ],
+      "inicio_utc": "2026-09-15T02:27:04.824392+00:00",
+      "saida_local": ".local/correcao_criterios/runtime_final/pipeline_reutilizar.stdout.log",
+      "erros_local": ".local/correcao_criterios/runtime_final/pipeline_reutilizar.stderr.log",
+      "fim_utc": "2026-09-15T02:27:18.742772+00:00",
+      "codigo_saida": 0,
+      "espaco_livre_bytes": 2733588480
+    },
+    {
+      "etapa": "recriar_api",
+      "argumentos": [
+        "docker",
+        "compose",
+        "up",
+        "-d",
+        "--no-deps",
+        "--force-recreate",
+        "api"
+      ],
+      "inicio_utc": "2026-09-15T02:27:18.751220+00:00",
+      "saida_local": ".local/correcao_criterios/runtime_final/recriar_api.stdout.log",
+      "erros_local": ".local/correcao_criterios/runtime_final/recriar_api.stderr.log",
+      "fim_utc": "2026-09-15T02:27:20.401464+00:00",
+      "codigo_saida": 0,
+      "espaco_livre_bytes": 2733518848
+    },
+    {
+      "etapa": "recriar_airflow",
+      "argumentos": [
+        "docker",
+        "compose",
+        "-f",
+        "docker-compose.airflow.yml",
+        "up",
+        "-d",
+        "--no-deps",
+        "--force-recreate",
+        "airflow"
+      ],
+      "inicio_utc": "2026-09-15T02:27:20.402561+00:00",
+      "saida_local": ".local/correcao_criterios/runtime_final/recriar_airflow.stdout.log",
+      "erros_local": ".local/correcao_criterios/runtime_final/recriar_airflow.stderr.log",
+      "fim_utc": "2026-09-15T02:27:23.079105+00:00",
+      "codigo_saida": 0,
+      "espaco_livre_bytes": 2733379584
+    },
+    {
+      "etapa": "fontes_api",
+      "argumentos": [
+        "docker",
+        "compose",
+        "exec",
+        "-T",
+        "api",
+        "python",
+        "-c",
+        "\nimport hashlib, json\nfrom pathlib import Path\nimport medical_classifier.training as treinamento\nimport medical_classifier.pipeline as pipeline\nraiz = Path('/app/models')\nponteiro = json.loads((raiz / 'current.json').read_text('utf-8'))\nrelease = raiz / ponteiro['release']\nmetadata = json.loads((release / 'metadata.json').read_text('utf-8'))\narquivos = ('baseline.joblib', 'model.onnx', 'metadata.json', 'avaliacao.json', 'latencia.json')\nprint(json.dumps({\n    'versao': metadata['versao'],\n    'ponteiro': ponteiro,\n    'sha256_arquivos': {nome: hashlib.sha256((release / nome).read_bytes()).hexdigest()\n                       for nome in arquivos},\n    'sha256_fontes': {'training.py': hashlib.sha256(Path(treinamento.__file__).read_bytes()).hexdigest(),\n                      'pipeline.py': hashlib.sha256(Path(pipeline.__file__).read_bytes()).hexdigest()}\n}))\n"
+      ],
+      "inicio_utc": "2026-09-15T02:27:41.605870+00:00",
+      "saida_local": ".local/correcao_criterios/runtime_final/fontes_api.stdout.log",
+      "erros_local": ".local/correcao_criterios/runtime_final/fontes_api.stderr.log",
+      "fim_utc": "2026-09-15T02:27:43.371579+00:00",
+      "codigo_saida": 0,
+      "espaco_livre_bytes": 2731769856
+    },
+    {
+      "etapa": "fontes_airflow",
+      "argumentos": [
+        "docker",
+        "compose",
+        "-f",
+        "docker-compose.airflow.yml",
+        "exec",
+        "-T",
+        "airflow",
+        "/opt/model-venv/bin/python",
+        "-c",
+        "\nimport hashlib, json\nfrom pathlib import Path\nimport medical_classifier.training as treinamento\nimport medical_classifier.pipeline as pipeline\nraiz = Path('/app/models')\nponteiro = json.loads((raiz / 'current.json').read_text('utf-8'))\nrelease = raiz / ponteiro['release']\nmetadata = json.loads((release / 'metadata.json').read_text('utf-8'))\narquivos = ('baseline.joblib', 'model.onnx', 'metadata.json', 'avaliacao.json', 'latencia.json')\nprint(json.dumps({\n    'versao': metadata['versao'],\n    'ponteiro': ponteiro,\n    'sha256_arquivos': {nome: hashlib.sha256((release / nome).read_bytes()).hexdigest()\n                       for nome in arquivos},\n    'sha256_fontes': {'training.py': hashlib.sha256(Path(treinamento.__file__).read_bytes()).hexdigest(),\n                      'pipeline.py': hashlib.sha256(Path(pipeline.__file__).read_bytes()).hexdigest()}\n}))\n"
+      ],
+      "inicio_utc": "2026-09-15T02:27:43.371579+00:00",
+      "saida_local": ".local/correcao_criterios/runtime_final/fontes_airflow.stdout.log",
+      "erros_local": ".local/correcao_criterios/runtime_final/fontes_airflow.stderr.log",
+      "fim_utc": "2026-09-15T02:27:45.042113+00:00",
+      "codigo_saida": 0,
+      "espaco_livre_bytes": 2731757568
+    },
+    {
+      "etapa": "smoke_final",
+      "argumentos": [
+        "C:\\estudos\\Tech-Challenge-fase-3\\.venv\\Scripts\\python.exe",
+        "scripts/smoke_stack.py",
+        "--requisicoes",
+        "20",
+        "--tempo-limite",
+        "90",
+        "--saida",
+        "reports/auditoria_criterios/smoke_stack_final.json"
+      ],
+      "inicio_utc": "2026-09-15T02:27:45.085316+00:00",
+      "saida_local": ".local/correcao_criterios/runtime_final/smoke_final.stdout.log",
+      "erros_local": ".local/correcao_criterios/runtime_final/smoke_final.stderr.log",
+      "fim_utc": "2026-09-15T02:28:12.281256+00:00",
+      "codigo_saida": 0,
+      "espaco_livre_bytes": 2730684416
+    },
+    {
+      "etapa": "containers_antes_confirmacao",
+      "argumentos": [
+        "docker",
+        "inspect",
+        "--format",
+        "{\"nome\":{{json .Name}},\"imagem\":{{json .Image}},\"estado\":{{json .State.Status}},\"saude\":{{json .State.Health.Status}},\"usuario\":{{json .Config.User}},\"inicio\":{{json .State.StartedAt}}}",
+        "medical-classifier-api-1",
+        "medical-classifier-prometheus-1",
+        "medical-classifier-grafana-1",
+        "medical-classifier-airflow-airflow-1"
+      ],
+      "inicio_utc": "2026-09-15T02:30:00.016913+00:00",
+      "fim_utc": "2026-09-15T02:30:00.087760+00:00",
+      "codigo_saida": 0,
+      "saida_local": ".local/correcao_criterios/runtime_final/containers_antes_confirmacao.stdout.log"
+    },
+    {
+      "etapa": "fontes_api_confirmacao",
+      "argumentos": [
+        "docker",
+        "compose",
+        "exec",
+        "-T",
+        "api",
+        "python",
+        "-c",
+        "\nimport hashlib, json\nfrom pathlib import Path\nimport medical_classifier.training as treinamento\nimport medical_classifier.pipeline as pipeline\nraiz = Path('/app/models')\nponteiro = json.loads((raiz / 'current.json').read_text('utf-8'))\nrelease = raiz / ponteiro['release']\nmetadata = json.loads((release / 'metadata.json').read_text('utf-8'))\narquivos = ('baseline.joblib', 'model.onnx', 'metadata.json', 'avaliacao.json', 'latencia.json')\nprint(json.dumps({\n    'versao': metadata['versao'],\n    'ponteiro': ponteiro,\n    'sha256_arquivos': {nome: hashlib.sha256((release / nome).read_bytes()).hexdigest()\n                       for nome in arquivos},\n    'sha256_fontes': {'training.py': hashlib.sha256(Path(treinamento.__file__).read_bytes()).hexdigest(),\n                      'pipeline.py': hashlib.sha256(Path(pipeline.__file__).read_bytes()).hexdigest()}\n}))\n"
+      ],
+      "inicio_utc": "2026-09-15T02:30:00.088270+00:00",
+      "fim_utc": "2026-09-15T02:30:01.775407+00:00",
+      "codigo_saida": 0,
+      "saida_local": ".local/correcao_criterios/runtime_final/fontes_api_confirmacao.stdout.log"
+    },
+    {
+      "etapa": "fontes_airflow_confirmacao",
+      "argumentos": [
+        "docker",
+        "compose",
+        "-f",
+        "docker-compose.airflow.yml",
+        "exec",
+        "-T",
+        "airflow",
+        "/opt/model-venv/bin/python",
+        "-c",
+        "\nimport hashlib, json\nfrom pathlib import Path\nimport medical_classifier.training as treinamento\nimport medical_classifier.pipeline as pipeline\nraiz = Path('/app/models')\nponteiro = json.loads((raiz / 'current.json').read_text('utf-8'))\nrelease = raiz / ponteiro['release']\nmetadata = json.loads((release / 'metadata.json').read_text('utf-8'))\narquivos = ('baseline.joblib', 'model.onnx', 'metadata.json', 'avaliacao.json', 'latencia.json')\nprint(json.dumps({\n    'versao': metadata['versao'],\n    'ponteiro': ponteiro,\n    'sha256_arquivos': {nome: hashlib.sha256((release / nome).read_bytes()).hexdigest()\n                       for nome in arquivos},\n    'sha256_fontes': {'training.py': hashlib.sha256(Path(treinamento.__file__).read_bytes()).hexdigest(),\n                      'pipeline.py': hashlib.sha256(Path(pipeline.__file__).read_bytes()).hexdigest()}\n}))\n"
+      ],
+      "inicio_utc": "2026-09-15T02:30:01.775407+00:00",
+      "fim_utc": "2026-09-15T02:30:04.062975+00:00",
+      "codigo_saida": 0,
+      "saida_local": ".local/correcao_criterios/runtime_final/fontes_airflow_confirmacao.stdout.log"
+    }
+  ],
+  "limpeza_de_disco_executada": false,
+  "espaco_livre_inicial_bytes": 2736173056,
+  "arquivos_preservados_antes": {
+    "reports/docker/pos_correcao/benchmark_http_execucao.json": "b6e03e9e4e7d139453471f62fddb89c5bf725ccf1d3f9ff23987fc3d027bfae9",
+    "reports/docker/pos_correcao/executar_dag.json": "bd252cbbb1a0496f4d11d76e8f4accc0ad7e712260589a6e60f4d40ff3c52530",
+    "reports/docker/pos_correcao/executar_dag.log": "2176de408a50f1a5b190c70470521b977ac922b336ded6f61d21a6df755e62a0",
+    "reports/docker/pos_correcao/integracao_verificada.json": "e325d20219efa9d9061e8aad98d54da2c38fd41a6d73d479ac9fd8d632169df4",
+    "reports/docker/pos_correcao/latencia_http.json": "82b165ad171781811f5a782d8493da9681e4f996538a0c465a595e4a999efcf3",
+    "reports/docker/pos_correcao/latencia_modelo.json": "7308ad82dcefad6f231bdffc3f95be9667adbd4303e0106696dbccbcb30f2719",
+    "reports/docker/pos_correcao/qualidade.json": "b681f00209a66551a96fecaa057923a114ee4398046735d01cea4463b68930e1",
+    "reports/docker/pos_correcao/smoke_stack.json": "236437e60628ce2393bf5f67a1fd053e5fcdfdeb0c8474759250c1841961ee47",
+    "models/current.json": "a9106860355d9d4266562b05a0f854624c6efbace43c40a133b63fca3b99240b",
+    "reports/qualidade.json": "bfda7b50116e744a336e4c4dbd34bc1e068dff614aa54612acc4e0edf840a53f",
+    "reports/latencia_modelo.json": "60898ed2451a273cda0429da0ad42044de7d8d31afe1ebafba1055f138c7f76e",
+    "reports/latencia_http_local.json": "6675b2ee6255f0c0311e701906b36e4fbad2e4c25f72f7341681b0c973988eb6"
+  },
+  "sha256_fontes_host": {
+    "training.py": "c2480b7636cd6602844511f707da4189191186d70c1b88edaf54f927399d9463",
+    "pipeline.py": "17a0de0132f0a768767c611a8b4a938289ecb57f9fed7e00a8ace3237e2ac4e1"
+  },
+  "containers_antes": [
+    {
+      "nome": "/medical-classifier-api-1",
+      "imagem": "sha256:db8c57bbab5a6522cd581d8dd91fa2e7b14d37182f1f30f4fc00564bdb671cd7",
+      "estado": "running",
+      "saude": "healthy",
+      "usuario": "10001:10001",
+      "inicio": "2026-09-14T23:25:18.657442953Z"
+    },
+    {
+      "nome": "/medical-classifier-prometheus-1",
+      "imagem": "sha256:5ce7540c3c00ef4ab0c9d2c995c6a5b9c421f44b4a115d97a2c7af3b1c21cbb0",
+      "estado": "running",
+      "saude": "healthy",
+      "usuario": "nobody",
+      "inicio": "2026-09-14T22:02:42.966980595Z"
+    },
+    {
+      "nome": "/medical-classifier-grafana-1",
+      "imagem": "sha256:f772d434e8fab0049deb2b1b30abd43342bcfca1537614aa8d36080232cf4283",
+      "estado": "running",
+      "saude": "healthy",
+      "usuario": "472",
+      "inicio": "2026-09-14T22:02:42.985609921Z"
+    },
+    {
+      "nome": "/medical-classifier-airflow-airflow-1",
+      "imagem": "sha256:4aa335021699aa872540e4ae7b96cd43add525a5223fe95279bcb93c75991b50",
+      "estado": "running",
+      "saude": "healthy",
+      "usuario": "10001:0",
+      "inicio": "2026-09-14T23:23:51.368219046Z"
+    }
+  ],
+  "modelo_antes": {
+    "versao": "20260914T232434-92cce529",
+    "ponteiro": {
+      "release": "releases/20260914T232434-92cce529",
+      "anterior": "releases/20260914T221243-003d412d"
+    },
+    "sha256_arquivos": {
+      "baseline.joblib": "d81bffe69000f79e171ecdd477b2d53091497e949c015248f8cef18a415f1cc5",
+      "model.onnx": "dd2571fb0009ae9734be903ad9df9063af2f22de7efa112b33d189e35c9315a1",
+      "metadata.json": "8423fbab12db38f906a0909bca115c15dfa07a2b29e17489c925d87f51db8445",
+      "avaliacao.json": "486d5a28343b739e3fcaa2b853ad244defd899f8d54ce3195db9c5626590f263",
+      "latencia.json": "56b6a6800303e6e29260305e207d3733781cc0c03ea7006f129d6f2fecb80ece"
+    },
+    "sha256_fontes": {
+      "training.py": "e71b3b99dcdd9c6c5f815ab64236752d7dcf21dcb96a6c7bda68a515f9824042",
+      "pipeline.py": "5479ac807d8b9c68518d9a611559840484fc85268715e629cf60ff84c25b7434"
+    }
+  },
+  "pipeline": {
+    "reutilizado": true,
+    "versao": "20260914T232434-92cce529"
+  },
+  "tentativas_sonda_saude": 7,
+  "containers_depois": [
+    {
+      "nome": "/medical-classifier-api-1",
+      "imagem": "sha256:2065c72b758e285d7d8f4946e0a59376f90fa772bb0ccade55fedce1ee84d920",
+      "estado": "running",
+      "saude": "healthy",
+      "usuario": "10001:10001",
+      "inicio": "2026-09-15T02:27:20.107594291Z"
+    },
+    {
+      "nome": "/medical-classifier-prometheus-1",
+      "imagem": "sha256:5ce7540c3c00ef4ab0c9d2c995c6a5b9c421f44b4a115d97a2c7af3b1c21cbb0",
+      "estado": "running",
+      "saude": "healthy",
+      "usuario": "nobody",
+      "inicio": "2026-09-14T22:02:42.966980595Z"
+    },
+    {
+      "nome": "/medical-classifier-grafana-1",
+      "imagem": "sha256:f772d434e8fab0049deb2b1b30abd43342bcfca1537614aa8d36080232cf4283",
+      "estado": "running",
+      "saude": "healthy",
+      "usuario": "472",
+      "inicio": "2026-09-14T22:02:42.985609921Z"
+    },
+    {
+      "nome": "/medical-classifier-airflow-airflow-1",
+      "imagem": "sha256:7b5eab2e6daec5e97012a1e9ac9a544b875edbb3e105f7a81243472422cd04d8",
+      "estado": "running",
+      "saude": "healthy",
+      "usuario": "10001:0",
+      "inicio": "2026-09-15T02:27:22.601469033Z"
+    }
+  ],
+  "modelo_e_fontes_api": {
+    "versao": "20260914T232434-92cce529",
+    "ponteiro": {
+      "release": "releases/20260914T232434-92cce529",
+      "anterior": "releases/20260914T221243-003d412d"
+    },
+    "sha256_arquivos": {
+      "baseline.joblib": "d81bffe69000f79e171ecdd477b2d53091497e949c015248f8cef18a415f1cc5",
+      "model.onnx": "dd2571fb0009ae9734be903ad9df9063af2f22de7efa112b33d189e35c9315a1",
+      "metadata.json": "8423fbab12db38f906a0909bca115c15dfa07a2b29e17489c925d87f51db8445",
+      "avaliacao.json": "486d5a28343b739e3fcaa2b853ad244defd899f8d54ce3195db9c5626590f263",
+      "latencia.json": "56b6a6800303e6e29260305e207d3733781cc0c03ea7006f129d6f2fecb80ece"
+    },
+    "sha256_fontes": {
+      "training.py": "c2480b7636cd6602844511f707da4189191186d70c1b88edaf54f927399d9463",
+      "pipeline.py": "17a0de0132f0a768767c611a8b4a938289ecb57f9fed7e00a8ace3237e2ac4e1"
+    }
+  },
+  "modelo_e_fontes_airflow": {
+    "versao": "20260914T232434-92cce529",
+    "ponteiro": {
+      "release": "releases/20260914T232434-92cce529",
+      "anterior": "releases/20260914T221243-003d412d"
+    },
+    "sha256_arquivos": {
+      "baseline.joblib": "d81bffe69000f79e171ecdd477b2d53091497e949c015248f8cef18a415f1cc5",
+      "model.onnx": "dd2571fb0009ae9734be903ad9df9063af2f22de7efa112b33d189e35c9315a1",
+      "metadata.json": "8423fbab12db38f906a0909bca115c15dfa07a2b29e17489c925d87f51db8445",
+      "avaliacao.json": "486d5a28343b739e3fcaa2b853ad244defd899f8d54ce3195db9c5626590f263",
+      "latencia.json": "56b6a6800303e6e29260305e207d3733781cc0c03ea7006f129d6f2fecb80ece"
+    },
+    "sha256_fontes": {
+      "training.py": "c2480b7636cd6602844511f707da4189191186d70c1b88edaf54f927399d9463",
+      "pipeline.py": "17a0de0132f0a768767c611a8b4a938289ecb57f9fed7e00a8ace3237e2ac4e1"
+    }
+  },
+  "prontidao_api": {
+    "status": "pronto",
+    "versao_modelo": "20260914T232434-92cce529",
+    "backend": "onnx"
+  },
+  "saude_airflow": {
+    "dag_processor": {
+      "latest_dag_processor_heartbeat": null,
+      "status": null
+    },
+    "metadatabase": {
+      "status": "healthy"
+    },
+    "scheduler": {
+      "latest_scheduler_heartbeat": "2026-09-15T02:30:00.458059+00:00",
+      "status": "healthy"
+    },
+    "triggerer": {
+      "latest_triggerer_heartbeat": "2026-09-15T02:30:01.053707+00:00",
+      "status": "healthy"
+    }
+  },
+  "fim_utc": "2026-09-15T02:30:04.117856+00:00",
+  "espaco_livre_final_bytes": 2916102144,
+  "containers_finais": [
+    {
+      "nome": "/medical-classifier-api-1",
+      "imagem": "sha256:2065c72b758e285d7d8f4946e0a59376f90fa772bb0ccade55fedce1ee84d920",
+      "estado": "running",
+      "saude": "healthy",
+      "usuario": "10001:10001",
+      "inicio": "2026-09-15T02:27:20.107594291Z"
+    },
+    {
+      "nome": "/medical-classifier-prometheus-1",
+      "imagem": "sha256:5ce7540c3c00ef4ab0c9d2c995c6a5b9c421f44b4a115d97a2c7af3b1c21cbb0",
+      "estado": "running",
+      "saude": "healthy",
+      "usuario": "nobody",
+      "inicio": "2026-09-14T22:02:42.966980595Z"
+    },
+    {
+      "nome": "/medical-classifier-grafana-1",
+      "imagem": "sha256:f772d434e8fab0049deb2b1b30abd43342bcfca1537614aa8d36080232cf4283",
+      "estado": "running",
+      "saude": "healthy",
+      "usuario": "472",
+      "inicio": "2026-09-14T22:02:42.985609921Z"
+    },
+    {
+      "nome": "/medical-classifier-airflow-airflow-1",
+      "imagem": "sha256:7b5eab2e6daec5e97012a1e9ac9a544b875edbb3e105f7a81243472422cd04d8",
+      "estado": "running",
+      "saude": "healthy",
+      "usuario": "10001:0",
+      "inicio": "2026-09-15T02:27:22.601469033Z"
+    }
+  ],
+  "smoke": {
+    "arquivo": "reports/auditoria_criterios/smoke_stack_final.json",
+    "sucesso": true,
+    "requisicoes_validas": 21,
+    "paineis": 6,
+    "consultas": 8
+  },
+  "arquivos_preservados_depois": {
+    "reports/docker/pos_correcao/benchmark_http_execucao.json": "b6e03e9e4e7d139453471f62fddb89c5bf725ccf1d3f9ff23987fc3d027bfae9",
+    "reports/docker/pos_correcao/executar_dag.json": "bd252cbbb1a0496f4d11d76e8f4accc0ad7e712260589a6e60f4d40ff3c52530",
+    "reports/docker/pos_correcao/executar_dag.log": "2176de408a50f1a5b190c70470521b977ac922b336ded6f61d21a6df755e62a0",
+    "reports/docker/pos_correcao/integracao_verificada.json": "e325d20219efa9d9061e8aad98d54da2c38fd41a6d73d479ac9fd8d632169df4",
+    "reports/docker/pos_correcao/latencia_http.json": "82b165ad171781811f5a782d8493da9681e4f996538a0c465a595e4a999efcf3",
+    "reports/docker/pos_correcao/latencia_modelo.json": "7308ad82dcefad6f231bdffc3f95be9667adbd4303e0106696dbccbcb30f2719",
+    "reports/docker/pos_correcao/qualidade.json": "b681f00209a66551a96fecaa057923a114ee4398046735d01cea4463b68930e1",
+    "reports/docker/pos_correcao/smoke_stack.json": "236437e60628ce2393bf5f67a1fd053e5fcdfdeb0c8474759250c1841961ee47",
+    "models/current.json": "a9106860355d9d4266562b05a0f854624c6efbace43c40a133b63fca3b99240b",
+    "reports/qualidade.json": "bfda7b50116e744a336e4c4dbd34bc1e068dff614aa54612acc4e0edf840a53f",
+    "reports/latencia_modelo.json": "60898ed2451a273cda0429da0ad42044de7d8d31afe1ebafba1055f138c7f76e",
+    "reports/latencia_http_local.json": "6675b2ee6255f0c0311e701906b36e4fbad2e4c25f72f7341681b0c973988eb6"
+  },
+  "evidencias_do_video_preservadas": true,
+  "api_host_8004": {
+    "status": "pronto",
+    "versao_modelo": "20260914T214327-e6c68fc4",
+    "backend": "onnx"
+  },
+  "intercorrencia_do_registro_resolvida": {
+    "erro_original": "UnicodeDecodeError: 'utf-8' codec can't decode byte 0xe7 in position 562: invalid continuation byte",
+    "causa": "O stdout do Python do Windows estava em CP1252; o registrador tentou UTF-8.",
+    "correcao": "Leitura do JSON UTF-8 gravado pelo smoke e repetição apenas das consultas de integridade e saúde.",
+    "smoke_e_construcoes_nao_reexecutados": true
+  }
+}

@@ -1,0 +1,373 @@
+{
+  "aprovado": true,
+  "estado": "candidato validado; consulte current.json para a versão ativa",
+  "sha256_modelos": {
+    "baseline.joblib": "e62a57e204fc70978c704bcf154610f90abdcd21c80d116083d293a97093d081",
+    "model.onnx": "daeb8292286128d042da6ce6bee73a68e906c54078855f35d7bc2ceb98a1a5db"
+  },
+  "versao_modelo": "20260915T022734-e031e4fb",
+  "auditoria_dados": {
+    "revisao_corpus": "70a2d9106c724729be8b3c4ddb00d1b14ec300c8",
+    "semente": 42,
+    "treino_original": 11550,
+    "teste_oficial": 2888,
+    "teste_textos_unicos": 2770,
+    "teste_linhas_ambiguas": 231,
+    "teste_teto_acuracia_deterministica": 0.9591412742382271,
+    "sobreposicoes_removidas_treino": 1097,
+    "rotulos_conflitantes_removidos": 3846,
+    "duplicatas_removidas_treino": 0,
+    "treino": 5285,
+    "validacao": 1322,
+    "sha256_treino": "ad53aebc682d6b87a5647f619a079bb446d286fdc93bf0159b812418f5758609",
+    "sha256_teste": "1eecea73c9ecad292c55e10403bd139fab9580545d6878482997c5564d51ac05",
+    "distribuicao_treino": {
+      "1": 1402,
+      "2": 446,
+      "3": 659,
+      "4": 1242,
+      "5": 1536
+    },
+    "distribuicao_validacao": {
+      "1": 350,
+      "2": 112,
+      "3": 165,
+      "4": 311,
+      "5": 384
+    },
+    "distribuicao_teste": {
+      "1": 633,
+      "2": 299,
+      "3": 385,
+      "4": 610,
+      "5": 961
+    },
+    "sha256_preparados": {
+      "treino.csv": "1014cb54eac1b5efe5603f9283ca855dc6ded03c62f78841b43193bfb6aa6ab9",
+      "validacao.csv": "9ad63e89560fc1bb8df3543248a7e2fcc20205d929ee71851ee765e31ab721a9",
+      "teste.csv": "052a2b2e99e04672e27c446ff8f0a4bb10f8dcd3598fe3ffe7e450bb65a6d8fe"
+    }
+  },
+  "validacao": {
+    "acuracia": 0.7950075642965204,
+    "f1_macro": 0.7813738154265538,
+    "matriz_confusao": [
+      [
+        311,
+        6,
+        3,
+        2,
+        28
+      ],
+      [
+        6,
+        83,
+        0,
+        0,
+        23
+      ],
+      [
+        4,
+        0,
+        114,
+        5,
+        42
+      ],
+      [
+        5,
+        1,
+        10,
+        266,
+        29
+      ],
+      [
+        24,
+        23,
+        32,
+        28,
+        277
+      ]
+    ],
+    "por_classe": {
+      "Neoplasias": {
+        "precision": 0.8885714285714286,
+        "recall": 0.8885714285714286,
+        "f1-score": 0.8885714285714286,
+        "support": 350.0
+      },
+      "Doenças do sistema digestivo": {
+        "precision": 0.7345132743362832,
+        "recall": 0.7410714285714286,
+        "f1-score": 0.7377777777777778,
+        "support": 112.0
+      },
+      "Doenças do sistema nervoso": {
+        "precision": 0.7169811320754716,
+        "recall": 0.6909090909090909,
+        "f1-score": 0.7037037037037037,
+        "support": 165.0
+      },
+      "Doenças cardiovasculares": {
+        "precision": 0.8837209302325582,
+        "recall": 0.8553054662379421,
+        "f1-score": 0.869281045751634,
+        "support": 311.0
+      },
+      "Condições patológicas gerais": {
+        "precision": 0.6942355889724311,
+        "recall": 0.7213541666666666,
+        "f1-score": 0.7075351213282248,
+        "support": 384.0
+      },
+      "accuracy": 0.7950075642965204,
+      "macro avg": {
+        "precision": 0.7836044708376346,
+        "recall": 0.7794423161913113,
+        "f1-score": 0.7813738154265538,
+        "support": 1322.0
+      },
+      "weighted avg": {
+        "precision": 0.7965136527880906,
+        "recall": 0.7950075642965204,
+        "f1-score": 0.7955991785484257,
+        "support": 1322.0
+      }
+    }
+  },
+  "paridade_validacao": {
+    "erro_maximo_probabilidade": 1.9309227050623434e-07,
+    "concordancia": 1.0
+  },
+  "teste": {
+    "sklearn": {
+      "acuracia": 0.6374653739612188,
+      "f1_macro": 0.6365372578387399,
+      "matriz_confusao": [
+        [
+          500,
+          23,
+          21,
+          12,
+          77
+        ],
+        [
+          34,
+          188,
+          5,
+          8,
+          64
+        ],
+        [
+          32,
+          7,
+          230,
+          30,
+          86
+        ],
+        [
+          11,
+          13,
+          26,
+          475,
+          85
+        ],
+        [
+          137,
+          100,
+          107,
+          169,
+          448
+        ]
+      ],
+      "por_classe": {
+        "Neoplasias": {
+          "precision": 0.7002801120448179,
+          "recall": 0.7898894154818326,
+          "f1-score": 0.7423904974016332,
+          "support": 633.0
+        },
+        "Doenças do sistema digestivo": {
+          "precision": 0.56797583081571,
+          "recall": 0.6287625418060201,
+          "f1-score": 0.5968253968253968,
+          "support": 299.0
+        },
+        "Doenças do sistema nervoso": {
+          "precision": 0.5912596401028277,
+          "recall": 0.5974025974025974,
+          "f1-score": 0.5943152454780362,
+          "support": 385.0
+        },
+        "Doenças cardiovasculares": {
+          "precision": 0.6844380403458213,
+          "recall": 0.7786885245901639,
+          "f1-score": 0.7285276073619632,
+          "support": 610.0
+        },
+        "Condições patológicas gerais": {
+          "precision": 0.5894736842105263,
+          "recall": 0.46618106139438087,
+          "f1-score": 0.5206275421266705,
+          "support": 961.0
+        },
+        "accuracy": 0.6374653739612188,
+        "macro avg": {
+          "precision": 0.6266854615039407,
+          "recall": 0.652184828134999,
+          "f1-score": 0.6365372578387399,
+          "support": 2888.0
+        },
+        "weighted avg": {
+          "precision": 0.631831184527397,
+          "recall": 0.6374653739612188,
+          "f1-score": 0.630858814573961,
+          "support": 2888.0
+        }
+      }
+    },
+    "onnx": {
+      "acuracia": 0.6374653739612188,
+      "f1_macro": 0.6365372578387399,
+      "matriz_confusao": [
+        [
+          500,
+          23,
+          21,
+          12,
+          77
+        ],
+        [
+          34,
+          188,
+          5,
+          8,
+          64
+        ],
+        [
+          32,
+          7,
+          230,
+          30,
+          86
+        ],
+        [
+          11,
+          13,
+          26,
+          475,
+          85
+        ],
+        [
+          137,
+          100,
+          107,
+          169,
+          448
+        ]
+      ],
+      "por_classe": {
+        "Neoplasias": {
+          "precision": 0.7002801120448179,
+          "recall": 0.7898894154818326,
+          "f1-score": 0.7423904974016332,
+          "support": 633.0
+        },
+        "Doenças do sistema digestivo": {
+          "precision": 0.56797583081571,
+          "recall": 0.6287625418060201,
+          "f1-score": 0.5968253968253968,
+          "support": 299.0
+        },
+        "Doenças do sistema nervoso": {
+          "precision": 0.5912596401028277,
+          "recall": 0.5974025974025974,
+          "f1-score": 0.5943152454780362,
+          "support": 385.0
+        },
+        "Doenças cardiovasculares": {
+          "precision": 0.6844380403458213,
+          "recall": 0.7786885245901639,
+          "f1-score": 0.7285276073619632,
+          "support": 610.0
+        },
+        "Condições patológicas gerais": {
+          "precision": 0.5894736842105263,
+          "recall": 0.46618106139438087,
+          "f1-score": 0.5206275421266705,
+          "support": 961.0
+        },
+        "accuracy": 0.6374653739612188,
+        "macro avg": {
+          "precision": 0.6266854615039407,
+          "recall": 0.652184828134999,
+          "f1-score": 0.6365372578387399,
+          "support": 2888.0
+        },
+        "weighted avg": {
+          "precision": 0.631831184527397,
+          "recall": 0.6374653739612188,
+          "f1-score": 0.630858814573961,
+          "support": 2888.0
+        }
+      }
+    }
+  },
+  "erro_maximo_probabilidade_teste": 3.1349054652185515e-07,
+  "concordancia_teste": 1.0,
+  "tamanho_bytes": {
+    "baseline.joblib": 1531796,
+    "model.onnx": 1007096
+  },
+  "hiperparametros": {
+    "tfidf": {
+      "analyzer": "word",
+      "binary": false,
+      "decode_error": "strict",
+      "dtype": "<class 'numpy.float32'>",
+      "encoding": "utf-8",
+      "input": "content",
+      "lowercase": false,
+      "max_df": 1.0,
+      "max_features": 20000,
+      "min_df": 1,
+      "ngram_range": [
+        1,
+        2
+      ],
+      "norm": "l2",
+      "preprocessor": null,
+      "smooth_idf": true,
+      "stop_words": null,
+      "strip_accents": null,
+      "sublinear_tf": false,
+      "token_pattern": "[a-zA-Z]{2,}",
+      "tokenizer": null,
+      "use_idf": true,
+      "vocabulary": null
+    },
+    "regressao_logistica": {
+      "C": 4.0,
+      "class_weight": "balanced",
+      "dual": false,
+      "fit_intercept": true,
+      "intercept_scaling": 1,
+      "l1_ratio": null,
+      "max_iter": 500,
+      "multi_class": "deprecated",
+      "n_jobs": null,
+      "penalty": "l2",
+      "random_state": null,
+      "solver": "lbfgs",
+      "tol": 0.0001,
+      "verbose": 0,
+      "warm_start": false
+    }
+  },
+  "ambiente": {
+    "python": "3.11.16",
+    "sklearn": "1.7.2",
+    "onnxruntime": "1.23.2",
+    "onnx": "1.19.1",
+    "skl2onnx": "1.19.1"
+  }
+}

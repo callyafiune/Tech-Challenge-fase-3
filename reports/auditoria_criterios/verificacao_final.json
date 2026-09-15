@@ -1,0 +1,42 @@
+{
+  "verificado_em_utc": "2026-09-15T02:33:53.128580+00:00",
+  "sucesso": true,
+  "commit_codigo_ci": "64264466dbb0202ee90d2c36ad00f73ef0350dc4",
+  "arvore_codigo_ci": "f4d527a5c83bf90c6a4b2827b9ab85c6bd978a42",
+  "ci": 34921095963,
+  "testes": {
+    "local": {
+      "tests": 105,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 1
+    },
+    "ci": {
+      "tests": 105,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 1
+    }
+  },
+  "pareceres_concluidos": {
+    "B1": 4,
+    "B2": 2,
+    "B3": 3,
+    "B4": 4,
+    "B5": 4
+  },
+  "video": {
+    "sha256": "b0d2a97a00c592bcdba4e06517e56aed15dcf81233a55d75d01f624587027fe7",
+    "segundos": 260.876417,
+    "cenas": 8,
+    "verificacoes": 67
+  },
+  "fontes_api_airflow_iguais_ao_host": true,
+  "modelo_local": "20260914T232434-92cce529",
+  "runtime_final": "reports/auditoria_criterios/runtime_final.json",
+  "smoke_final": "reports/auditoria_criterios/smoke_stack_final.json",
+  "links_locais_conferidos": 193,
+  "links_ausentes": [],
+  "conferencia_criterios": "docs/auditoria_criterios.md",
+  "limite": "Verificações técnicas; a nota da atividade é atribuída pela banca."
+}
