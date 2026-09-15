@@ -1,65 +1,81 @@
 # Roteiro STAR — apresentação programática narrada
 
-O vídeo usa **sete cartões desenhados por código**, com texto, diagrama, gráficos e recortes de JSON reais. A narração é sintética, em português Brasil, pela Microsoft Maria Desktop. Não há captura da área de trabalho nem simulação visual das interfaces Grafana, Airflow ou GitHub.
+O gerador monta **oito cartões desenhados por código**, com texto, diagrama, gráficos e resultados reais de HTTP e PromQL. A narração é sintética, em português Brasil, pela Microsoft Maria Desktop. Os cartões identificam suas fontes; não imitam as interfaces Grafana, Airflow ou GitHub.
 
-O [MP4 local](../reports/video/apresentacao_star.mp4) e o [manifesto de evidências](../reports/video/evidencias.json) são produzidos por [scripts/gerar_video.ps1](../scripts/gerar_video.ps1). A duração vem do arquivo renderizado e é validada por `ffprobe`, com limite de **300 segundos**. Os tempos de cada cena são registrados no manifesto; não se presume uma duração a partir do texto. O MP4 integra os arquivos deste repositório.
+O [MP4](../reports/video/apresentacao_star.mp4) integra os arquivos deste repositório. Seu [manifesto](../reports/video/evidencias.json) registra a duração medida por `ffprobe`, resolução, codecs, hashes, versões, fontes e narração efetivamente renderizada. O limite é **300 segundos**; a duração não é inferida pela quantidade de palavras.
 
-A renderização final foi verificada: **219,626395 segundos (3min40s)**, resolução 1280×720, vídeo H.264 e áudio AAC, com 2.409.644 bytes. Os sete cartões foram inspecionados visualmente. A narração contém 451 palavras. O manifesto confirma API/relatórios da versão `20260914T214327-e6c68fc4`, stack verificada e as quatro tarefas reais do Airflow concluídas.
+A renderização final de oito cenas foi verificada: **260,876417 segundos (4min21s)**, 1280×720, H.264/AAC e 2.849.611 bytes, com 525 palavras na narração. A [verificação completa](../reports/video/verificacao.json) aprovou **67 casos**. A [inspeção visual](../reports/video/inspecao_visual.json) registra os oito quadros extraídos do MP4, todos legíveis, e a verificação técnica do áudio. A amplitude média foi −23,9 dB e o pico −4,4 dB; não foi feita avaliação perceptiva da locução.
 
 ## Cenas e evidências
 
 | Cena | STAR | Cartão programático | Fonte |
 |---|---|---|---|
-| 1 | Situação | Título, corpus em inglês e cinco categorias | Escopo autorizado e classes do corpus |
-| 2 | Tarefa | Diagrama corpus → treino → versão → API → resposta | Arquitetura implementada; AWS identificada como proposta |
+| 1 | Situação | Corpus em inglês e cinco categorias médicas | Escopo autorizado e classes do corpus |
+| 2 | Tarefa | Corpus → treino → versão → API → resposta | Arquitetura implementada; AWS identificada como proposta |
 | 3 | Ação | Contagens de ajuste/validação/teste e remoções | `reports/qualidade.json`, campo `auditoria_dados` |
-| 4 | Ação | Exemplo público e campos selecionados das duas respostas reais | Chamadas `/ready` e `/predict` na captura |
-| 5 | Ação | Estado real da DAG quando comprovado; workflow como código estático; resultado da stack | `reports/airflow_execucao.json`, `reports/smoke_stack.json` e `ci.yml` |
-| 6 | Resultado | Gráficos p50 do modelo em processo e HTTP do host, fora de Docker | `reports/latencia_modelo.json`, `reports/latencia_http_local.json` |
-| 7 | Resultado | Aprendizados, versões, revisões e limites | Evidências e decisões do projeto |
+| 4 | Ação | Exemplo público e campos das duas respostas reais | Chamadas `/ready` e `/predict` durante a captura |
+| 5 | Ação | DAG real com quatro estados; CI real vinculado ao commit | `reports/docker/pos_correcao/integracao_verificada.json` e `reports/ci/34908437830/execucao.json` |
+| 6 | Ação | Instrumentação → coleta → painéis, três resultados e consulta PromQL | `reports/docker/pos_correcao/smoke_stack.json` e configurações versionadas de monitoração |
+| 7 | Resultado | Qualidade e gráficos p50 em processo/HTTP do host | `reports/qualidade.json`, `reports/latencia_modelo.json`, `reports/latencia_http_local.json` |
+| 8 | Resultado | Aprendizados, proveniência, revisões e limites | Evidências e decisões do projeto |
 
-## Preparação
+## Pré-requisitos para gerar o vídeo
+
+Use **Windows PowerShell 5.1**, iniciado por `powershell.exe`, com os assemblies **System.Drawing e System.Speech do .NET Framework**. O script rejeita PowerShell Core e plataformas diferentes do Windows. Habilite a voz **Microsoft Maria Desktop, cultura pt-BR**, e disponibilize **FFmpeg e ffprobe no PATH**. Ter somente outra voz em português não atende à seleção explícita usada pelo gerador.
+
+Para preparar a voz, instale o recurso de fala de Português (Brasil) nas configurações de idioma do Windows e confirme que Microsoft Maria Desktop está disponível ao System.Speech. Instale uma distribuição Windows do FFmpeg que inclua os dois executáveis e adicione seu diretório `bin` ao PATH. Abra um novo Windows PowerShell após modificar o ambiente.
+
+Este comando verifica versão do PowerShell, assemblies, voz habilitada e execução de FFmpeg/ffprobe, sem renderizar nem consultar a API:
+
+```powershell
+powershell.exe -NoProfile -ExecutionPolicy Bypass -File scripts/gerar_video.ps1 -VerificarAmbiente
+```
+
+Para pré-visualizar imagens, a voz e os executáveis de vídeo não são exigidos; Windows PowerShell e os assemblies continuam necessários.
+
+## Preparação e verificação
 
 1. Gere os relatórios reais de qualidade e latência. Os dois motores do benchmark HTTP precisam usar a mesma versão registrada no relatório do modelo.
-2. Disponibilize a API dessa versão no endereço passado ao gerador. O script **rejeita** respostas de `/ready` ou `/predict` que usem outra versão ou motores divergentes.
-3. Execute a verificação da stack. Sem relatório com sucesso, a cena declara apenas ausência de comprovação; não inventa a causa de uma falha.
-4. Registre a execução Airflow no JSON descrito abaixo. Sem as quatro tarefas concluídas e um identificador de execução, o vídeo mostra código estático e declara que a execução completa não foi comprovada.
-5. Execute o gerador, confira os sete PNGs em `.local/video`, escute a narração e verifique `reports/video/evidencias.json`.
+2. Disponibilize essa versão no endereço passado por `-ApiUrl`. O gerador rejeita respostas de `/ready` ou `/predict` com outra versão ou motores divergentes. Uma indisponibilidade HTTP é declarada na cena; não produz resposta inventada.
+3. Registre o smoke da stack em `reports/docker/pos_correcao/smoke_stack.json`. A cena de monitoração exige sucesso booleano, coleta ativa, histograma presente, fonte Grafana válida, instante e resultados numéricos finitos. Evidência ausente ou inválida interrompe a geração antes das imagens.
+4. Preserve os registros reais de DAG e CI nos caminhos da tabela. A DAG só é narrada como concluída quando identifica execução, versão e quatro tarefas `success`. A versão publicada precisa coincidir com a do smoke. Sem comprovação da DAG, o cartão identifica o código estático. O CI exige execução concluída com sucesso e commit identificado, incluindo testes, build, quatro etapas e smoke.
+5. Verifique os contratos, gere uma prévia e inspecione os oito PNGs. Após a revisão, renderize, confira o manifesto e escute a narração.
 
 ```powershell
-powershell -NoProfile -ExecutionPolicy Bypass -File scripts/gerar_video.ps1 -ApiUrl http://127.0.0.1:8004
+powershell.exe -NoProfile -ExecutionPolicy Bypass -File reports/video/verificar_gerador.ps1 -SomenteContratos
+powershell.exe -NoProfile -ExecutionPolicy Bypass -File scripts/gerar_video.ps1 -ApiUrl http://127.0.0.1:8004 -SomenteImagens
+powershell.exe -NoProfile -ExecutionPolicy Bypass -File scripts/gerar_video.ps1 -ApiUrl http://127.0.0.1:8004
+powershell.exe -NoProfile -ExecutionPolicy Bypass -File reports/video/verificar_gerador.ps1 -ApiUrl http://127.0.0.1:8004
 ```
 
-Para repetir a verificação dos contratos e da preservação do vídeo:
+`-SomenteContratos` não renderiza nem altera arquivos da entrega; seu resultado fica em `.local/video/verificacao-contratos.json`. `-SomenteImagens` grava imagens e manifesto próprios em `.local/video/imagens`, preservando MP4, manifesto final e intermediários de áudio/vídeo. O verificador completo confere essa preservação por hashes, obtém uma nova leitura `ffprobe`, verifica codecs, resolução, duração e correspondência com o manifesto. Também exige o hash do gerador atual, narração idêntica em cada cena, DAG real concluída e consultas/versões coincidentes com as fontes independentes. A quantidade de intermediários é calculada pelas cenas, sem depender de sete ou oito cartões. O resultado completo fica em `reports/video/verificacao.json`.
 
-```powershell
-powershell -NoProfile -ExecutionPolicy Bypass -File reports/video/verificar_gerador.ps1 -ApiUrl http://127.0.0.1:8004
-```
+## Configuração de monitoração mostrada
 
-O modo `-SomenteImagens` permite conferir o layout sem renderizar áudio/vídeo e grava seu manifesto apenas em `.local/video/imagens/evidencias-imagens.json`, preservando o manifesto do MP4 final. O gerador registra a frase “evidências capturadas nesta execução”, os hashes das fontes e as respostas reais. Dados exibidos são públicos; não há telas pessoais, tokens ou credenciais de serviços.
+O `Counter` conta requisições HTTP e o `Histogram` observa sua duração. `/metrics` expõe essas séries para o Prometheus. A [configuração de coleta](../monitoring/prometheus/prometheus.yml) usa `api:8000`, caminho `/metrics`, intervalo de **5 segundos** e job `medical-api` dentro da rede do Compose.
 
-Na [verificação negativa final](../reports/video/rejeicao_versao.json), a API Docker da porta 8000, com a versão `20260914T221243-003d412d`, foi rejeitada pelo gerador antes das imagens, pois os relatórios do vídeo usam a versão do host. Na renderização final, a API do host na porta 8004 forneceu a versão correta. A [verificação reproduzível](../reports/video/verificar_gerador.ps1) passou em 26 casos: rejeição de evidências inválidas, leitura independente com ffprobe e preservação dos hashes do MP4, do manifesto e dos 23 intermediários após `-SomenteImagens`. O [resultado](../reports/video/verificacao.json) registra o comando e cada caso; a [inspeção visual](../reports/video/inspecao_visual.json) identifica os sete quadros extraídos do MP4 final.
+A [fonte Grafana](../monitoring/grafana/provisioning/datasources/prometheus.yml) tem UID `prometheus-medical` e URL `http://prometheus:9090`. O [provedor de painéis](../monitoring/grafana/provisioning/dashboards/dashboard.yml) carrega o [dashboard JSON](../monitoring/grafana/dashboards/medical-classifier.json). Esses arquivos são provisionados na inicialização dos contêineres. Os painéis apresentam volume, prontidão, coleta, taxa de chamadas, latência e erros.
 
-## Evidência Airflow
+A cena 6 mostra volume acumulado, p95 e proporção de erros HTTP 4xx, extraídos das consultas registradas pelo smoke. O volume acumulado pode incluir chamadas anteriores ao ensaio. Os erros 4xx incluem entradas inválidas intencionais do smoke; não medem erro de classificação médica. O p95 é uma **estimativa das faixas do histograma numa janela de 20 segundos**, expressa em segundos pela consulta e convertida para milissegundos no cartão. Não equivale ao percentil empírico do benchmark HTTP. A consulta PromQL de p95 aparece integralmente; as três expressões e seus valores integram o manifesto.
 
-O coletor deve produzir `reports/airflow_execucao.json` com `sucesso` booleano, `dag_id`, `run_id` e `tarefas`. O campo `dag_id` precisa ser `retreino_medico`; os estados de `ingestao`, `treinamento`, `validacao` e `publicacao` precisam ser `success`. Um JSON ausente, incompleto ou com tarefa reprovada não autoriza narrar sucesso.
+O [registro dos comandos](../reports/docker/pos_correcao/benchmark_http_execucao.json), etapa `smoke_stack_atual`, documenta o comando real, 20 requisições configuradas, caminho de saída, horários e código zero do smoke utilizado. Seu hash também integra o manifesto. A captura de 289 chamadas acumuladas corresponde à coleta de `2026-09-15T01:59:57.317Z`.
 
-Quando essa evidência existe, a cena mostra o identificador e os quatro estados reais. O cartão do workflow GitHub é sempre identificado como código estático; não representa o estado de uma execução remota. A situação atual do CI deve ser consultada no README e na matriz. O comando `airflow dags test` executa a cadeia manualmente e, no Airflow 2.11, também aplica a tentativa adicional configurada por `retries=1`, observada na execução remota inicial.
+## Versões e proveniência
 
-Na apresentação final, stack e DAG usam a versão Docker `20260914T221243-003d412d`, distinta da versão `20260914T214327-e6c68fc4` da API do host e dos gráficos. A tela, a narração e os campos `versao_modelo_stack`/`versao_modelo_dag` do manifesto identificam essa separação.
+O exemplo HTTP e os gráficos históricos do host usam `20260914T214327-e6c68fc4`. A monitoração e a DAG Docker usam `20260914T232434-92cce529`. Tela, narração e manifesto distinguem esses experimentos. Os gráficos do host preservam seu contexto histórico; não representam o desempenho da versão Docker posterior.
 
-## Conteúdo da narração
+O cartão de CI identifica a execução real **34908437830**, no commit **3a7ad7f052aa2ad246d399e4743f435bde8af221**. Esse resultado comprova aquele commit, sem atribuir sucesso às alterações posteriores do roteiro ou do gerador. O manifesto inclui os hashes dos relatórios e das configurações utilizados.
 
-**Situação:** organizar resumos médicos em inglês por condição, com resposta rápida e operação verificável. Explicar que a classificação de urgência foi substituída por cinco categorias com autorização e que o uso é acadêmico.
+O comando `airflow dags test` executa a cadeia manualmente. No Airflow 2.11 também aplica `retries=1`, comportamento observado na execução remota inicial. A data lógica identifica a DAG; os horários reais dos comandos estão nas evidências de execução.
+
+## Conteúdo STAR
+
+**Situação:** organizar resumos públicos em inglês por condição médica com resposta rápida e operação observável. Explicar a adaptação autorizada para cinco categorias e o uso acadêmico.
 
 **Tarefa:** entregar modelo leve, API, imagem, CI, retreino, métricas e otimização medida. O treinamento fica fora da API. A arquitetura AWS/ECS/ALB é uma proposta sem provisionamento.
 
-**Ação:** mostrar as contagens reais e a política de remoção de sobreposição/conflitos. Explicar que TF-IDF aprende apenas no ajuste. A resposta da API identifica modelo e motor; probabilidades não são risco clínico calibrado. A cena operacional distingue os estados reais da DAG e da stack de trechos estáticos do workflow.
+**Ação:** explicar a auditoria dos dados, o TF-IDF ajustado apenas no treino, a conversão de TF-IDF e regressão logística para ONNX, o contrato da API e a identificação da versão. Demonstrar estados reais da DAG e do CI. Explicar Counter/Histogram, exposição `/metrics`, coleta a cada 5 segundos, provisionamento Grafana e resultados reais das consultas.
 
-**Resultado:** apresentar acurácia e F1 do teste oficial, paridade, p50 original/ONNX e número de medições. A primeira comparação inclui normalização, vetorização e classificação. A segunda inclui o percurso HTTP **no host, fora de Docker**. Os dados Docker têm relatórios e versões separados; não são usados nesses gráficos como se fossem o mesmo ambiente.
+**Resultado:** apresentar a resposta capturada, qualidade no teste, paridade, aceleração p50 e número de medições. Separar inferência em processo, benchmark HTTP do host e estimativa do histograma Docker. Probabilidades não representam risco clínico calibrado.
 
-**Aprendizados:** otimização exige preservar comportamento, medir o caminho real e manter proveniência. A validação vem de uma população filtrada e o teste preserva ambiguidades; isso não explica sozinho toda a diferença de qualidade. O serviço não foi validado para diagnóstico ou decisões clínicas.
-
-## Entrega
-
-O manifesto do vídeo é a fonte da duração, resolução, codecs, versão, capturas e arquivos efetivamente utilizados. O MP4 integra os arquivos deste repositório e pode ser acessado pelo link da apresentação no README.
+**Aprendizados:** otimizar exige preservar comportamento, medir o caminho real e manter proveniência. Revisões adversariais precisam da análise dos achados. O serviço não foi validado para diagnóstico ou decisões clínicas.

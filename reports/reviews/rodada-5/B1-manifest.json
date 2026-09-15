@@ -1,0 +1,82 @@
+{
+  "bloco": "B1",
+  "modelo_solicitado": "fable",
+  "inicio_utc": "2026-09-15T01:57:49.246277+00:00",
+  "arquivos": [
+    {
+      "caminho": "src/medical_classifier/training.py",
+      "sha256": "4dee5693ef5dc676b2093f757cb1c70335908d4c34d2db9ad643e845f3d3bfda",
+      "bytes": 9090
+    },
+    {
+      "caminho": "src/medical_classifier/serving.py",
+      "sha256": "f1c4256d366e95b87473175fcc6bdab20c6e706816574702983324904aa5d0e4",
+      "bytes": 2853
+    },
+    {
+      "caminho": "src/medical_classifier/pipeline.py",
+      "sha256": "5479ac807d8b9c68518d9a611559840484fc85268715e629cf60ff84c25b7434",
+      "bytes": 7168
+    },
+    {
+      "caminho": "tests/test_model.py",
+      "sha256": "8b755d86580ffcd9ce557a6e33dfc6d88a4664788483a3c85072742c6021977e",
+      "bytes": 6410
+    },
+    {
+      "caminho": "scripts/diagnosticar_paridade.py",
+      "sha256": "757f00176f426e44041c7615bf130a62b2f79ba96081816febc313aa8fbd4171",
+      "bytes": 11406
+    },
+    {
+      "caminho": ".github/workflows/diagnostico-paridade.yml",
+      "sha256": "3cb7888f7047723658e391979b5c3b37e5e28e1489427522c68becdcb08e0574",
+      "bytes": 1600
+    },
+    {
+      "caminho": "docs/diagnostico_paridade.md",
+      "sha256": "a50de6c7bbe7c22d2cea73038f9f13b4195a4d003e70535522871f66586e38db",
+      "bytes": 5042
+    },
+    {
+      "caminho": "reports/diagnostico_paridade/correcao_paridade_verificada.json",
+      "sha256": "06ca6834afd3639769aaa56645b7cd6dc02dbdd51d3b1b0c6e938653c4ef167b",
+      "bytes": 1090
+    },
+    {
+      "caminho": "reports/ci/34908437830/execucao.json",
+      "sha256": "dba7e3fc04cccd15bd60b6f69008ae6d557d120b5992eb81b096332dadb5e65f",
+      "bytes": 5613
+    }
+  ],
+  "prompt_sha256": "94f822c738764c09d9ad3ad4dea00cd413441a6834b31786da2e4f9774574009",
+  "contexto": "Revisão suplementar anteriormente impedida por HTTP429. Audite a correção final de exportação: bigramas com componente unigram fora do vocabulário são fornecidos ao conversor como tuplas explícitas numa cópia profunda. Baseline, índices, pesos e critérios preservados. Os testes de regressão e o CI real foram aprovados, mas não assuma ausência de defeitos. Procure falhas concretas, com cenário e severidade; confira limites da evidência. Não ampliar escopo para infraestrutura clínica.",
+  "timeout_segundos": 600,
+  "aprovacao_automatica": false,
+  "fim_utc": "2026-09-15T01:59:57.799435+00:00",
+  "comando": [
+    "C:\\Users\\Cally\\.vscode\\extensions\\anthropic.claude-code-2.1.270-win32-x64\\resources\\native-binary\\claude.exe",
+    "-p",
+    "--model",
+    "fable",
+    "--effort",
+    "medium",
+    "--safe-mode",
+    "--strict-mcp-config",
+    "--permission-mode",
+    "dontAsk",
+    "--tools",
+    "",
+    "--output-format",
+    "json",
+    "--no-session-persistence"
+  ],
+  "modelos_reportados": [
+    "claude-fable-5-1",
+    "claude-haiku-4-5-20251001"
+  ],
+  "exit_code": 0,
+  "codigo_saida_script": 0,
+  "stderr": "",
+  "erro": ""
+}

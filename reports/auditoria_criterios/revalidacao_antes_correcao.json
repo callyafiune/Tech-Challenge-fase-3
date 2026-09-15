@@ -1,0 +1,38 @@
+{
+  "verificado_em_utc": "2026-09-15T02:17:02.397150+00:00",
+  "versao_sintetica": "20260915T021702-b4943385",
+  "metodo": "Modelo e partições sintéticos reais em diretório temporário. As probabilidades e os artefatos não são simulados; apenas compare recebe fatores controlados 2,0 e 0,8. As duas chamadas validate ocorrem pela tarefa real do Airflow.",
+  "primeira_validacao": {
+    "etapa": "validacao",
+    "execucao": "20260915T020000",
+    "estado": "C:\\estudos\\Tech-Challenge-fase-3\\.local\\correcao_criterios\\revalidacao-wrwfdw9d\\dados\\runs\\20260915T020000",
+    "sucesso": true
+  },
+  "primeira_avaliacao_aprovada": true,
+  "segunda_validacao": {
+    "falhou": true,
+    "mensagem": "O modelo ONNX não apresentou ganho de latência mediana nesta execução."
+  },
+  "relatorios_da_release_permaneceram_identicos": true,
+  "hashes_relatorios_antes": {
+    "avaliacao.json": "2d110dc88967105aa44961a1de14d11d86dc0b6af714abe70ec049350e4d8d1b",
+    "latencia.json": "e6febb8be90af818c1a6e3769db4e580cb8ea947c800af621608b1a7292af517"
+  },
+  "hashes_relatorios_depois": {
+    "avaliacao.json": "2d110dc88967105aa44961a1de14d11d86dc0b6af714abe70ec049350e4d8d1b",
+    "latencia.json": "e6febb8be90af818c1a6e3769db4e580cb8ea947c800af621608b1a7292af517"
+  },
+  "aprovacao_da_execucao_airflow_foi_invalidada": true,
+  "publicacao_airflow_bloqueada": "Publicação bloqueada: falta a validação desta execução.",
+  "publicacao_direta_aceita": true,
+  "fator_usado_na_publicacao_direta": 2.0,
+  "interpretacao": "A API de promoção aceita aprovação histórica do mesmo artefato, mesmo após revalidação explícita reprovada. Há diferença concreta entre o contrato da função direta e o da tarefa Airflow, que invalida a aprovação da execução. Não é publicação de artefato nunca avaliado: a primeira avaliação foi completa. O fluxo execute também não chega à promoção após a exceção. A reutilização documentada de versão já publicada não executa validate novamente, portanto é um caminho distinto desta reprodução sobre candidato ainda não publicado.",
+  "referencia_documental": "README.md:216 afirma que o pipeline bloqueia a publicação quando o fator p50 fica abaixo de 1 e compara os motores na execução atual.",
+  "fontes_preservadas_sha256": {
+    "src/medical_classifier/training.py": "6bb896d8252258dce8fe34ae2ba0cbd66027d91cb6f45a55717541e5077d6d2d",
+    "src/medical_classifier/pipeline.py": "fd1fed000a89cbfd4e00835273dcbdf7d9261bda877f66cab8809a85e401817d",
+    "src/medical_classifier/airflow_tasks.py": "c9d2e64b1a061a6878c63e7b791822bee5794a77e1c7cff4029c2f56301f2afa"
+  },
+  "ponteiro_modelo_real_preservado": true,
+  "artefatos_sinteticos_removidos_ao_final": true
+}

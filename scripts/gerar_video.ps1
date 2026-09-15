@@ -7,14 +7,22 @@ Os arquivos de trabalho ficam em .local/video e o MP4 final fica em reports/vide
 #>
 [CmdletBinding()]
 param(
-    [string]$ApiUrl = 'http://127.0.0.1:8000',
-    [switch]$SomenteImagens
+    [string]$ApiUrl = 'http://127.0.0.1:8004',
+    [switch]$SomenteImagens,
+    [switch]$VerificarAmbiente
 )
 
 $ErrorActionPreference = 'Stop'
 Set-StrictMode -Version Latest
-Add-Type -AssemblyName System.Drawing
-Add-Type -AssemblyName System.Speech
+if ([Environment]::OSVersion.Platform -ne [PlatformID]::Win32NT -or
+    $PSVersionTable.PSEdition -ne 'Desktop' -or $PSVersionTable.PSVersion -lt [version]'5.1') {
+    throw 'Use Windows PowerShell 5.1 (powershell.exe) no Windows para gerar esta apresentação.'
+}
+try {
+    Add-Type -AssemblyName System.Drawing
+    Add-Type -AssemblyName System.Speech
+}
+catch { throw 'System.Drawing e System.Speech precisam estar disponíveis no .NET Framework do Windows.' }
 
 $Raiz = [System.IO.Path]::GetFullPath((Join-Path $PSScriptRoot '..'))
 $Temporarios = Join-Path $Raiz '.local/video'
@@ -92,6 +100,114 @@ function Testar-ExecucaoDag($Execucao) {
     return $Valida
 }
 
+function Verificar-PreRequisitos([bool]$ExigirVideo) {
+    $Ambiente = [ordered]@{ powershell = $PSVersionTable.PSVersion.ToString(); sistema = 'Windows'; desenho = 'System.Drawing' }
+    if ($ExigirVideo) {
+        $Sintese = New-Object System.Speech.Synthesis.SpeechSynthesizer
+        try {
+            $Vozes = @($Sintese.GetInstalledVoices() | Where-Object {
+                $_.Enabled -and $_.VoiceInfo.Name -eq 'Microsoft Maria Desktop' -and $_.VoiceInfo.Culture.Name -eq 'pt-BR'
+            })
+            if ($Vozes.Count -ne 1) { throw 'Instale e habilite a voz Microsoft Maria Desktop, cultura pt-BR, no Windows.' }
+            $Ambiente.voz = $Vozes[0].VoiceInfo.Name
+        }
+        finally { $Sintese.Dispose() }
+        foreach ($Nome in @('ffmpeg', 'ffprobe')) {
+            $Programa = Get-Command $Nome -CommandType Application -ErrorAction SilentlyContinue
+            if ($null -eq $Programa) { throw "Instale FFmpeg e inclua $Nome no PATH antes de renderizar." }
+            $Versao = & $Programa.Source -version
+            if ($LASTEXITCODE -ne 0) { throw "O executável $Nome não respondeu à verificação de versão." }
+            $Ambiente[$Nome] = $Versao[0]
+        }
+    }
+    return [pscustomobject]$Ambiente
+}
+
+function Obter-Monitoramento($Stack, [string]$Prometheus, [string]$FonteGrafana) {
+    $Prom = Campo $Stack 'prometheus'
+    $Grafana = Campo $Stack 'grafana'
+    $Versao = Campo (Campo $Stack 'modelo') 'versao'
+    $InstanteConsulta = [DateTimeOffset]::MinValue
+    if (-not (Testar-SucessoBooleano $Stack) -or
+        (Campo $Prom 'coleta') -ne 'ativa' -or (Campo $Prom 'histograma') -ne 'presente' -or
+        (Campo $Prom 'janela_taxa') -ne '20s' -or
+        (Campo $Grafana 'fonte_dados') -ne 'OK' -or (Campo $Grafana 'dashboard') -ne 'medical-classifier' -or
+        [string]::IsNullOrWhiteSpace($Versao) -or
+        -not [DateTimeOffset]::TryParse([string](Campo $Prom 'instante_metricas_utc'), [ref]$InstanteConsulta)) {
+        throw 'O cartão de monitoração exige smoke aprovado, versão, coleta, histograma, fonte Grafana e instante válidos.'
+    }
+    if ($Prometheus -notmatch '(?m)^\s*scrape_interval:\s*5s\s*$' -or
+        $Prometheus -notmatch '(?m)^\s*metrics_path:\s*/metrics\s*$' -or
+        $Prometheus -notmatch '(?m)^\s*-\s*targets:\s*\["api:8000"\]\s*$' -or
+        $FonteGrafana -notmatch '(?m)^\s*uid:\s*prometheus-medical\s*$' -or
+        $FonteGrafana -notmatch '(?m)^\s*url:\s*http://prometheus:9090\s*$') {
+        throw 'A configuração versionada não corresponde ao fluxo /metrics, coleta de 5 s e fonte Grafana narrados.'
+    }
+    $Paineis = @(Campo $Grafana 'paineis')
+    if ($Paineis.Count -lt 3) { throw 'A evidência precisa conter pelo menos três painéis.' }
+    $Consultas = @()
+    foreach ($Painel in $Paineis) {
+        $ConsultasPainel = @(Campo $Painel 'consultas')
+        if ($ConsultasPainel.Count -eq 0) { throw 'Há painel sem consulta registrada.' }
+        foreach ($Consulta in $ConsultasPainel) {
+            $Valor = Campo $Consulta 'valor'
+            $Numerico = ($Valor -is [int]) -or ($Valor -is [long]) -or ($Valor -is [double]) -or ($Valor -is [decimal])
+            if (-not $Numerico -or [double]::IsNaN([double]$Valor) -or [double]::IsInfinity([double]$Valor) -or
+                [string]::IsNullOrWhiteSpace((Campo $Consulta 'expressao'))) {
+                throw 'As consultas de monitoração exigem expressão e resultado numérico finito.'
+            }
+            $Consultas += $Consulta
+        }
+    }
+    $Volume = @($Consultas | Where-Object { $_.expressao -match '^sum\(http_requests_total\{' })
+    $P95 = @($Consultas | Where-Object { $_.expressao -match '^histogram_quantile\(0\.95,' })
+    $Erros = @($Consultas | Where-Object { $_.expressao -match 'status=~"4\.\."' })
+    if ($Volume.Count -ne 1 -or $P95.Count -ne 1 -or $Erros.Count -ne 1) {
+        throw 'Faltam consultas inequívocas de volume, latência p95 ou erros 4xx.'
+    }
+    if ($Volume[0].valor -le 0 -or $P95[0].valor -le 0 -or $Erros[0].valor -lt 0 -or $Erros[0].valor -gt 100) {
+        throw 'Os resultados de volume, p95 ou percentual de erros são incompatíveis com o ensaio.'
+    }
+    foreach ($Consulta in @($Volume[0], $P95[0], $Erros[0])) {
+        if ($Consulta.expressao -notmatch 'job="medical-api",route="/predict",method="POST"') {
+            throw 'A consulta não corresponde às chamadas POST /predict da API monitorada.'
+        }
+    }
+    if ($P95[0].expressao -notmatch '\[20s\]' -or $Erros[0].expressao -notmatch '\[20s\]') {
+        throw 'As consultas de p95 e erros precisam corresponder à janela narrada de 20 s.'
+    }
+    return [pscustomobject]@{
+        versao_modelo = $Versao; instante_utc = $InstanteConsulta.UtcDateTime.ToString('o')
+        volume = $Volume[0].valor; p95_segundos = $P95[0].valor; erros_4xx_percentual = $Erros[0].valor
+        quantidade_paineis = $Paineis.Count; consultas = @($Volume[0], $P95[0], $Erros[0])
+        configuracao = 'Counter/Histogram em /metrics; Prometheus api:8000 a cada 5 s; Grafana prometheus-medical em http://prometheus:9090'
+    }
+}
+
+function Obter-ExecucaoCi($Registro) {
+    $Identificador = Campo $Registro 'execucao'
+    $Commit = Campo $Registro 'commit'
+    $Jobs = @(Campo $Registro 'jobs')
+    if ((Campo $Registro 'conclusao') -ne 'success' -or $Commit -notmatch '^[a-f0-9]{40}$' -or
+        $null -eq $Identificador -or $Identificador -notmatch '^\d+$' -or $Jobs.Count -eq 0) {
+        throw 'A evidência CI precisa identificar uma execução concluída e o commit verificado.'
+    }
+    $Passos = @()
+    foreach ($Job in $Jobs) {
+        if ((Campo $Job 'status') -ne 'completed' -or (Campo $Job 'conclusion') -ne 'success' -or
+            (Campo $Job 'run_id') -ne $Identificador) { throw 'Há job de outra execução ou sem sucesso confirmado.' }
+        $Passos += @(Campo $Job 'steps')
+    }
+    $Esperados = @('Executar análise estática e testes', 'Construir a aplicação e o Airflow',
+        'Executar as quatro etapas sobre o corpus público', 'Verificar a stack de ponta a ponta')
+    foreach ($Nome in $Esperados) {
+        $Passo = @($Passos | Where-Object { (Campo $_ 'name') -eq $Nome })
+        if ($Passo.Count -ne 1 -or (Campo $Passo[0] 'status') -ne 'completed' -or
+            (Campo $Passo[0] 'conclusion') -ne 'success') { throw "O CI não comprova sucesso do passo: $Nome" }
+    }
+    return [pscustomobject]@{ execucao = $Identificador; commit = $Commit; url = (Campo $Registro 'url'); passos = $Esperados }
+}
+
 function Retangulo($Grafico, [float]$X, [float]$Y, [float]$W, [float]$H, $Cor) {
     $Pincel = New-Object System.Drawing.SolidBrush($Cor)
     try { $Grafico.FillRectangle($Pincel, $X, $Y, $W, $H) }
@@ -146,6 +262,8 @@ function Barras($Grafico, [string]$Titulo, [double]$Original, [double]$Otimizado
     Retangulo $Grafico ($X + 24) 529 ([float](480 * $Otimizado / $Original)) 22 $Verde
 }
 
+$AmbienteGeracao = Verificar-PreRequisitos (-not $SomenteImagens -or $VerificarAmbiente)
+if ($VerificarAmbiente) { $AmbienteGeracao | ConvertTo-Json; exit 0 }
 $Qualidade = Ler-Json 'reports/qualidade.json'
 $Latencia = Ler-Json 'reports/latencia_modelo.json'
 $Http = Ler-Json 'reports/latencia_http_local.json'
@@ -159,14 +277,15 @@ if ($Http.prontidao.sklearn.versao_modelo -ne $Modelo -or
     throw 'O benchmark HTTP local deve ser refeito para a mesma versão dos relatórios do modelo.'
 }
 $Auditoria = $Qualidade.auditoria_dados
-$StackConcluida = $false
-$Stack = $null
-$VersaoStack = $null
-if (Test-Path -LiteralPath (Join-Path $Raiz 'reports/smoke_stack.json')) {
-    $Stack = Ler-Json 'reports/smoke_stack.json'
-    $StackConcluida = Testar-SucessoBooleano $Stack
-    $VersaoStack = Campo (Campo $Stack 'modelo') 'versao'
-}
+$FonteStack = 'reports/docker/pos_correcao/smoke_stack.json'
+$Stack = Ler-Json $FonteStack
+$FontePrometheus = 'monitoring/prometheus/prometheus.yml'
+$FonteGrafana = 'monitoring/grafana/provisioning/datasources/prometheus.yml'
+$Monitoramento = Obter-Monitoramento $Stack `
+    ([IO.File]::ReadAllText((Join-Path $Raiz $FontePrometheus))) `
+    ([IO.File]::ReadAllText((Join-Path $Raiz $FonteGrafana)))
+$StackConcluida = $true
+$VersaoStack = $Monitoramento.versao_modelo
 
 $Prontidao = $null
 $Predicao = $null
@@ -190,13 +309,9 @@ $FonteDag = Get-Content -LiteralPath (Join-Path $Raiz 'dags/retreino_medico.py')
 $TrechoDag = ($FonteDag | Where-Object {
     $_ -match 'dag_id=|schedule=|max_active_runs=|for etapa in'
 }) -join "`n"
-$FonteCi = Get-Content -LiteralPath (Join-Path $Raiz '.github/workflows/ci.yml') -Encoding UTF8
-$TrechoCi = ($FonteCi | Where-Object {
-    $_ -match 'name: Executar análise|name: Construir|name: Importar|name: Executar as quatro|name: Verificar a stack'
-}) -join "`n"
-if ([string]::IsNullOrWhiteSpace($TrechoCi)) {
-    throw 'O workflow não contém os passos esperados para o cartão de configuração.'
-}
+$FonteExecucaoCi = 'reports/ci/34908437830/execucao.json'
+$Ci = Obter-ExecucaoCi (Ler-Json $FonteExecucaoCi)
+$TrechoCi = "Execução: $($Ci.execucao)`nCommit: $($Ci.commit.Substring(0, 7))`n`nLint e testes: success`nBuild de imagens: success`nQuatro etapas da DAG: success`nStack ponta a ponta: success"
 
 $Airflow = $null
 $AirflowBuild = $null
@@ -204,18 +319,23 @@ $FonteBuildAirflow = $null
 $VersaoDag = $null
 $DagConcluida = $false
 $RotuloDag = 'AIRFLOW / TRECHO ESTÁTICO'
-$FonteAutomacao = 'Trechos estáticos: dags/retreino_medico.py e .github/workflows/ci.yml.'
-if (Test-Path -LiteralPath (Join-Path $Raiz 'reports/airflow_execucao.json')) {
-    $Airflow = Ler-Json 'reports/airflow_execucao.json'
+$FonteExecucaoDag = 'reports/docker/pos_correcao/integracao_verificada.json'
+$FonteAutomacao = ''
+if (Test-Path -LiteralPath (Join-Path $Raiz $FonteExecucaoDag)) {
+    $Airflow = Ler-Json $FonteExecucaoDag
     $DagConcluida = Testar-ExecucaoDag $Airflow
 }
-if (Test-Path -LiteralPath (Join-Path $Raiz 'reports/docker/build_airflow_state.json')) {
+if ($null -ne (Campo $Airflow 'etapas')) {
+    $FonteBuildAirflow = $FonteExecucaoDag
+    $AirflowBuild = @($Airflow.etapas | Where-Object etapa -eq 'build_airflow')[0]
+}
+elseif (Test-Path -LiteralPath (Join-Path $Raiz 'reports/docker/build_airflow_state.json')) {
     $FonteBuildAirflow = 'reports/docker/build_airflow_state.json'
 }
 elseif (Test-Path -LiteralPath (Join-Path $Raiz 'reports/airflow_build_state.json')) {
     $FonteBuildAirflow = 'reports/airflow_build_state.json'
 }
-if ($null -ne $FonteBuildAirflow) {
+if ($null -ne $FonteBuildAirflow -and $null -eq $AirflowBuild) {
     $AirflowBuild = Ler-Json $FonteBuildAirflow
 }
 
@@ -223,13 +343,13 @@ if ($DagConcluida) {
     $VersaoDag = (Campo (Campo $Airflow 'modelo') 'release') -replace '^releases/', ''
     $EstadoDag = 'Airflow: quatro tarefas concluídas em uma execução real identificada.'
     $RotuloDag = 'AIRFLOW / EXECUÇÃO REAL REGISTRADA'
-    $FonteAutomacao = 'Fonte Airflow: reports/airflow_execucao.json. GitHub Actions: trecho estático de ci.yml.'
+    if ($VersaoDag -ne $VersaoStack) { throw 'DAG e consultas de monitoração precisam identificar a mesma versão Docker.' }
     $TrechoDag = "DAG: $($Airflow.dag_id)`nExecução: $($Airflow.run_id)`n`ningestao: success`ntreinamento: success`nvalidacao: success`npublicacao: success`nVersão: $VersaoDag"
-    $NarracaoAirflow = 'O relatório do Airflow confirma as quatro tarefas concluídas: ingestão, treinamento, validação e publicação, em uma execução identificada. O cartão mostra esses estados reais. O workflow do GitHub aparece como código estático; sua execução remota não é presumida.'
+    $NarracaoAirflow = 'O Airflow concluiu ingestão, treinamento, validação e publicação na execução identificada. O GitHub Actions também concluiu testes, imagens, DAG e verificação da stack. O cartão vincula esse resultado ao commit registrado; ele não comprova revisões posteriores.'
 }
 else {
     $EstadoDag = 'Airflow: sem evidência de execução completa das quatro tarefas nesta captura.'
-    $NarracaoAirflow = 'A execução completa das quatro tarefas do Airflow ainda não tem evidência de sucesso nesta captura. Os cartões da DAG e do workflow são trechos estáticos, identificados como configuração. Também não presumimos execução remota no GitHub.'
+    $NarracaoAirflow = 'A execução completa das quatro tarefas do Airflow não foi comprovada neste registro local. O cartão da DAG apresenta configuração estática. O resultado real do GitHub Actions corresponde exclusivamente à execução e ao commit identificados.'
     if ($null -ne $AirflowBuild -and (Campo $AirflowBuild 'interrompido_por_espaco') -eq $true) {
         $NarracaoAirflow += ' O último registro de construção informa interrupção por espaço em disco.'
     }
@@ -237,7 +357,7 @@ else {
 
 if ($StackConcluida) {
     $EstadoStack = "Stack API, Prometheus e Grafana: verificada; versão $VersaoStack."
-    $NarracaoStack = 'A verificação real da stack retornou sucesso. Ela enviou chamadas, consultou métricas e confirmou a fonte de dados e os painéis do Grafana. ' + $NarracaoAirflow
+    $NarracaoStack = $NarracaoAirflow
 }
 else {
     $EstadoStack = 'Stack: sem relatório de verificação completa com sucesso nesta captura.'
@@ -245,9 +365,11 @@ else {
 }
 if (($StackConcluida -and $VersaoStack -ne $Modelo) -or
     ($DagConcluida -and $VersaoDag -ne $Modelo)) {
-    $NarracaoStack += ' Essas evidências operacionais incluem outra versão publicada no Docker, distinta da versão do host mostrada nos gráficos.'
-    $FonteAutomacao = 'Evidência operacional: versão Docker distinta do host nos gráficos. GitHub: configuração estática.'
+    $NarracaoStack += ' A operação Docker usa outra versão, distinta do host nos gráficos históricos.'
 }
+$OrigemDag = 'configuração estática da DAG; execução local não comprovada'
+if ($DagConcluida) { $OrigemDag = 'integração Docker registrada' }
+$FonteAutomacao = "Fontes: $OrigemDag; CI $($Ci.execucao), commit $($Ci.commit.Substring(0, 7))."
 
 if ($null -ne $Predicao) {
     $TrechoApi = [ordered]@{
@@ -267,7 +389,7 @@ else {
 $Cenas = @(
     @{
         etapa = 'SITUAÇÃO'; titulo = 'Classificação médica, com evidências'; fonte = 'Fonte: corpus público e escopo autorizado da atividade.'
-        narracao = 'Esta apresentação reúne evidências capturadas nesta execução do Tech Challenge, fase três. O cenário exige um serviço capaz de organizar textos médicos com resposta rápida e operação observável. Usamos resumos públicos em inglês e classificamos cinco condições médicas. A adaptação foi autorizada para o projeto. Trata-se de uma demonstração acadêmica: as saídas não representam urgência, diagnóstico ou orientação clínica.'
+        narracao = 'Esta apresentação reúne evidências registradas do Tech Challenge, fase três. O cenário exige um serviço capaz de organizar textos médicos com resposta rápida e operação observável. Usamos resumos públicos em inglês e classificamos cinco condições médicas. A adaptação foi autorizada para o projeto. Trata-se de uma demonstração acadêmica: as saídas não representam urgência, diagnóstico ou orientação clínica.'
     },
     @{
         etapa = 'TAREFA'; titulo = 'Do corpus à operação da API'; fonte = 'Diagrama da implementação; AWS ECS Fargate e ALB são uma proposta, sem provisionamento.'
@@ -282,12 +404,16 @@ $Cenas = @(
         narracao = $NarracaoApi
     },
     @{
-        etapa = 'AÇÃO / AUTOMAÇÃO'; titulo = 'Configuração e execução são evidências diferentes'; fonte = $FonteAutomacao
+        etapa = 'AÇÃO / AUTOMAÇÃO'; titulo = 'Execuções com versão e origem'; fonte = $FonteAutomacao
         narracao = $NarracaoStack
     },
     @{
+        etapa = 'AÇÃO / MONITORAÇÃO'; titulo = 'Da requisição ao painel'; fonte = "Consulta registrada em $($Monitoramento.instante_utc) • Docker $VersaoStack"
+        narracao = "Na API, Counter conta requisições e Histogram mede duração. O endpoint barra metrics expõe essas séries. O Prometheus consulta api, porta oito mil, a cada cinco segundos. No Grafana, a fonte Prometheus e o dashboard são provisionados por arquivos YAML e JSON. Os painéis acompanham volume, latência e erros. Este cartão apresenta consultas reais: $(Numero $Monitoramento.volume 0) chamadas acumuladas, p95 estimado de $(Numero ($Monitoramento.p95_segundos * 1000)) milissegundos e $(Numero $Monitoramento.erros_4xx_percentual) por cento de erros quatrocentos. As entradas inválidas foram intencionais. O p95 vem de faixas do histograma numa janela de vinte segundos; difere do benchmark HTTP a seguir."
+    },
+    @{
         etapa = 'RESULTADO'; titulo = 'Otimização medida no mesmo modelo'; fonte = 'Fontes: qualidade.json, latencia_modelo.json e latencia_http_local.json. HTTP fora de Docker.'
-        narracao = "No teste oficial, a acurácia foi $(Numero ($Qualidade.teste.onnx.acuracia * 100)) por cento e a F1 macro foi $(Numero $Qualidade.teste.onnx.f1_macro 4). A conversão preservou as classes na validação. Em $(Numero $Latencia.onnx.amostras 0) medições por motor, ONNX foi $(Numero $Latencia.fator_aceleracao_p50) vezes mais rápido na mediana da inferência completa. No HTTP local, fora de Docker, a aceleração foi $(Numero $Http.fator_aceleracao_p50) vezes em $(Numero $Http.onnx.amostras 0) chamadas por motor. Rede, validação e serialização reduzem o ganho observado na API."
+        narracao = "Otimizamos a execução convertendo TF-IDF e regressão logística para ONNX. Neste ensaio histórico do host, a acurácia no teste foi $(Numero ($Qualidade.teste.onnx.acuracia * 100)) por cento e a F1 macro foi $(Numero $Qualidade.teste.onnx.f1_macro 4). A conversão preservou as classes na validação. Em $(Numero $Latencia.onnx.amostras 0) medições por motor, ONNX foi $(Numero $Latencia.fator_aceleracao_p50) vezes mais rápido na mediana da inferência completa. No HTTP local, fora de Docker, a aceleração foi $(Numero $Http.fator_aceleracao_p50) vezes em $(Numero $Http.onnx.amostras 0) chamadas por motor. Rede, validação e serialização reduzem o ganho observado na API."
     },
     @{
         etapa = 'RESULTADO / APRENDIZADOS'; titulo = 'Reproduzir, verificar e declarar os limites'; fonte = 'Narração sintética por Microsoft Maria Desktop; evidências locais desta captura.'
@@ -301,6 +427,7 @@ $Manifesto = [ordered]@{
     tipo = 'Apresentação STAR com narração sintética e imagens programáticas'
     voz = 'Microsoft Maria Desktop'
     velocidade_voz = 3
+    ambiente_geracao = $AmbienteGeracao
     versao_modelo = $Modelo
     api_url = $ApiUrl
     api_prontidao = $Prontidao
@@ -316,18 +443,25 @@ $Manifesto = [ordered]@{
     airflow_execucao = $Airflow
     airflow_construcao = $AirflowBuild
     fonte_airflow_construcao = $FonteBuildAirflow
+    fonte_stack = $FonteStack
+    fonte_airflow_execucao = $FonteExecucaoDag
+    monitoramento = $Monitoramento
+    ci = $Ci
     palavras_narracao = $QuantidadePalavras
     fontes = @()
     cenas = @()
 }
-foreach ($Nome in @('reports/qualidade.json', 'reports/latencia_modelo.json',
-    'reports/latencia_http_local.json', 'dags/retreino_medico.py', '.github/workflows/ci.yml')) {
+foreach ($Nome in @('scripts/gerar_video.ps1', 'reports/qualidade.json', 'reports/latencia_modelo.json',
+    'reports/latencia_http_local.json', 'dags/retreino_medico.py', '.github/workflows/ci.yml',
+    $FontePrometheus, $FonteGrafana, 'monitoring/grafana/provisioning/dashboards/dashboard.yml',
+    'monitoring/grafana/dashboards/medical-classifier.json', $FonteExecucaoCi,
+    'reports/docker/pos_correcao/benchmark_http_execucao.json')) {
     $Manifesto.fontes += @{ caminho = $Nome; sha256 = (Get-FileHash -LiteralPath (Join-Path $Raiz $Nome) -Algorithm SHA256).Hash.ToLowerInvariant() }
 }
 if ($null -ne $Stack) {
-    $Manifesto.fontes += @{ caminho = 'reports/smoke_stack.json'; sha256 = (Get-FileHash -LiteralPath (Join-Path $Raiz 'reports/smoke_stack.json') -Algorithm SHA256).Hash.ToLowerInvariant() }
+    $Manifesto.fontes += @{ caminho = $FonteStack; sha256 = (Get-FileHash -LiteralPath (Join-Path $Raiz $FonteStack) -Algorithm SHA256).Hash.ToLowerInvariant() }
 }
-foreach ($Nome in @('reports/airflow_execucao.json', $FonteBuildAirflow)) {
+foreach ($Nome in @($FonteExecucaoDag, $FonteBuildAirflow) | Select-Object -Unique) {
     if ($null -eq $Nome) { continue }
     if (Test-Path -LiteralPath (Join-Path $Raiz $Nome)) {
         $Manifesto.fontes += @{ caminho = $Nome; sha256 = (Get-FileHash -LiteralPath (Join-Path $Raiz $Nome) -Algorithm SHA256).Hash.ToLowerInvariant() }
@@ -389,21 +523,38 @@ for ($Indice = 0; $Indice -lt $Cenas.Count; $Indice++) {
                 Texto $Grafico $RotuloDag 88 244 500 41 23 $Verde -Negrito
                 Texto $Grafico $TrechoDag 88 299 500 198 23 $Marinho
                 Retangulo $Grafico 638 220 578 306 $Branco
-                Texto $Grafico 'GITHUB ACTIONS / TRECHO ESTÁTICO' 662 244 526 42 22 $Verde -Negrito
+                Texto $Grafico 'GITHUB ACTIONS / EXECUÇÃO REGISTRADA' 662 244 526 42 22 $Verde -Negrito
                 Texto $Grafico $TrechoCi 662 299 526 198 22 $Marinho
                 Retangulo $Grafico 64 549 1152 90 $Marinho
                 Texto $Grafico ($EstadoStack + "`n" + $EstadoDag) 89 566 1102 59 25 $Branco
             }
             6 {
+                $Titulos = @('FastAPI / instrumentação', 'Prometheus / coleta', 'Grafana / visualização')
+                $DetalhesFluxo = @("Counter + Histogram`nGET /metrics", "api:8000/metrics`na cada 5 segundos", "fonte: prometheus-medical`nhttp://prometheus:9090")
+                for ($Bloco = 0; $Bloco -lt 3; $Bloco++) {
+                    $X = 64 + $Bloco * 393
+                    Retangulo $Grafico $X 218 365 118 $Branco
+                    Texto $Grafico $Titulos[$Bloco] ($X + 16) 230 332 31 23 $Verde -Negrito
+                    Texto $Grafico $DetalhesFluxo[$Bloco] ($X + 16) 270 332 58 23 $Marinho
+                    if ($Bloco -lt 2) { Texto $Grafico '›' ($X + 369) 250 22 52 36 $Verde }
+                }
+                Texto $Grafico 'Fonte e dashboard provisionados por YAML/JSON • resultados reais do smoke' 64 351 1150 35 23 $Cinza
+                Estatistica $Grafico (Numero $Monitoramento.volume 0) 'chamadas acumuladas' 64 397
+                Estatistica $Grafico ((Numero ($Monitoramento.p95_segundos * 1000)) + ' ms') 'p95 estimado / janela 20 s' 457 397
+                Estatistica $Grafico ((Numero $Monitoramento.erros_4xx_percentual) + '%') 'erros 4xx / entradas inválidas' 850 397
+                Texto $Grafico 'PROMQL REAL / p95 em segundos • cartão programático da consulta registrada' 64 555 1150 29 20 $Verde -Negrito
+                Texto $Grafico $Monitoramento.consultas[1].expressao 64 591 1152 65 20 $Marinho
+            }
+            7 {
                 Texto $Grafico ('Acurácia teste: ' + (Numero ($Qualidade.teste.onnx.acuracia * 100)) + '%     |     F1 macro: ' + (Numero $Qualidade.teste.onnx.f1_macro 4)) 64 220 1150 52 31 $Marinho -Negrito
                 Barras $Grafico 'Inferência completa / em processo' $Latencia.sklearn.p50_ms $Latencia.onnx.p50_ms $Latencia.fator_aceleracao_p50 64
                 Barras $Grafico 'HTTP local / fora de Docker' $Http.sklearn.p50_ms $Http.onnx.p50_ms $Http.fator_aceleracao_p50 668
-                Texto $Grafico ('Mesmo modelo • lote 1 • ordem alternada • ' + $Latencia.onnx.amostras + '/' + $Http.onnx.amostras + ' medições por motor') 64 609 1150 36 23 $Cinza
+                Texto $Grafico ('Host ' + $Modelo + ' • lote 1 • ' + $Latencia.onnx.amostras + '/' + $Http.onnx.amostras + ' medições por motor') 64 609 1150 36 23 $Cinza
             }
-            7 {
+            8 {
                 Texto $Grafico "01  Comparar qualidade e latência`n02  Preservar versões e proveniência`n03  Revisar falhas por bloco`n04  Declarar o que ainda não foi demonstrado" 64 248 1136 281 36 $Marinho -Negrito
                 Retangulo $Grafico 64 561 1152 72 $Verde
-                Texto $Grafico 'Evidências capturadas nesta execução • narração sintética • uso acadêmico' 88 580 1105 39 27 $Branco -Negrito
+                Texto $Grafico 'Evidências com instante e versão • narração sintética • uso acadêmico' 88 580 1105 39 27 $Branco -Negrito
             }
         }
         Texto $Grafico $Cena.fonte 64 669 1065 32 15 $Cinza

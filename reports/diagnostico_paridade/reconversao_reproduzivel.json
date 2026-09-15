@@ -1,0 +1,47 @@
+{
+  "verificado_em": "2026-09-15T02:05:39.703754+00:00",
+  "reajuste_executado": false,
+  "publicacao_executada": false,
+  "conversao": "medical_classifier.training.export_onnx",
+  "entradas_sha256": {
+    "baseline": "18a7c6799a4aa4c661c7ab534636146a10b77e5c924febd83e9ca75a303effa3",
+    "onnx_anterior": "e9a489eaba6e275fe682f7328538fa32b53d7ff1fbec63a2db9840a541c2b5fb"
+  },
+  "ambiente": {
+    "python": "3.11.9",
+    "sistema": "Windows",
+    "scikit-learn": "1.7.2",
+    "skl2onnx": "1.19.1",
+    "onnxruntime": "1.23.2"
+  },
+  "validacao": {
+    "amostras": 1322,
+    "dados_sha256": "0130b3138133a6a55ffd2852306df7abf2966aef14ca28b11bb844cf4d1f05d5",
+    "antes": {
+      "erro_maximo": 0.009424056206913889,
+      "concordancia": 1.0,
+      "linhas_divergentes": 2
+    },
+    "depois": {
+      "erro_maximo": 1.9309227050623434e-07,
+      "concordancia": 1.0,
+      "linhas_divergentes": 0
+    }
+  },
+  "teste": {
+    "amostras": 2888,
+    "dados_sha256": "ab4e185ce91dfc7422f6bf451f5aa801cfe90796b64899d9866368b78fb7563c",
+    "antes": {
+      "erro_maximo": 0.033729572298424715,
+      "concordancia": 1.0,
+      "linhas_divergentes": 4
+    },
+    "depois": {
+      "erro_maximo": 3.1349054652185515e-07,
+      "concordancia": 1.0,
+      "linhas_divergentes": 0
+    }
+  },
+  "modelo_sklearn_e_arquivos_preservados": true,
+  "sucesso": true
+}

@@ -1,0 +1,30 @@
+{
+  "verificado_em_utc": "2026-09-15T02:12:15.166602+00:00",
+  "escopo": "Leitura dos relatórios existentes; sem treino, promoção ou reinício de serviços.",
+  "contrato_atual_aprovado": {
+    "host": {
+      "versao": "20260914T214327-e6c68fc4",
+      "fator_aceleracao_p50": 3.516138165345413,
+      "ponteiro_preservado": true
+    },
+    "docker": {
+      "versao": "20260914T232434-92cce529",
+      "fator_aceleracao_p50": 3.80227603198966,
+      "hashes_artefatos_verificados": true
+    }
+  },
+  "regressao": {
+    "red": ".local/correcao_criterios/testes_b1_red.log",
+    "resultado_red": "21 falharam, 13 passaram; candidato reprovado era promovido.",
+    "green": ".local/correcao_criterios/testes_b1_green.log",
+    "resultado_green": "35 passaram; inclui o teste de integração real da API.",
+    "ressalva": "Dados sintéticos em diretórios temporários nos testes; sem novas versões reais."
+  },
+  "arquivos_alterados_sha256": {
+    "src/medical_classifier/training.py": "6bb896d8252258dce8fe34ae2ba0cbd66027d91cb6f45a55717541e5077d6d2d",
+    "src/medical_classifier/pipeline.py": "fd1fed000a89cbfd4e00835273dcbdf7d9261bda877f66cab8809a85e401817d",
+    "tests/test_model.py": "0debcea89a99e60485dc52190eb12d0a3db53ab75950376dc27f11bf49f2ee70",
+    "tests/test_pipeline.py": "4f11aee29dbe53d0c4e738f97587d47418cb57e4c8b629212f04ffb6f2c5be4c",
+    "tests/test_api.py": "ed6108e21191e9287b6fec135f5ca7a2e546547cd52866c78de191241bcc3c01"
+  }
+}

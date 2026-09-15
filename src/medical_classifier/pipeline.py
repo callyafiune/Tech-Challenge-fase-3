@@ -10,7 +10,14 @@ import pandas as pd
 from medical_classifier.benchmark import compare
 from medical_classifier.data import download_data, prepare_data, sha256
 from medical_classifier.serving import Predictor, resolve_release
-from medical_classifier.training import evaluate, fit_release, promote_release, write_json
+from medical_classifier.training import (
+    evaluate,
+    fit_release,
+    promote_release,
+    require_latency_gain,
+    verified_evaluation,
+    write_json,
+)
 
 
 def ingest(raw: Path, prepared: Path) -> str:
@@ -54,16 +61,33 @@ def train(prepared: Path, models: Path) -> str:
 
 def validate(release: Path, prepared: Path, reports: Path, iterations: int = 400) -> dict:
     """Mede latência na validação e registra teste oficial sem ajustar parâmetros."""
-    audit = verified_audit(prepared)
+    release = release.resolve()
+    models = release.parent.parent
+    if (models / "current.json").is_file() and resolve_release(models) == release:
+        raise ValueError("A versão já está publicada; valide um novo candidato.")
     metadata = json.loads((release / "metadata.json").read_text("utf-8"))
+    evaluation_path = release / "avaliacao.json"
+    previous = json.loads(evaluation_path.read_text("utf-8")) if evaluation_path.is_file() else {}
+    pending = previous.copy() if isinstance(previous, dict) else {}
+    pending.update(
+        {
+            "aprovado": False,
+            "estado": "validação iniciada; resultados anteriores não autorizam publicação",
+            "versao_modelo": release.name,
+        }
+    )
+    # Conserva os resultados históricos identificados, mas revoga a aprovação da tentativa.
+    write_json(evaluation_path, pending)
+    audit = verified_audit(prepared)
     if audit["sha256_preparados"] != metadata["auditoria_dados"]["sha256_preparados"]:
         raise ValueError("As partições de avaliação não correspondem às usadas no treino.")
     original = Predictor.from_release(release, "sklearn")
     optimized = Predictor.from_release(release, "onnx")
     validation = pd.read_csv(prepared / "validacao.csv")
     latency = compare(original, optimized, validation.medical_abstract.tolist(), iterations)
-    if latency["fator_aceleracao_p50"] < 1.0:
-        raise ValueError("O modelo ONNX não apresentou ganho de latência mediana nesta execução.")
+    require_latency_gain(latency)
+    if latency.get("versao_modelo") != release.name:
+        raise ValueError("O resultado do benchmark não corresponde à versão candidata.")
     test = pd.read_csv(prepared / "teste.csv")
     texts = test.medical_abstract.tolist()
     probabilities = {}
@@ -72,7 +96,14 @@ def validate(release: Path, prepared: Path, reports: Path, iterations: int = 400
             [predictor.predict(texts[i : i + 64]) for i in range(0, len(texts), 64)]
         )
     difference = float(np.max(np.abs(probabilities["sklearn"] - probabilities["onnx"])))
-    if not np.isfinite(probabilities["onnx"]).all() or difference > 1e-4:
+    agreement = float(
+        np.mean(probabilities["sklearn"].argmax(1) == probabilities["onnx"].argmax(1))
+    )
+    if (
+        any(not np.isfinite(values).all() for values in probabilities.values())
+        or difference > 1e-4
+        or agreement != 1.0
+    ):
         raise ValueError("Divergência inesperada dos motores no teste oficial.")
     quality = {
         "aprovado": True,
@@ -86,6 +117,7 @@ def validate(release: Path, prepared: Path, reports: Path, iterations: int = 400
             name: evaluate(test.condition_label, values) for name, values in probabilities.items()
         },
         "erro_maximo_probabilidade_teste": difference,
+        "concordancia_teste": agreement,
         "tamanho_bytes": {
             name: (release / name).stat().st_size for name in ["baseline.joblib", "model.onnx"]
         },
@@ -108,19 +140,8 @@ def execute(
         release = resolve_release(models)
         for backend in ("sklearn", "onnx"):
             Predictor.from_release(release, backend)
-        if not (release / "avaliacao.json").is_file() or not (release / "latencia.json").is_file():
-            raise ValueError("A versão existente não possui relatórios de avaliação completos.")
         metadata = json.loads((release / "metadata.json").read_text("utf-8"))
-        quality = json.loads((release / "avaliacao.json").read_text("utf-8"))
-        latency = json.loads((release / "latencia.json").read_text("utf-8"))
-        if quality.get("aprovado") is not True:
-            raise ValueError("A versão existente não possui avaliação aprovada.")
-        if (
-            quality.get("versao_modelo") != release.name
-            or quality.get("sha256_modelos") != metadata["sha256"]
-            or latency.get("versao_modelo") != release.name
-        ):
-            raise ValueError("Os relatórios não correspondem à versão publicada.")
+        quality, latency = verified_evaluation(release, metadata)
         write_json(reports / "qualidade.json", quality)
         write_json(reports / "latencia_modelo.json", latency)
         return {"qualidade": quality, "latencia": latency, "reutilizado": True}

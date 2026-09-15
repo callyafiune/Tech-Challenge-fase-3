@@ -1,0 +1,229 @@
+{
+  "inicio_utc": "2026-09-15T01:59:02.501172+00:00",
+  "etapas": [
+    {
+      "nome": "validar_compose_benchmark",
+      "comando": [
+        "docker",
+        "compose",
+        "-f",
+        "docker-compose.yml",
+        "-f",
+        "docker-compose.benchmark.yml",
+        "config",
+        "--quiet"
+      ],
+      "inicio_utc": "2026-09-15T01:59:02.524061+00:00",
+      "fim_utc": "2026-09-15T01:59:02.718653+00:00",
+      "segundos": 0.18699999997625127,
+      "codigo_saida": 0
+    },
+    {
+      "nome": "iniciar_api_original",
+      "comando": [
+        "docker",
+        "compose",
+        "-f",
+        "docker-compose.yml",
+        "-f",
+        "docker-compose.benchmark.yml",
+        "up",
+        "-d",
+        "--no-deps",
+        "--no-build",
+        "api-original"
+      ],
+      "inicio_utc": "2026-09-15T01:59:02.722046+00:00",
+      "fim_utc": "2026-09-15T01:59:04.286061+00:00",
+      "segundos": 1.562000000034459,
+      "codigo_saida": 0
+    },
+    {
+      "nome": "imagens_benchmark",
+      "comando": [
+        "docker",
+        "inspect",
+        "medical-classifier-api-1",
+        "medical-classifier-api-original-1"
+      ],
+      "inicio_utc": "2026-09-15T01:59:08.426260+00:00",
+      "fim_utc": "2026-09-15T01:59:08.512300+00:00",
+      "segundos": 0.0779999999795109,
+      "codigo_saida": 0
+    },
+    {
+      "nome": "medir_http",
+      "comando": [
+        "C:\\estudos\\Tech-Challenge-fase-3\\.venv\\Scripts\\python.exe",
+        "scripts/benchmark_http.py",
+        "--original",
+        "http://127.0.0.1:8001",
+        "--otimizado",
+        "http://127.0.0.1:8000",
+        "--dados",
+        "data/prepared/validacao.csv",
+        "--iteracoes",
+        "200",
+        "--aquecimento",
+        "20",
+        "--ambiente",
+        "docker",
+        "--saida",
+        "reports/docker/pos_correcao/latencia_http.json"
+      ],
+      "inicio_utc": "2026-09-15T01:59:08.514916+00:00",
+      "fim_utc": "2026-09-15T01:59:29.311171+00:00",
+      "segundos": 20.79700000002049,
+      "codigo_saida": 0
+    },
+    {
+      "nome": "encerrar_api_original",
+      "comando": [
+        "docker",
+        "compose",
+        "-f",
+        "docker-compose.yml",
+        "-f",
+        "docker-compose.benchmark.yml",
+        "rm",
+        "--stop",
+        "--force",
+        "api-original"
+      ],
+      "inicio_utc": "2026-09-15T01:59:29.379300+00:00",
+      "fim_utc": "2026-09-15T01:59:31.162070+00:00",
+      "segundos": 1.7810000000172295,
+      "codigo_saida": 0
+    },
+    {
+      "nome": "smoke_stack_atual",
+      "comando": [
+        "C:\\estudos\\Tech-Challenge-fase-3\\.venv\\Scripts\\python.exe",
+        "scripts/smoke_stack.py",
+        "--requisicoes",
+        "20",
+        "--tempo-limite",
+        "120",
+        "--saida",
+        "reports/docker/pos_correcao/smoke_stack.json"
+      ],
+      "inicio_utc": "2026-09-15T01:59:31.170059+00:00",
+      "fim_utc": "2026-09-15T01:59:58.023539+00:00",
+      "segundos": 26.85999999998603,
+      "codigo_saida": 0
+    },
+    {
+      "nome": "saude_servicos",
+      "comando": [
+        "docker",
+        "inspect",
+        "medical-classifier-api-1",
+        "medical-classifier-prometheus-1",
+        "medical-classifier-grafana-1",
+        "medical-classifier-airflow-airflow-1"
+      ],
+      "inicio_utc": "2026-09-15T01:59:58.027969+00:00",
+      "fim_utc": "2026-09-15T01:59:58.140692+00:00",
+      "segundos": 0.125,
+      "codigo_saida": 0
+    }
+  ],
+  "historico_sha256_antes": "7a7555cb9279b2eee44cad0eb0feac3641103ad67f208bad355894b1897d7ef0",
+  "prontidao_onnx_antes": {
+    "status": "pronto",
+    "versao_modelo": "20260914T232434-92cce529",
+    "backend": "onnx"
+  },
+  "prontidao_sklearn_antes": {
+    "status": "pronto",
+    "versao_modelo": "20260914T232434-92cce529",
+    "backend": "sklearn"
+  },
+  "servidores": [
+    {
+      "nome": "medical-classifier-api-1",
+      "id": "b4106ca158a6a777829455360e8532fb4f30681d926c80ba673e66d20aa78f4f",
+      "imagem": "sha256:db8c57bbab5a6522cd581d8dd91fa2e7b14d37182f1f30f4fc00564bdb671cd7",
+      "usuario": "10001:10001"
+    },
+    {
+      "nome": "medical-classifier-api-original-1",
+      "id": "5aa1738e34517cbc9aa6afa261c5b6a917fb57cea51adb6cdb0bad2f3f435965",
+      "imagem": "sha256:db8c57bbab5a6522cd581d8dd91fa2e7b14d37182f1f30f4fc00564bdb671cd7",
+      "usuario": "10001:10001"
+    }
+  ],
+  "resultado_http": {
+    "sklearn": {
+      "amostras": 200,
+      "media_ms": 6.070835999999999,
+      "p50_ms": 5.68385,
+      "p95_ms": 7.60603,
+      "p99_ms": 10.092549999999996
+    },
+    "onnx": {
+      "amostras": 200,
+      "media_ms": 4.7608765,
+      "p50_ms": 4.5707,
+      "p95_ms": 5.816794999999999,
+      "p99_ms": 6.79742299999998
+    },
+    "fator_aceleracao_p50": 1.243540376747544,
+    "fator_aceleracao_p95": 1.3075980845121757,
+    "metodo": "HTTP local, lote 1, concorrência 1, conexões persistentes e ordem alternada",
+    "ambiente_servidores": "docker",
+    "endpoints": {
+      "sklearn": "http://127.0.0.1:8001",
+      "onnx": "http://127.0.0.1:8000"
+    },
+    "ambiente_cliente": {
+      "plataforma": "Windows-10-10.0.26200-SP0",
+      "processador": "Intel64 Family 6 Model 140 Stepping 1, GenuineIntel",
+      "python": "3.11.9"
+    },
+    "semente": 42,
+    "aquecimento_por_motor": 20,
+    "prontidao": {
+      "sklearn": {
+        "status": "pronto",
+        "versao_modelo": "20260914T232434-92cce529",
+        "backend": "sklearn"
+      },
+      "onnx": {
+        "status": "pronto",
+        "versao_modelo": "20260914T232434-92cce529",
+        "backend": "onnx"
+      }
+    },
+    "instante_utc": "2026-09-15T01:59:28.847373+00:00"
+  },
+  "historico_sha256_depois": "7a7555cb9279b2eee44cad0eb0feac3641103ad67f208bad355894b1897d7ef0",
+  "fim_utc": "2026-09-15T01:59:58.142197+00:00",
+  "servicos_finais": [
+    {
+      "nome": "medical-classifier-api-1",
+      "imagem": "sha256:db8c57bbab5a6522cd581d8dd91fa2e7b14d37182f1f30f4fc00564bdb671cd7",
+      "estado": "running",
+      "saude": "healthy"
+    },
+    {
+      "nome": "medical-classifier-prometheus-1",
+      "imagem": "sha256:5ce7540c3c00ef4ab0c9d2c995c6a5b9c421f44b4a115d97a2c7af3b1c21cbb0",
+      "estado": "running",
+      "saude": "healthy"
+    },
+    {
+      "nome": "medical-classifier-grafana-1",
+      "imagem": "sha256:f772d434e8fab0049deb2b1b30abd43342bcfca1537614aa8d36080232cf4283",
+      "estado": "running",
+      "saude": "healthy"
+    },
+    {
+      "nome": "medical-classifier-airflow-airflow-1",
+      "imagem": "sha256:4aa335021699aa872540e4ae7b96cd43add525a5223fe95279bcb93c75991b50",
+      "estado": "running",
+      "saude": "healthy"
+    }
+  ],
+  "sucesso": true
+}

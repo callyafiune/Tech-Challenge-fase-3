@@ -1,0 +1,145 @@
+....FFFFF.....FFFFFFFFFFFFF..F..FF                                       [100%]
+================================== FAILURES ===================================
+_ test_exportacao_rejeita_tokenizacao_fora_do_contrato[token_pattern-(?u)\\b\\w\\w+\\b] _
+tests\test_model.py:86: in test_exportacao_rejeita_tokenizacao_fora_do_contrato
+    with pytest.raises(ValueError, match="tokenização suportada"):
+E   Failed: DID NOT RAISE <class 'ValueError'>
+_____ test_exportacao_rejeita_tokenizacao_fora_do_contrato[analyzer-char] _____
+tests\test_model.py:86: in test_exportacao_rejeita_tokenizacao_fora_do_contrato
+    with pytest.raises(ValueError, match="tokenização suportada"):
+E   Failed: DID NOT RAISE <class 'ValueError'>
+____ test_exportacao_rejeita_tokenizacao_fora_do_contrato[tokenizer-split] ____
+tests\test_model.py:87: in test_exportacao_rejeita_tokenizacao_fora_do_contrato
+    export_onnx(modelo)
+src\medical_classifier\training.py:64: in export_onnx
+    return convert_sklearn(
+.venv\Lib\site-packages\skl2onnx\convert.py:211: in convert_sklearn
+    onnx_model = convert_topology(
+.venv\Lib\site-packages\skl2onnx\common\_topology.py:1671: in convert_topology
+    topology.convert_operators(container=container, verbose=verbose)
+.venv\Lib\site-packages\skl2onnx\common\_topology.py:1348: in convert_operators
+    self.call_converter(operator, container, verbose=verbose)
+.venv\Lib\site-packages\skl2onnx\common\_topology.py:1131: in call_converter
+    conv(self.scopes[0], operator, container)
+.venv\Lib\site-packages\skl2onnx\common\_registration.py:26: in __call__
+    return self._fct(*args)
+           ^^^^^^^^^^^^^^^^
+.venv\Lib\site-packages\skl2onnx\operator_converters\text_vectoriser.py:265: in convert_sklearn_text_vectorizer
+    raise NotImplementedError(
+E   NotImplementedError: Custom tokenizer cannot be converted into ONNX. You may raise an issue at https://github.com/onnx/sklearn-onnx/issues.
+__ test_exportacao_rejeita_tokenizacao_fora_do_contrato[preprocessor-lower] ___
+tests\test_model.py:87: in test_exportacao_rejeita_tokenizacao_fora_do_contrato
+    export_onnx(modelo)
+src\medical_classifier\training.py:64: in export_onnx
+    return convert_sklearn(
+.venv\Lib\site-packages\skl2onnx\convert.py:211: in convert_sklearn
+    onnx_model = convert_topology(
+.venv\Lib\site-packages\skl2onnx\common\_topology.py:1671: in convert_topology
+    topology.convert_operators(container=container, verbose=verbose)
+.venv\Lib\site-packages\skl2onnx\common\_topology.py:1348: in convert_operators
+    self.call_converter(operator, container, verbose=verbose)
+.venv\Lib\site-packages\skl2onnx\common\_topology.py:1131: in call_converter
+    conv(self.scopes[0], operator, container)
+.venv\Lib\site-packages\skl2onnx\common\_registration.py:26: in __call__
+    return self._fct(*args)
+           ^^^^^^^^^^^^^^^^
+.venv\Lib\site-packages\skl2onnx\operator_converters\text_vectoriser.py:259: in convert_sklearn_text_vectorizer
+    raise NotImplementedError(
+E   NotImplementedError: Custom preprocessor cannot be converted into ONNX. You may raise an issue at https://github.com/onnx/sklearn-onnx/issues.
+_________ test_exportacao_rejeita_componentes_ambiguos_no_vocabulario _________
+tests\test_model.py:96: in test_exportacao_rejeita_componentes_ambiguos_no_vocabulario
+    with pytest.raises(ValueError, match="vocabulário incompatível"):
+E   Failed: DID NOT RAISE <class 'ValueError'>
+_ test_publicacao_revalida_evidencias_e_preserva_ponteiro[avaliacao.json-None-relat\xf3rios de avalia\xe7\xe3o completos] _
+tests\test_model.py:206: in test_publicacao_revalida_evidencias_e_preserva_ponteiro
+    with pytest.raises(ValueError, match=mensagem):
+E   Failed: DID NOT RAISE <class 'ValueError'>
+_ test_publicacao_revalida_evidencias_e_preserva_ponteiro[latencia.json-None-relat\xf3rios de avalia\xe7\xe3o completos] _
+tests\test_model.py:206: in test_publicacao_revalida_evidencias_e_preserva_ponteiro
+    with pytest.raises(ValueError, match=mensagem):
+E   Failed: DID NOT RAISE <class 'ValueError'>
+_ test_publicacao_revalida_evidencias_e_preserva_ponteiro[avaliacao.json-alteracoes2-avalia\xe7\xe3o aprovada] _
+tests\test_model.py:206: in test_publicacao_revalida_evidencias_e_preserva_ponteiro
+    with pytest.raises(ValueError, match=mensagem):
+E   Failed: DID NOT RAISE <class 'ValueError'>
+_ test_publicacao_revalida_evidencias_e_preserva_ponteiro[avaliacao.json-alteracoes3-avalia\xe7\xe3o aprovada] _
+tests\test_model.py:206: in test_publicacao_revalida_evidencias_e_preserva_ponteiro
+    with pytest.raises(ValueError, match=mensagem):
+E   Failed: DID NOT RAISE <class 'ValueError'>
+_ test_publicacao_revalida_evidencias_e_preserva_ponteiro[avaliacao.json-alteracoes4-n\xe3o correspondem] _
+tests\test_model.py:206: in test_publicacao_revalida_evidencias_e_preserva_ponteiro
+    with pytest.raises(ValueError, match=mensagem):
+E   Failed: DID NOT RAISE <class 'ValueError'>
+_ test_publicacao_revalida_evidencias_e_preserva_ponteiro[avaliacao.json-alteracoes5-n\xe3o correspondem] _
+tests\test_model.py:206: in test_publicacao_revalida_evidencias_e_preserva_ponteiro
+    with pytest.raises(ValueError, match=mensagem):
+E   Failed: DID NOT RAISE <class 'ValueError'>
+_ test_publicacao_revalida_evidencias_e_preserva_ponteiro[latencia.json-alteracoes6-n\xe3o correspondem] _
+tests\test_model.py:206: in test_publicacao_revalida_evidencias_e_preserva_ponteiro
+    with pytest.raises(ValueError, match=mensagem):
+E   Failed: DID NOT RAISE <class 'ValueError'>
+_ test_publicacao_revalida_evidencias_e_preserva_ponteiro[latencia.json-alteracoes7-ganho de lat\xeancia] _
+tests\test_model.py:206: in test_publicacao_revalida_evidencias_e_preserva_ponteiro
+    with pytest.raises(ValueError, match=mensagem):
+E   Failed: DID NOT RAISE <class 'ValueError'>
+_ test_publicacao_revalida_evidencias_e_preserva_ponteiro[latencia.json-alteracoes8-ganho de lat\xeancia] _
+tests\test_model.py:206: in test_publicacao_revalida_evidencias_e_preserva_ponteiro
+    with pytest.raises(ValueError, match=mensagem):
+E   Failed: DID NOT RAISE <class 'ValueError'>
+_ test_publicacao_revalida_evidencias_e_preserva_ponteiro[latencia.json-alteracoes9-ganho de lat\xeancia] _
+tests\test_model.py:206: in test_publicacao_revalida_evidencias_e_preserva_ponteiro
+    with pytest.raises(ValueError, match=mensagem):
+E   Failed: DID NOT RAISE <class 'ValueError'>
+_ test_publicacao_revalida_evidencias_e_preserva_ponteiro[latencia.json-alteracoes10-ganho de lat\xeancia] _
+tests\test_model.py:206: in test_publicacao_revalida_evidencias_e_preserva_ponteiro
+    with pytest.raises(ValueError, match=mensagem):
+E   Failed: DID NOT RAISE <class 'ValueError'>
+_ test_publicacao_revalida_evidencias_e_preserva_ponteiro[latencia.json-alteracoes11-ganho de lat\xeancia] _
+tests\test_model.py:206: in test_publicacao_revalida_evidencias_e_preserva_ponteiro
+    with pytest.raises(ValueError, match=mensagem):
+E   Failed: DID NOT RAISE <class 'ValueError'>
+_ test_publicacao_revalida_evidencias_e_preserva_ponteiro[latencia.json-alteracoes12-ganho de lat\xeancia] _
+tests\test_model.py:206: in test_publicacao_revalida_evidencias_e_preserva_ponteiro
+    with pytest.raises(ValueError, match=mensagem):
+E   Failed: DID NOT RAISE <class 'ValueError'>
+_______________ test_reutiliza_modelo_integro_sem_acessar_dados _______________
+tests\test_pipeline.py:44: in test_reutiliza_modelo_integro_sem_acessar_dados
+    with pytest.raises(ValueError, match="ganho de latência"):
+E   Failed: DID NOT RAISE <class 'ValueError'>
+___________________ test_validacao_bloqueia_onnx_mais_lento ___________________
+tests\test_pipeline.py:82: in test_validacao_bloqueia_onnx_mais_lento
+    with pytest.raises(ValueError, match="relatórios de avaliação completos"):
+E   Failed: DID NOT RAISE <class 'ValueError'>
+___ test_validacao_rejeita_troca_de_classe_mesmo_com_erro_numerico_pequeno ____
+tests\test_pipeline.py:113: in test_validacao_rejeita_troca_de_classe_mesmo_com_erro_numerico_pequeno
+    with pytest.raises(ValueError, match="Divergência inesperada"):
+E   Failed: DID NOT RAISE <class 'ValueError'>
+============================== warnings summary ===============================
+tests/test_model.py::test_exportacao_rejeita_tokenizacao_fora_do_contrato[analyzer-char]
+  C:\estudos\Tech-Challenge-fase-3\.venv\Lib\site-packages\skl2onnx\operator_converters\text_vectoriser.py:203: UserWarning: The conversion of CountVectorizer may not work. only tokenizer='word' is fully supported. You may raise an issue at https://github.com/onnx/sklearn-onnx/issues.
+    warnings.warn(
+
+-- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html
+=========================== short test summary info ===========================
+FAILED tests/test_model.py::test_exportacao_rejeita_tokenizacao_fora_do_contrato[token_pattern-(?u)\\b\\w\\w+\\b]
+FAILED tests/test_model.py::test_exportacao_rejeita_tokenizacao_fora_do_contrato[analyzer-char]
+FAILED tests/test_model.py::test_exportacao_rejeita_tokenizacao_fora_do_contrato[tokenizer-split]
+FAILED tests/test_model.py::test_exportacao_rejeita_tokenizacao_fora_do_contrato[preprocessor-lower]
+FAILED tests/test_model.py::test_exportacao_rejeita_componentes_ambiguos_no_vocabulario
+FAILED tests/test_model.py::test_publicacao_revalida_evidencias_e_preserva_ponteiro[avaliacao.json-None-relat\xf3rios de avalia\xe7\xe3o completos]
+FAILED tests/test_model.py::test_publicacao_revalida_evidencias_e_preserva_ponteiro[latencia.json-None-relat\xf3rios de avalia\xe7\xe3o completos]
+FAILED tests/test_model.py::test_publicacao_revalida_evidencias_e_preserva_ponteiro[avaliacao.json-alteracoes2-avalia\xe7\xe3o aprovada]
+FAILED tests/test_model.py::test_publicacao_revalida_evidencias_e_preserva_ponteiro[avaliacao.json-alteracoes3-avalia\xe7\xe3o aprovada]
+FAILED tests/test_model.py::test_publicacao_revalida_evidencias_e_preserva_ponteiro[avaliacao.json-alteracoes4-n\xe3o correspondem]
+FAILED tests/test_model.py::test_publicacao_revalida_evidencias_e_preserva_ponteiro[avaliacao.json-alteracoes5-n\xe3o correspondem]
+FAILED tests/test_model.py::test_publicacao_revalida_evidencias_e_preserva_ponteiro[latencia.json-alteracoes6-n\xe3o correspondem]
+FAILED tests/test_model.py::test_publicacao_revalida_evidencias_e_preserva_ponteiro[latencia.json-alteracoes7-ganho de lat\xeancia]
+FAILED tests/test_model.py::test_publicacao_revalida_evidencias_e_preserva_ponteiro[latencia.json-alteracoes8-ganho de lat\xeancia]
+FAILED tests/test_model.py::test_publicacao_revalida_evidencias_e_preserva_ponteiro[latencia.json-alteracoes9-ganho de lat\xeancia]
+FAILED tests/test_model.py::test_publicacao_revalida_evidencias_e_preserva_ponteiro[latencia.json-alteracoes10-ganho de lat\xeancia]
+FAILED tests/test_model.py::test_publicacao_revalida_evidencias_e_preserva_ponteiro[latencia.json-alteracoes11-ganho de lat\xeancia]
+FAILED tests/test_model.py::test_publicacao_revalida_evidencias_e_preserva_ponteiro[latencia.json-alteracoes12-ganho de lat\xeancia]
+FAILED tests/test_pipeline.py::test_reutiliza_modelo_integro_sem_acessar_dados
+FAILED tests/test_pipeline.py::test_validacao_bloqueia_onnx_mais_lento - Fail...
+FAILED tests/test_pipeline.py::test_validacao_rejeita_troca_de_classe_mesmo_com_erro_numerico_pequeno
+21 failed, 13 passed, 1 warning in 9.78s

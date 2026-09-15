@@ -1,0 +1,49 @@
+FFFFF                                                                    [100%]
+================================== FAILURES ===================================
+_____________ test_publicacao_bloqueia_versao_atual_sem_metadados _____________
+tests\test_model.py:183: in test_publicacao_bloqueia_versao_atual_sem_metadados
+    promote_release(candidato, tmp_path)
+src\medical_classifier\training.py:247: in promote_release
+    old = json.loads((previous_release / "metadata.json").read_text("utf-8"))
+                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+C:\Users\Cally\AppData\Local\Programs\Python\Python311\Lib\pathlib.py:1058: in read_text
+    with self.open(mode='r', encoding=encoding, errors=errors) as f:
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+C:\Users\Cally\AppData\Local\Programs\Python\Python311\Lib\pathlib.py:1044: in open
+    return io.open(self, mode, buffering, encoding, errors, newline)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E   FileNotFoundError: [Errno 2] No such file or directory: 'C:\\Users\\Cally\\AppData\\Local\\Temp\\pytest-of-Cally\\pytest-42\\test_publicacao_bloqueia_versa0\\releases\\20260915T022001-2006a899\\metadata.json'
+________ test_validacao_rejeita_benchmark_sem_vinculo_da_versao[None] _________
+tests\test_pipeline.py:136: in test_validacao_rejeita_benchmark_sem_vinculo_da_versao
+    with pytest.raises(ValueError, match="benchmark.*versão candidata"):
+E   Failed: DID NOT RAISE <class 'ValueError'>
+____ test_validacao_rejeita_benchmark_sem_vinculo_da_versao[outra-versao] _____
+tests\test_pipeline.py:136: in test_validacao_rejeita_benchmark_sem_vinculo_da_versao
+    with pytest.raises(ValueError, match="benchmark.*versão candidata"):
+E   Failed: DID NOT RAISE <class 'ValueError'>
+___________ test_revalidacao_reprovada_invalida_aprovacao_anterior ____________
+tests\test_pipeline.py:155: in test_revalidacao_reprovada_invalida_aprovacao_anterior
+    with pytest.raises(ValueError, match="avaliação aprovada"):
+E   Failed: DID NOT RAISE <class 'ValueError'>
+_____________ test_validacao_preserva_versao_atualmente_publicada _____________
+tests\test_pipeline.py:186: in test_validacao_preserva_versao_atualmente_publicada
+    pipeline.validate(release, tmp_path, tmp_path / "reports")
+src\medical_classifier\pipeline.py:72: in validate
+    require_latency_gain(latency)
+src\medical_classifier\training.py:202: in require_latency_gain
+    raise ValueError("O modelo ONNX não apresentou ganho de latência mediana nesta execução.")
+E   ValueError: O modelo ONNX não apresentou ganho de latência mediana nesta execução.
+
+During handling of the above exception, another exception occurred:
+tests\test_pipeline.py:185: in test_validacao_preserva_versao_atualmente_publicada
+    with pytest.raises(ValueError, match="já está publicada.*novo candidato"):
+E   AssertionError: Regex pattern did not match.
+E    Regex: 'já está publicada.*novo candidato'
+E    Input: 'O modelo ONNX não apresentou ganho de latência mediana nesta execução.'
+=========================== short test summary info ===========================
+FAILED tests/test_model.py::test_publicacao_bloqueia_versao_atual_sem_metadados
+FAILED tests/test_pipeline.py::test_validacao_rejeita_benchmark_sem_vinculo_da_versao[None]
+FAILED tests/test_pipeline.py::test_validacao_rejeita_benchmark_sem_vinculo_da_versao[outra-versao]
+FAILED tests/test_pipeline.py::test_revalidacao_reprovada_invalida_aprovacao_anterior
+FAILED tests/test_pipeline.py::test_validacao_preserva_versao_atualmente_publicada
+5 failed, 34 deselected in 2.82s

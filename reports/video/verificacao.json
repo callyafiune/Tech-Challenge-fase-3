@@ -1,8 +1,28 @@
 {
-    "registrado_em_utc":  "2026-09-14T22:50:16.7993360Z",
+    "registrado_em_utc":  "2026-09-15T02:19:38.6688817Z",
     "comando":  "powershell.exe -NoProfile -ExecutionPolicy Bypass -File reports/video/verificar_gerador.ps1 -ApiUrl http://127.0.0.1:8004",
     "sucesso":  true,
     "verificacoes":  [
+                         {
+                             "caso":  "Hash do gerador aceito quando coincide",
+                             "sucesso":  true
+                         },
+                         {
+                             "caso":  "Hash do gerador divergente rejeitado",
+                             "sucesso":  true
+                         },
+                         {
+                             "caso":  "Manifesto sem hash do gerador rejeitado",
+                             "sucesso":  true
+                         },
+                         {
+                             "caso":  "Narrações idênticas aceitas",
+                             "sucesso":  true
+                         },
+                         {
+                             "caso":  "Narração alterada com mesma quantidade de cenas rejeitada",
+                             "sucesso":  true
+                         },
                          {
                              "caso":  "Execução real completa aceita",
                              "sucesso":  true
@@ -68,6 +88,86 @@
                              "sucesso":  true
                          },
                          {
+                             "caso":  "Consultas reais de volume, p95 e erros extraídas",
+                             "sucesso":  true
+                         },
+                         {
+                             "caso":  "p95 preserva a unidade em segundos da consulta",
+                             "sucesso":  true
+                         },
+                         {
+                             "caso":  "Monitoração inválida rejeitada: sucesso textual",
+                             "sucesso":  true
+                         },
+                         {
+                             "caso":  "Monitoração inválida rejeitada: sem fonte",
+                             "sucesso":  true
+                         },
+                         {
+                             "caso":  "Monitoração inválida rejeitada: sem consulta p95",
+                             "sucesso":  true
+                         },
+                         {
+                             "caso":  "Monitoração inválida rejeitada: valor textual",
+                             "sucesso":  true
+                         },
+                         {
+                             "caso":  "Monitoração inválida rejeitada: valor infinito",
+                             "sucesso":  true
+                         },
+                         {
+                             "caso":  "Monitoração inválida rejeitada: sem instante",
+                             "sucesso":  true
+                         },
+                         {
+                             "caso":  "Monitoração inválida rejeitada: coleta indisponivel",
+                             "sucesso":  true
+                         },
+                         {
+                             "caso":  "Monitoração inválida rejeitada: janela diferente",
+                             "sucesso":  true
+                         },
+                         {
+                             "caso":  "Monitoração inválida rejeitada: dashboard diferente",
+                             "sucesso":  true
+                         },
+                         {
+                             "caso":  "Monitoração inválida rejeitada: consulta de outro alvo",
+                             "sucesso":  true
+                         },
+                         {
+                             "caso":  "Monitoração inválida rejeitada: janela PromQL diferente",
+                             "sucesso":  true
+                         },
+                         {
+                             "caso":  "Configuração diferente do fluxo narrado rejeitada",
+                             "sucesso":  true
+                         },
+                         {
+                             "caso":  "Configuração diferente do fluxo narrado rejeitada",
+                             "sucesso":  true
+                         },
+                         {
+                             "caso":  "CI identifica o commit realmente verificado",
+                             "sucesso":  true
+                         },
+                         {
+                             "caso":  "CI inválido rejeitado: passo reprovado",
+                             "sucesso":  true
+                         },
+                         {
+                             "caso":  "CI inválido rejeitado: sem commit",
+                             "sucesso":  true
+                         },
+                         {
+                             "caso":  "Manifesto final identifica o gerador atual pelo SHA-256",
+                             "sucesso":  true
+                         },
+                         {
+                             "caso":  "Vídeo final registra a DAG real concluída",
+                             "sucesso":  true
+                         },
+                         {
                              "caso":  "Vídeo corresponde ao SHA-256 do manifesto",
                              "sucesso":  true
                          },
@@ -100,20 +200,84 @@
                              "sucesso":  true
                          },
                          {
-                             "caso":  "Modo SomenteImagens preserva os 23 arquivos intermediários do vídeo",
+                             "caso":  "Modo SomenteImagens preserva os 26 arquivos intermediários do vídeo",
                              "sucesso":  true
                          },
                          {
                              "caso":  "Modo SomenteImagens capturou a API real",
                              "sucesso":  true
+                         },
+                         {
+                             "caso":  "Modo SomenteImagens manteve a quantidade de cenas da renderização",
+                             "sucesso":  true
+                         },
+                         {
+                             "caso":  "Narração de cada cena coincide com a renderização final",
+                             "sucesso":  true
+                         },
+                         {
+                             "caso":  "Prévia identifica o mesmo gerador atual",
+                             "sucesso":  true
+                         },
+                         {
+                             "caso":  "Prévia confirma a execução real da DAG",
+                             "sucesso":  true
+                         },
+                         {
+                             "caso":  "Monitoração coincide com a versão das fontes independentes smoke e DAG",
+                             "sucesso":  true
+                         },
+                         {
+                             "caso":  "DAG da apresentação coincide com o identificador da fonte real",
+                             "sucesso":  true
+                         },
+                         {
+                             "caso":  "Monitoração registra as três consultas esperadas",
+                             "sucesso":  true
+                         },
+                         {
+                             "caso":  "Resultado da consulta coincide com o smoke independente",
+                             "sucesso":  true
+                         },
+                         {
+                             "caso":  "Resultado da consulta coincide com o smoke independente",
+                             "sucesso":  true
+                         },
+                         {
+                             "caso":  "Resultado da consulta coincide com o smoke independente",
+                             "sucesso":  true
+                         },
+                         {
+                             "caso":  "Monitoração coincide com a versão das fontes independentes smoke e DAG",
+                             "sucesso":  true
+                         },
+                         {
+                             "caso":  "DAG da apresentação coincide com o identificador da fonte real",
+                             "sucesso":  true
+                         },
+                         {
+                             "caso":  "Monitoração registra as três consultas esperadas",
+                             "sucesso":  true
+                         },
+                         {
+                             "caso":  "Resultado da consulta coincide com o smoke independente",
+                             "sucesso":  true
+                         },
+                         {
+                             "caso":  "Resultado da consulta coincide com o smoke independente",
+                             "sucesso":  true
+                         },
+                         {
+                             "caso":  "Resultado da consulta coincide com o smoke independente",
+                             "sucesso":  true
                          }
                      ],
-    "saida_somente_imagens":  "Imagens geradas em C:\\estudos\\Tech-Challenge-fase-3\\.local\\video\\imagens; 451 palavras de narração.",
+    "saida_somente_imagens":  "Imagens geradas em C:\\estudos\\Tech-Challenge-fase-3\\.local\\video\\imagens; 525 palavras de narra‡Æo.",
     "codigo_saida_somente_imagens":  0,
-    "sha256_script":  "56629c0c9861c16561a88a98b9c9d98e42ae436e1c8bc8298107ebc71f5fc119",
-    "sha256_video":  "41d55f255cd0df8a2b06c6a3de0735d12e94a37e31b1cdbd62fe55c6751b1992",
-    "sha256_manifesto_final":  "784177fec6f6d5f7299c76db9de67a8bd6b9bf0de2b5fb30233103ea09146efb",
-    "duracao_segundos":  219.626395,
+    "sha256_script":  "32ed26c8aa41dda6f7e279d793ea53f7d0e6f75f3bd00c556f3984625638f500",
+    "sha256_video":  "b0d2a97a00c592bcdba4e06517e56aed15dcf81233a55d75d01f624587027fe7",
+    "sha256_manifesto_final":  "a362250a99f68711bc5656726e01d9094d42b7ac7390274038cb2a230981e9ec",
+    "duracao_segundos":  260.876417,
     "ffprobe":  {
                     "programs":  [
 
@@ -132,8 +296,8 @@
                                     }
                                 ],
                     "format":  {
-                                   "duration":  "219.626395",
-                                   "size":  "2409644"
+                                   "duration":  "260.876417",
+                                   "size":  "2849611"
                                }
                 }
 }

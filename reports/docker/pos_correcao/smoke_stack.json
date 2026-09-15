@@ -15,7 +15,7 @@
     "coleta": "ativa",
     "histograma": "presente",
     "janela_taxa": "20s",
-    "instante_metricas_utc": "2026-09-14T23:26:22.460000+00:00"
+    "instante_metricas_utc": "2026-09-15T01:59:57.317000+00:00"
   },
   "grafana": {
     "fonte_dados": "OK",
@@ -26,7 +26,7 @@
         "consultas": [
           {
             "expressao": "sum(http_requests_total{job=\"medical-api\",route=\"/predict\",method=\"POST\"}) or vector(0)",
-            "valor": 23.0
+            "valor": 289.0
           }
         ]
       },
@@ -53,7 +53,7 @@
         "consultas": [
           {
             "expressao": "sum(rate(http_requests_total{job=\"medical-api\",route=\"/predict\",method=\"POST\"}[20s])) or vector(0)",
-            "valor": 0.7333333333333334
+            "valor": 0.6667555674089878
           }
         ]
       },
@@ -66,7 +66,7 @@
           },
           {
             "expressao": "histogram_quantile(0.95, sum by (le) (rate(http_request_duration_seconds_bucket{job=\"medical-api\",route=\"/predict\",method=\"POST\"}[20s])))",
-            "valor": 0.00475
+            "valor": 0.004750000000000001
           }
         ]
       },
@@ -75,7 +75,7 @@
         "consultas": [
           {
             "expressao": "100 * (sum(rate(http_requests_total{job=\"medical-api\",route=\"/predict\",method=\"POST\",status=~\"4..\"}[20s])) or vector(0)) / clamp_min((sum(rate(http_requests_total{job=\"medical-api\",route=\"/predict\",method=\"POST\"}[20s])) or vector(0)), 1e-9)",
-            "valor": 9.090909090909092
+            "valor": 10.0
           },
           {
             "expressao": "100 * (sum(rate(http_requests_total{job=\"medical-api\",route=\"/predict\",method=\"POST\",status=~\"5..\"}[20s])) or vector(0)) / clamp_min((sum(rate(http_requests_total{job=\"medical-api\",route=\"/predict\",method=\"POST\"}[20s])) or vector(0)), 1e-9)",
@@ -85,6 +85,6 @@
       }
     ]
   },
-  "inicio_utc": "2026-09-14T23:25:52.480911+00:00",
-  "fim_utc": "2026-09-14T23:26:22.989914+00:00"
+  "inicio_utc": "2026-09-15T01:59:31.345924+00:00",
+  "fim_utc": "2026-09-15T01:59:58.005383+00:00"
 }

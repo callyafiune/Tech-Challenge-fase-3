@@ -1,55 +1,69 @@
 {
-    "verificado_em_utc":  "2026-09-14T22:51:48.3594989Z",
-    "sha256_video":  "41d55f255cd0df8a2b06c6a3de0735d12e94a37e31b1cdbd62fe55c6751b1992",
+    "verificado_em_utc":  "2026-09-15T02:20:16.156171+00:00",
+    "sha256_video":  "b0d2a97a00c592bcdba4e06517e56aed15dcf81233a55d75d01f624587027fe7",
     "extracao":  "ffmpeg -ss \u003cinstante_segundos\u003e -i reports/video/apresentacao_star.mp4 -frames:v 1 .local/video/final-cena-\u003ccena\u003e.png",
     "quadros":  [
                     {
                         "cena":  1,
-                        "instante_segundos":  0.5,
-                        "sha256":  "6584b3daf0a03198846ec9b8b94730c1f783cdc763a77a8b25a45b093d7a3bdf",
-                        "resultado":  "Cinco classes médicas legíveis; texto de uso educacional sem urgência ou diagnóstico."
+                        "instante_segundos":  2.0,
+                        "caminho":  ".local/video/final-cena-01.png",
+                        "sha256":  "9265ba60ed4049b721813ed8ce15113fd5c21694c655f6dc734f75efd3e4ab3b",
+                        "resultado":  "Cinco categorias legíveis; uso educacional e ausência de classificação de urgência ou diagnóstico explícitos."
                     },
                     {
                         "cena":  2,
-                        "instante_segundos":  29.78,
-                        "sha256":  "ce9fbd6ff7dd0384a0eb853a2cbd75952d6b79ed2dfa889b96d213e81091cf5e",
-                        "resultado":  "Fluxo Corpus → Treino → Versão → FastAPI → Resposta e cadeia Airflow legíveis."
+                        "instante_segundos":  30.532245,
+                        "caminho":  ".local/video/final-cena-02.png",
+                        "sha256":  "8aaf16599592b93a98817b58ef7dd50b69d4a86c2c30fc6e34e4585441397166",
+                        "resultado":  "Fluxo corpus, treino, versão, API e resposta legível; AWS identificada como proposta sem provisionamento."
                     },
                     {
                         "cena":  3,
-                        "instante_segundos":  59.719,
-                        "sha256":  "7f2464c58911bd89a39fcffd81704c351387c44e927e4b901195f1a34a3e288d",
-                        "resultado":  "Contagens 5.285/1.322/2.888 e remoções 1.097/3.846 legíveis."
+                        "instante_segundos":  60.471247,
+                        "caminho":  ".local/video/final-cena-03.png",
+                        "sha256":  "73b775c46ced896597c0d51fa391e6bd7ec210a9f57869e79e99fffd8d782a16",
+                        "resultado":  "Contagens 5.285/1.322/2.888 e remoções 1.097/3.846 legíveis, sem cortes."
                     },
                     {
                         "cena":  4,
-                        "instante_segundos":  92.105,
-                        "sha256":  "00f5bf9e1d0701f83054e9a96063feb86a650688c59bf62ee969d612e35b2ea0",
-                        "resultado":  "Resposta cardiovascular de classe 4; motor onnx; versão 20260914T214327-e6c68fc4 e instante da captura legíveis."
+                        "instante_segundos":  92.857732,
+                        "caminho":  ".local/video/final-cena-04.png",
+                        "sha256":  "2b0ad65ea72bc2a85519392522390ea3c3672d9dcf6875eabd7cc9426d96f4e1",
+                        "resultado":  "Respostas reais de prontidão e classificação legíveis: classe 4, cardiovascular, ONNX e versão do host e6c68fc4."
                     },
                     {
                         "cena":  5,
-                        "instante_segundos":  118.51,
-                        "sha256":  "aebe54b2bf84052a598500ae292dc1b9605c1d3d23bd699b7949bf7b05652f51",
-                        "resultado":  "DAG com quatro success e versão 20260914T221243-003d412d; rodapé distingue Docker do host; CI rotulado estático."
+                        "instante_segundos":  119.262766,
+                        "caminho":  ".local/video/final-cena-05.png",
+                        "sha256":  "d35a98ad45a0f5c330deb9cb6808ae915e4ca65dcbae5043300e9c9013dd0b19",
+                        "resultado":  "DAG com quatro success e versão Docker 92cce529; execução CI 34908437830 e commit 3a7ad7f legíveis."
                     },
                     {
                         "cena":  6,
-                        "instante_segundos":  154.515,
-                        "sha256":  "b1d77de8c3a96367bef48503651d3a0a1dfb8f3c30bbe7a5f22078884bf39a0f",
-                        "resultado":  "Acurácia 63,92%, F1 0,6385, ganhos 3,52× e 1,45× legíveis; HTTP do host identificado."
+                        "instante_segundos":  143.428843,
+                        "caminho":  ".local/video/final-cena-06.png",
+                        "sha256":  "1fb276d18022d63ab2f739a88b66bc0f5525ad03ae0a0fe1d0e6ccfdaada5749",
+                        "resultado":  "Fluxo Counter/Histogram, /metrics, coleta a cada 5s e fonte Grafana legível; consulta p95 integral, 289 chamadas acumuladas, 4,75ms e 10%4xx registrados."
                     },
                     {
                         "cena":  7,
-                        "instante_segundos":  188.581,
-                        "sha256":  "cf75031e6331157fa237d25b50b39b42670dcc6476907ac2d3bb8d6549df3764",
-                        "resultado":  "Quatro aprendizados legíveis; narração sintética e uso acadêmico explícitos."
+                        "instante_segundos":  190.01424,
+                        "caminho":  ".local/video/final-cena-07.png",
+                        "sha256":  "3df3b230b71fed87db6846a9bcdc8a06f694eb5f83b0efacc577f63b29517ade",
+                        "resultado":  "Qualidade e acelerações 3,52x/1,45x legíveis; inferência em processo e HTTP fora de Docker, versão do host explícita."
+                    },
+                    {
+                        "cena":  8,
+                        "instante_segundos":  231.215056,
+                        "caminho":  ".local/video/final-cena-08.png",
+                        "sha256":  "8d33b0898384b958d8d6b53fdc3b0d1e967d3c0e670cc2dd454dad948899754f",
+                        "resultado":  "Quatro aprendizados legíveis; narração sintética, evidências com instante/versão e uso acadêmico explícitos."
                     }
                 ],
     "audio":  {
                   "codigo_saida_ffmpeg":  0,
                   "volume_medio_db":  -23.9,
-                  "pico_db":  -4.6,
-                  "limite":  "Presença, codificação e amplitude verificadas. Não foi feita avaliação perceptiva da locução."
+                  "pico_db":  -4.4,
+                  "limite":  "Presença, decodificação e amplitude verificadas. Não foi feita avaliação perceptiva da locução."
               }
 }

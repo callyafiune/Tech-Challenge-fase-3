@@ -1,8 +1,10 @@
 """Treinamento, exportação ONNX e publicação após gates de qualidade."""
 
 import json
+import math
 import os
 import platform
+import re
 import uuid
 from copy import deepcopy
 from datetime import UTC, datetime
@@ -53,14 +55,26 @@ def evaluate(labels, probabilities: np.ndarray) -> dict:
 
 def export_onnx(model: Pipeline) -> onnx.ModelProto:
     """Exporta n-gramas explícitos sem modificar o pipeline ajustado."""
-    exportable = deepcopy(model)
-    vectorizer = exportable.named_steps["tfidf"]
+    vectorizer = model.named_steps["tfidf"]
+    if (
+        vectorizer.token_pattern != r"[a-zA-Z]{2,}"
+        or vectorizer.analyzer != "word"
+        or vectorizer.tokenizer is not None
+        or vectorizer.preprocessor is not None
+    ):
+        raise ValueError("A exportação exige a tokenização suportada pelo pipeline do projeto.")
+    vocabulary = {}
+    for term, index in vectorizer.vocabulary_.items():
+        if not isinstance(term, str) or any(
+            re.fullmatch(vectorizer.token_pattern, token) is None for token in term.split(" ")
+        ):
+            raise ValueError("A exportação recebeu vocabulário incompatível com a tokenização.")
+        vocabulary[tuple(term.split(" "))] = index
     # O padrão fixo [a-zA-Z]{2,} impede espaços dentro de cada token.
     # Tuplas evitam que o conversor 1.19 confunda um bigrama com um token
     # quando max_features remove um dos unigramas que o compõem.
-    vectorizer.vocabulary_ = {
-        tuple(term.split(" ")): index for term, index in vectorizer.vocabulary_.items()
-    }
+    exportable = deepcopy(model)
+    exportable.named_steps["tfidf"].vocabulary_ = vocabulary
     return convert_sklearn(
         exportable,
         initial_types=[("texto", StringTensorType([None, 1]))],
@@ -176,6 +190,39 @@ def _fit_bundle(train, validation, release: Path, audit: dict, min_macro_f1: flo
     write_json(release / "metadata.json", metadata)
 
 
+def require_latency_gain(latency: dict) -> None:
+    """Exige a evidência numérica finita do mesmo gate de latência da validação."""
+    speedup = latency.get("fator_aceleracao_p50")
+    if (
+        isinstance(speedup, bool)
+        or not isinstance(speedup, (int, float))
+        or not math.isfinite(speedup)
+        or speedup < 1.0
+    ):
+        raise ValueError("O modelo ONNX não apresentou ganho de latência mediana nesta execução.")
+
+
+def verified_evaluation(release: Path, metadata: dict) -> tuple[dict, dict]:
+    """Confere aprovação completa, vínculo dos relatórios e gate de latência da versão."""
+    if not (release / "avaliacao.json").is_file() or not (release / "latencia.json").is_file():
+        raise ValueError("A versão não possui relatórios de avaliação completos.")
+    quality = json.loads((release / "avaliacao.json").read_text("utf-8"))
+    latency = json.loads((release / "latencia.json").read_text("utf-8"))
+    if not isinstance(quality, dict) or not isinstance(latency, dict):
+        raise ValueError("A versão não possui relatórios de avaliação completos.")
+    if quality.get("aprovado") is not True:
+        raise ValueError("A versão não possui avaliação aprovada.")
+    if (
+        metadata.get("versao") != release.name
+        or quality.get("versao_modelo") != release.name
+        or quality.get("sha256_modelos") != metadata["sha256"]
+        or latency.get("versao_modelo") != release.name
+    ):
+        raise ValueError("Os relatórios não correspondem à versão dos modelos.")
+    require_latency_gain(latency)
+    return quality, latency
+
+
 def promote_release(release: Path, model_root: Path) -> None:
     """Atualiza um ponteiro atomicamente sem sobrescrever a versão em uso."""
     root = model_root.resolve()
@@ -183,11 +230,12 @@ def promote_release(release: Path, model_root: Path) -> None:
     if not release.is_relative_to(root / "releases"):
         raise ValueError("Versão fora do diretório dos modelos.")
     metadata = json.loads((release / "metadata.json").read_text("utf-8"))
-    if not metadata.get("aprovado"):
+    if metadata.get("aprovado") is not True:
         raise ValueError("Modelo sem aprovação dos gates.")
     for name in ("baseline.joblib", "model.onnx"):
         if sha256(release / name) != metadata["sha256"][name]:
             raise ValueError("Falha de integridade antes da publicação.")
+    verified_evaluation(release, metadata)
     previous = None
     if (root / "current.json").exists():
         from medical_classifier.serving import resolve_release
@@ -196,7 +244,13 @@ def promote_release(release: Path, model_root: Path) -> None:
         if previous_release == release:
             return
         previous = previous_release.relative_to(root).as_posix()
-        old = json.loads((previous_release / "metadata.json").read_text("utf-8"))
+        try:
+            old = json.loads((previous_release / "metadata.json").read_text("utf-8"))
+        except FileNotFoundError:
+            raise ValueError(
+                "Publicação bloqueada: a versão atual não possui metadados "
+                "para verificar regressão de F1."
+            ) from None
         new_hash = metadata["auditoria_dados"].get("sha256_preparados", {}).get("validacao.csv")
         old_hash = old["auditoria_dados"].get("sha256_preparados", {}).get("validacao.csv")
         if new_hash and new_hash == old_hash:

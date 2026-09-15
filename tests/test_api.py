@@ -394,9 +394,11 @@ def test_limita_corpo_antes_do_parse_inclusive_sem_content_length(
 
 
 def test_api_carrega_artefato_real_e_classifica_apos_aquecimento(tmp_path):
+    import json
+
     import pandas as pd
 
-    from medical_classifier.training import fit_release, promote_release
+    from medical_classifier.training import fit_release, promote_release, write_json
 
     palavras = ["tumor cancer", "stomach bowel", "brain nerve", "heart artery", "fever pain"]
     frame = pd.DataFrame(
@@ -407,6 +409,15 @@ def test_api_carrega_artefato_real_e_classifica_apos_aquecimento(tmp_path):
         ]
     )
     release = fit_release(frame, frame, tmp_path, {"origem": "teste sintético"})
+    metadata = json.loads((release / "metadata.json").read_text("utf-8"))
+    # Evidências sintéticas vinculadas: este teste verifica o carregamento pela API.
+    write_json(
+        release / "avaliacao.json",
+        {"aprovado": True, "versao_modelo": release.name, "sha256_modelos": metadata["sha256"]},
+    )
+    write_json(
+        release / "latencia.json", {"fator_aceleracao_p50": 2.0, "versao_modelo": release.name}
+    )
     promote_release(release, tmp_path)
     with TestClient(api.create_app(model_dir=tmp_path)) as client:
         assert client.get("/ready").status_code == 200

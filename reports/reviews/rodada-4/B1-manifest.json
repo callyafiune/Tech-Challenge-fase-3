@@ -1,0 +1,64 @@
+{
+  "bloco": "B1",
+  "modelo_solicitado": "fable",
+  "inicio_utc": "2026-09-14T23:15:22.497096+00:00",
+  "arquivos": [
+    {
+      "caminho": "src/medical_classifier/training.py",
+      "sha256": "e71b3b99dcdd9c6c5f815ab64236752d7dcf21dcb96a6c7bda68a515f9824042",
+      "bytes": 8883
+    },
+    {
+      "caminho": "tests/test_model.py",
+      "sha256": "928664ac44963fbde26f655f5a7a3d2347f2ecf5daa3d43f422c09c3c8734b8e",
+      "bytes": 6257
+    },
+    {
+      "caminho": "scripts/diagnosticar_paridade.py",
+      "sha256": "4b1221959ed53a44f8b83a8de431c84dcc2199d6bf557aff8cc261da2f9ed77f",
+      "bytes": 11146
+    },
+    {
+      "caminho": ".github/workflows/diagnostico-paridade.yml",
+      "sha256": "7267b722c5149e62a872bfe3edb67ce0b57ef6420395e3b1d9a632285243737e",
+      "bytes": 1552
+    },
+    {
+      "caminho": "docs/diagnostico_paridade.md",
+      "sha256": "1779adf9d0d1b5bc60bfbd2f5911549df4d172e02443ce6741b31a6c97f50d43",
+      "bytes": 3933
+    },
+    {
+      "caminho": "reports/diagnostico_paridade/correcao_paridade_verificada.json",
+      "sha256": "06ca6834afd3639769aaa56645b7cd6dc02dbdd51d3b1b0c6e938653c4ef167b",
+      "bytes": 1090
+    }
+  ],
+  "prompt_sha256": "4ad4b2bb62ccf581077a4f5bc93f0ba1e8242b36fece2c0b9cf5a3ea8a5271b0",
+  "contexto": "Revisão suplementar B1/B4 após causa raiz reproduzida no CI: conversor 1.19.1 perde bigramas quando componente unigram fica fora do vocabulário. Correção por cópia profunda e tuplas explícitas somente na exportação, sem alterar baseline, pesos, limites ou hiperparâmetros. Dois testes de regressão, 78 testes locais aprovados, candidato remoto reconvertido na validação e teste com erro abaixo de 3.2e-7. Revisar correção e ferramenta diagnóstica isolada, sem ampliar escopo. Modelo solicitado permanece fable.",
+  "timeout_segundos": 600,
+  "aprovacao_automatica": false,
+  "fim_utc": "2026-09-14T23:15:25.127368+00:00",
+  "comando": [
+    "C:\\Users\\Cally\\.vscode\\extensions\\anthropic.claude-code-2.1.270-win32-x64\\resources\\native-binary\\claude.exe",
+    "-p",
+    "--model",
+    "fable",
+    "--effort",
+    "medium",
+    "--safe-mode",
+    "--strict-mcp-config",
+    "--permission-mode",
+    "dontAsk",
+    "--tools",
+    "",
+    "--output-format",
+    "json",
+    "--no-session-persistence"
+  ],
+  "modelos_reportados": [],
+  "exit_code": 1,
+  "codigo_saida_script": 1,
+  "stderr": "",
+  "erro": "A CLI reportou is_error=true; a revisão não foi concluída."
+}

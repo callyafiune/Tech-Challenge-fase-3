@@ -15,17 +15,27 @@ from medical_classifier.training import export_onnx, fit_release, promote_releas
 from tests.test_data import corpus
 
 
-def test_exportacao_preserva_bigrama_sem_unigrama_no_vocabulario(tmp_path, monkeypatch):
-    """O corte do vocabulário pode preservar o bigrama e remover uma de suas palavras."""
-    vocabulario = {
-        "gadopentetate": 0,
-        "gadopentetate dimeglumine": 1,
-        "bowel": 2,
-        "nerve": 3,
-        "artery": 4,
-        "fever": 5,
-        "bowel nerve": 6,
-    }
+def registrar_avaliacao_sintetica(release):
+    """Prepara evidências sintéticas para testar somente o contrato de publicação."""
+    metadata = json.loads((release / "metadata.json").read_text("utf-8"))
+    training.write_json(
+        release / "avaliacao.json",
+        {"aprovado": True, "versao_modelo": release.name, "sha256_modelos": metadata["sha256"]},
+    )
+    training.write_json(
+        release / "latencia.json", {"fator_aceleracao_p50": 2.0, "versao_modelo": release.name}
+    )
+
+
+@pytest.mark.parametrize("unigrama_preservado", ["gadopentetate", "dimeglumine", None])
+def test_exportacao_preserva_bigrama_sem_unigrama_no_vocabulario(
+    tmp_path, monkeypatch, unigrama_preservado
+):
+    """O corte pode remover o primeiro, o segundo ou ambos os componentes do bigrama."""
+    termos = ["gadopentetate dimeglumine", "bowel", "nerve", "artery", "fever", "bowel nerve"]
+    if unigrama_preservado is not None:
+        termos.append(unigrama_preservado)
+    vocabulario = {termo: indice for indice, termo in enumerate(termos)}
     monkeypatch.setattr(
         training, "TfidfVectorizer", partial(TfidfVectorizer, vocabulary=vocabulario)
     )
@@ -59,6 +69,34 @@ def test_exportacao_nao_modifica_vocabulario_idf_coeficientes_ou_predicoes(tmp_p
     np.testing.assert_array_equal(modelo.predict_proba(textos), probabilidades)
 
 
+@pytest.mark.parametrize(
+    ("parametro", "valor"),
+    [
+        ("token_pattern", r"(?u)\b\w\w+\b"),
+        ("analyzer", "char"),
+        ("tokenizer", str.split),
+        ("preprocessor", str.lower),
+    ],
+)
+def test_exportacao_rejeita_tokenizacao_fora_do_contrato(tmp_path, parametro, valor):
+    frame = corpus(10)
+    release = fit_release(frame, frame, tmp_path, {}, min_macro_f1=0)
+    modelo = joblib.load(release / "baseline.joblib")
+    modelo.named_steps["tfidf"].set_params(**{parametro: valor})
+    with pytest.raises(ValueError, match="tokenização suportada"):
+        export_onnx(modelo)
+
+
+def test_exportacao_rejeita_componentes_ambiguos_no_vocabulario(tmp_path):
+    frame = corpus(10)
+    release = fit_release(frame, frame, tmp_path, {}, min_macro_f1=0)
+    modelo = joblib.load(release / "baseline.joblib")
+    vocabulario = modelo.named_steps["tfidf"].vocabulary_
+    vocabulario["tumor  cancer"] = vocabulario.pop(next(iter(vocabulario)))
+    with pytest.raises(ValueError, match="vocabulário incompatível"):
+        export_onnx(modelo)
+
+
 def test_paridade_com_frequencias_de_palavras_distintas(tmp_path):
     palavras = ["tumor cancer", "stomach bowel", "brain nerve", "heart artery", "fever pain"]
     frame = pd.DataFrame(
@@ -85,6 +123,7 @@ def test_exportacao_preserva_probabilidades_e_publicacao(tmp_path):
     frame = corpus(15)
     release = fit_release(frame, frame, tmp_path, {"origem": "teste sintético"}, min_macro_f1=0)
     assert not (tmp_path / "current.json").exists()
+    registrar_avaliacao_sintetica(release)
     promote_release(release, tmp_path)
     original = Predictor(tmp_path, "sklearn")
     otimizado = Predictor(tmp_path, "onnx")
@@ -97,6 +136,7 @@ def test_exportacao_preserva_probabilidades_e_publicacao(tmp_path):
 def test_rejeita_artefato_alterado(tmp_path):
     frame = corpus(10)
     release = fit_release(frame, frame, tmp_path, {}, min_macro_f1=0)
+    registrar_avaliacao_sintetica(release)
     promote_release(release, tmp_path)
     (release / "model.onnx").write_bytes(b"corrompido")
     with pytest.raises(ValueError, match="integridade"):
@@ -112,8 +152,10 @@ def test_rejeita_ponteiro_fora_da_raiz(tmp_path):
 def test_publicacao_exige_aprovacao_e_preserva_anterior(tmp_path):
     frame = corpus(10)
     first = fit_release(frame, frame, tmp_path, {}, min_macro_f1=0)
+    registrar_avaliacao_sintetica(first)
     promote_release(first, tmp_path)
     second = fit_release(frame, frame, tmp_path, {}, min_macro_f1=0)
+    registrar_avaliacao_sintetica(second)
     metadata = json.loads((second / "metadata.json").read_text("utf-8"))
     metadata["aprovado"] = False
     (second / "metadata.json").write_text(json.dumps(metadata), "utf-8")
@@ -124,6 +166,63 @@ def test_publicacao_exige_aprovacao_e_preserva_anterior(tmp_path):
     (second / "metadata.json").write_text(json.dumps(metadata), "utf-8")
     promote_release(second, tmp_path)
     assert json.loads((tmp_path / "current.json").read_text())["anterior"].endswith(first.name)
+
+
+def test_publicacao_bloqueia_versao_atual_sem_metadados(tmp_path):
+    """A perda dos metadados atuais não pode dispensar o gate de regressão de F1."""
+    frame = corpus(10)
+    atual = fit_release(frame, frame, tmp_path, {}, min_macro_f1=0)
+    registrar_avaliacao_sintetica(atual)
+    promote_release(atual, tmp_path)
+    candidato = fit_release(frame, frame, tmp_path, {}, min_macro_f1=0)
+    registrar_avaliacao_sintetica(candidato)
+    ponteiro_anterior = (tmp_path / "current.json").read_bytes()
+    (atual / "metadata.json").unlink()
+
+    with pytest.raises(ValueError, match="versão atual.*metadados"):
+        promote_release(candidato, tmp_path)
+
+    assert (tmp_path / "current.json").read_bytes() == ponteiro_anterior
+
+
+@pytest.mark.parametrize(
+    ("arquivo", "alteracoes", "mensagem"),
+    [
+        ("avaliacao.json", None, "relatórios de avaliação completos"),
+        ("latencia.json", None, "relatórios de avaliação completos"),
+        ("avaliacao.json", {"aprovado": False}, "avaliação aprovada"),
+        ("avaliacao.json", {"aprovado": "true"}, "avaliação aprovada"),
+        ("avaliacao.json", {"versao_modelo": "outra"}, "não correspondem"),
+        ("avaliacao.json", {"sha256_modelos": {}}, "não correspondem"),
+        ("latencia.json", {"versao_modelo": "outra"}, "não correspondem"),
+        ("latencia.json", {"fator_aceleracao_p50": 0.8}, "ganho de latência"),
+        ("latencia.json", {"fator_aceleracao_p50": None}, "ganho de latência"),
+        ("latencia.json", {"fator_aceleracao_p50": True}, "ganho de latência"),
+        ("latencia.json", {"fator_aceleracao_p50": "2.0"}, "ganho de latência"),
+        ("latencia.json", {"fator_aceleracao_p50": float("nan")}, "ganho de latência"),
+        ("latencia.json", {"fator_aceleracao_p50": float("inf")}, "ganho de latência"),
+    ],
+)
+def test_publicacao_revalida_evidencias_e_preserva_ponteiro(
+    tmp_path, arquivo, alteracoes, mensagem
+):
+    """Nem a promoção repetida pode aceitar evidências ausentes, trocadas ou reprovadas."""
+    frame = corpus(10)
+    release = fit_release(frame, frame, tmp_path, {}, min_macro_f1=0)
+    registrar_avaliacao_sintetica(release)
+    promote_release(release, tmp_path)
+    ponteiro_anterior = (tmp_path / "current.json").read_bytes()
+    evidencia = release / arquivo
+    if alteracoes is None:
+        evidencia.unlink()
+    else:
+        conteudo = json.loads(evidencia.read_text("utf-8"))
+        conteudo.update(alteracoes)
+        # Simula inclusive um JSON externo com NaN/Infinity, vedados pelo gravador do projeto.
+        evidencia.write_text(json.dumps(conteudo), "utf-8")
+    with pytest.raises(ValueError, match=mensagem):
+        promote_release(release, tmp_path)
+    assert (tmp_path / "current.json").read_bytes() == ponteiro_anterior
 
 
 def test_falha_de_treino_nao_deixa_release_parcial(tmp_path):
@@ -144,10 +243,12 @@ def test_publicacao_bloqueia_regressao_na_mesma_validacao(tmp_path):
     )
     audit = {"sha256_preparados": {"validacao.csv": "mesma-particao"}}
     first = fit_release(frame, frame, tmp_path, audit)
+    registrar_avaliacao_sintetica(first)
     promote_release(first, tmp_path)
     wrong = frame.copy()
     wrong.condition_label = wrong.condition_label.map({1: 2, 2: 1, 3: 3, 4: 4, 5: 5})
     second = fit_release(wrong, frame, tmp_path, audit, min_macro_f1=0)
+    registrar_avaliacao_sintetica(second)
     with pytest.raises(ValueError, match="regressão"):
         promote_release(second, tmp_path)
     assert Predictor(tmp_path).version == first.name

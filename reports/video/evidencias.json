@@ -1,8 +1,16 @@
 {
-    "inicio_utc":  "2026-09-14T22:49:39.9892528Z",
+    "inicio_utc":  "2026-09-15T02:19:23.3052853Z",
     "tipo":  "Apresentação STAR com narração sintética e imagens programáticas",
     "voz":  "Microsoft Maria Desktop",
     "velocidade_voz":  3,
+    "ambiente_geracao":  {
+                             "powershell":  "5.1.26100.9444",
+                             "sistema":  "Windows",
+                             "desenho":  "System.Drawing",
+                             "voz":  "Microsoft Maria Desktop",
+                             "ffmpeg":  "ffmpeg version 8.1-full_build-www.gyan.dev Copyright (c) 2000-2026 the FFmpeg developers",
+                             "ffprobe":  "ffprobe version 8.1-full_build-www.gyan.dev Copyright (c) 2007-2026 the FFmpeg developers"
+                         },
     "versao_modelo":  "20260914T214327-e6c68fc4",
     "api_url":  "http://127.0.0.1:8004",
     "api_prontidao":  {
@@ -26,62 +34,438 @@
     "api_erro":  null,
     "api_mesma_versao_relatorios":  true,
     "stack_verificada":  true,
-    "versao_modelo_stack":  "20260914T221243-003d412d",
-    "estado_stack":  "Stack API, Prometheus e Grafana: verificada; versão 20260914T221243-003d412d.",
+    "versao_modelo_stack":  "20260914T232434-92cce529",
+    "estado_stack":  "Stack API, Prometheus e Grafana: verificada; versão 20260914T232434-92cce529.",
     "dag_verificada":  true,
-    "versao_modelo_dag":  "20260914T221243-003d412d",
+    "versao_modelo_dag":  "20260914T232434-92cce529",
     "estado_dag":  "Airflow: quatro tarefas concluídas em uma execução real identificada.",
     "airflow_execucao":  {
                              "sucesso":  true,
+                             "fonte_git":  "fa821effafcac0aece10b705e248365793384354",
+                             "verificado_em_utc":  "2026-09-14T23:27:44.664720+00:00",
+                             "training_sha256_host_e_container":  "e71b3b99dcdd9c6c5f815ab64236752d7dcf21dcb96a6c7bda68a515f9824042",
+                             "api_prontidao":  {
+                                                   "status":  "pronto",
+                                                   "versao_modelo":  "20260914T232434-92cce529",
+                                                   "backend":  "onnx"
+                                               },
+                             "modelo":  {
+                                            "release":  "releases/20260914T232434-92cce529",
+                                            "anterior":  "releases/20260914T221243-003d412d"
+                                        },
                              "dag_id":  "retreino_medico",
-                             "run_id":  "manual__2026-09-14T00:00:00+00:00",
+                             "run_id":  "manual__2026-09-14T23:30:00+00:00",
                              "tarefas":  {
                                              "ingestao":  "success",
                                              "treinamento":  "success",
                                              "validacao":  "success",
                                              "publicacao":  "success"
                                          },
-                             "airflow":  "2.11.0",
-                             "modelo":  {
-                                            "release":  "releases/20260914T221243-003d412d",
-                                            "anterior":  "releases/20260914T214809-a767fe94"
-                                        },
-                             "verificado_em":  "2026-09-14T22:31:13.640625+00:00",
-                             "fonte_estado":  "reports/docker/airflow_dag_state.json",
-                             "fontes_execucao":  "reports/docker/airflow_execution_steps.json",
-                             "saude":  {
-                                           "dag_processor":  {
-                                                                 "latest_dag_processor_heartbeat":  null,
-                                                                 "status":  null
-                                                             },
-                                           "metadatabase":  {
-                                                                "status":  "healthy"
-                                                            },
-                                           "scheduler":  {
-                                                             "latest_scheduler_heartbeat":  "2026-09-14T22:31:13.625184+00:00",
-                                                             "status":  "healthy"
-                                                         },
-                                           "triggerer":  {
-                                                             "latest_triggerer_heartbeat":  "2026-09-14T22:31:12.824031+00:00",
-                                                             "status":  "healthy"
-                                                         }
+                             "airflow_saude":  {
+                                                   "dag_processor":  {
+                                                                         "latest_dag_processor_heartbeat":  null,
+                                                                         "status":  null
+                                                                     },
+                                                   "metadatabase":  {
+                                                                        "status":  "healthy"
+                                                                    },
+                                                   "scheduler":  {
+                                                                     "latest_scheduler_heartbeat":  "2026-09-14T23:27:42.230955+00:00",
+                                                                     "status":  "healthy"
+                                                                 },
+                                                   "triggerer":  {
+                                                                     "latest_triggerer_heartbeat":  "2026-09-14T23:27:42.119261+00:00",
+                                                                     "status":  "healthy"
+                                                                 }
+                                               },
+                             "imagens":  [
+                                             {
+                                                 "id":  "sha256:db8c57bbab5a6522cd581d8dd91fa2e7b14d37182f1f30f4fc00564bdb671cd7",
+                                                 "tags":  [
+                                                              "medical-classifier:local"
+                                                          ],
+                                                 "criada_em":  "2026-09-14T23:21:41.118062322Z"
+                                             },
+                                             {
+                                                 "id":  "sha256:4aa335021699aa872540e4ae7b96cd43add525a5223fe95279bcb93c75991b50",
+                                                 "tags":  [
+                                                              "medical-classifier-airflow:local"
+                                                          ],
+                                                 "criada_em":  "2026-09-14T23:23:16.250135722Z"
+                                             }
+                                         ],
+                             "servicos":  [
+                                              {
+                                                  "nome":  "medical-classifier-api-1",
+                                                  "imagem_id":  "sha256:db8c57bbab5a6522cd581d8dd91fa2e7b14d37182f1f30f4fc00564bdb671cd7",
+                                                  "usuario":  "10001:10001",
+                                                  "status":  "running",
+                                                  "saude":  "healthy",
+                                                  "portas":  {
+                                                                 "8000/tcp":  [
+                                                                                  {
+                                                                                      "HostIp":  "127.0.0.1",
+                                                                                      "HostPort":  "8000"
+                                                                                  }
+                                                                              ]
+                                                             }
+                                              },
+                                              {
+                                                  "nome":  "medical-classifier-prometheus-1",
+                                                  "imagem_id":  "sha256:5ce7540c3c00ef4ab0c9d2c995c6a5b9c421f44b4a115d97a2c7af3b1c21cbb0",
+                                                  "usuario":  "nobody",
+                                                  "status":  "running",
+                                                  "saude":  "healthy",
+                                                  "portas":  {
+                                                                 "9090/tcp":  [
+                                                                                  {
+                                                                                      "HostIp":  "127.0.0.1",
+                                                                                      "HostPort":  "9090"
+                                                                                  }
+                                                                              ]
+                                                             }
+                                              },
+                                              {
+                                                  "nome":  "medical-classifier-grafana-1",
+                                                  "imagem_id":  "sha256:f772d434e8fab0049deb2b1b30abd43342bcfca1537614aa8d36080232cf4283",
+                                                  "usuario":  "472",
+                                                  "status":  "running",
+                                                  "saude":  "healthy",
+                                                  "portas":  {
+                                                                 "3000/tcp":  [
+                                                                                  {
+                                                                                      "HostIp":  "127.0.0.1",
+                                                                                      "HostPort":  "3000"
+                                                                                  }
+                                                                              ]
+                                                             }
+                                              },
+                                              {
+                                                  "nome":  "medical-classifier-airflow-airflow-1",
+                                                  "imagem_id":  "sha256:4aa335021699aa872540e4ae7b96cd43add525a5223fe95279bcb93c75991b50",
+                                                  "usuario":  "10001:0",
+                                                  "status":  "running",
+                                                  "saude":  "healthy",
+                                                  "portas":  {
+                                                                 "8080/tcp":  [
+                                                                                  {
+                                                                                      "HostIp":  "127.0.0.1",
+                                                                                      "HostPort":  "8080"
+                                                                                  }
+                                                                              ]
+                                                             }
+                                              }
+                                          ],
+                             "etapas":  [
+                                            {
+                                                "etapa":  "build_app",
+                                                "comando":  [
+                                                                "docker",
+                                                                "compose",
+                                                                "build",
+                                                                "api"
+                                                            ],
+                                                "fonte_git":  "fa821effafcac0aece10b705e248365793384354",
+                                                "inicio_utc":  "2026-09-14T23:21:28.577163+00:00",
+                                                "livre_inicio_mib":  2851.5,
+                                                "interrompido_por_espaco":  false,
+                                                "codigo_saida":  0,
+                                                "segundos":  16.02,
+                                                "fim_utc":  "2026-09-14T23:21:44.587666+00:00",
+                                                "livre_fim_mib":  2850.9
+                                            },
+                                            {
+                                                "etapa":  "build_airflow",
+                                                "comando":  [
+                                                                "docker",
+                                                                "compose",
+                                                                "-f",
+                                                                "docker-compose.airflow.yml",
+                                                                "build",
+                                                                "airflow"
+                                                            ],
+                                                "fonte_git":  "fa821effafcac0aece10b705e248365793384354",
+                                                "inicio_utc":  "2026-09-14T23:22:01.122032+00:00",
+                                                "livre_inicio_mib":  2849.9,
+                                                "interrompido_por_espaco":  false,
+                                                "codigo_saida":  0,
+                                                "segundos":  92.03,
+                                                "fim_utc":  "2026-09-14T23:23:33.154250+00:00",
+                                                "livre_fim_mib":  2849.6
+                                            },
+                                            {
+                                                "etapa":  "iniciar_airflow",
+                                                "comando":  [
+                                                                "docker",
+                                                                "compose",
+                                                                "-f",
+                                                                "docker-compose.airflow.yml",
+                                                                "up",
+                                                                "-d",
+                                                                "--no-deps",
+                                                                "--force-recreate",
+                                                                "--wait",
+                                                                "--wait-timeout",
+                                                                "180",
+                                                                "airflow"
+                                                            ],
+                                                "fonte_git":  "fa821effafcac0aece10b705e248365793384354",
+                                                "inicio_utc":  "2026-09-14T23:23:47.703181+00:00",
+                                                "livre_inicio_mib":  2849.5,
+                                                "interrompido_por_espaco":  false,
+                                                "codigo_saida":  0,
+                                                "segundos":  26.02,
+                                                "fim_utc":  "2026-09-14T23:24:13.718298+00:00",
+                                                "livre_fim_mib":  2850.8
+                                            },
+                                            {
+                                                "etapa":  "executar_dag",
+                                                "comando":  [
+                                                                "docker",
+                                                                "compose",
+                                                                "-f",
+                                                                "docker-compose.airflow.yml",
+                                                                "exec",
+                                                                "-T",
+                                                                "airflow",
+                                                                "airflow",
+                                                                "dags",
+                                                                "test",
+                                                                "retreino_medico",
+                                                                "2026-09-14T23:30:00+00:00"
+                                                            ],
+                                                "fonte_git":  "fa821effafcac0aece10b705e248365793384354",
+                                                "inicio_utc":  "2026-09-14T23:24:21.471815+00:00",
+                                                "livre_inicio_mib":  2850.8,
+                                                "interrompido_por_espaco":  false,
+                                                "codigo_saida":  0,
+                                                "segundos":  30.02,
+                                                "fim_utc":  "2026-09-14T23:24:51.488574+00:00",
+                                                "livre_fim_mib":  2884.8
+                                            },
+                                            {
+                                                "etapa":  "estado_dag",
+                                                "comando":  [
+                                                                "docker",
+                                                                "compose",
+                                                                "-f",
+                                                                "docker-compose.airflow.yml",
+                                                                "exec",
+                                                                "-T",
+                                                                "airflow",
+                                                                "python",
+                                                                "-"
+                                                            ],
+                                                "fonte_git":  "fa821effafcac0aece10b705e248365793384354",
+                                                "inicio_utc":  "2026-09-14T23:24:59.168730+00:00",
+                                                "livre_inicio_mib":  2884.8,
+                                                "interrompido_por_espaco":  false,
+                                                "codigo_saida":  0,
+                                                "segundos":  6.0,
+                                                "fim_utc":  "2026-09-14T23:25:05.178019+00:00",
+                                                "livre_fim_mib":  2884.8
+                                            },
+                                            {
+                                                "etapa":  "atualizar_api",
+                                                "comando":  [
+                                                                "docker",
+                                                                "compose",
+                                                                "up",
+                                                                "-d",
+                                                                "--no-deps",
+                                                                "--force-recreate",
+                                                                "--wait",
+                                                                "--wait-timeout",
+                                                                "120",
+                                                                "api"
+                                                            ],
+                                                "fonte_git":  "fa821effafcac0aece10b705e248365793384354",
+                                                "inicio_utc":  "2026-09-14T23:25:16.851389+00:00",
+                                                "livre_inicio_mib":  2888.0,
+                                                "interrompido_por_espaco":  false,
+                                                "codigo_saida":  0,
+                                                "segundos":  8.0,
+                                                "fim_utc":  "2026-09-14T23:25:24.860640+00:00",
+                                                "livre_fim_mib":  2887.9
+                                            },
+                                            {
+                                                "etapa":  "smoke_stack",
+                                                "comando":  [
+                                                                ".\\.venv\\Scripts\\python.exe",
+                                                                "scripts/smoke_stack.py",
+                                                                "--requisicoes",
+                                                                "20",
+                                                                "--tempo-limite",
+                                                                "120",
+                                                                "--saida",
+                                                                ".local/pos_correcao/smoke_stack.json"
+                                                            ],
+                                                "fonte_git":  "fa821effafcac0aece10b705e248365793384354",
+                                                "inicio_utc":  "2026-09-14T23:25:52.231698+00:00",
+                                                "livre_inicio_mib":  2904.3,
+                                                "interrompido_por_espaco":  false,
+                                                "codigo_saida":  0,
+                                                "segundos":  32.01,
+                                                "fim_utc":  "2026-09-14T23:26:24.251156+00:00",
+                                                "livre_fim_mib":  2903.8
+                                            }
+                                        ],
+                             "smoke":  {
+                                           "sucesso":  true,
+                                           "api":  {
+                                                       "health":  200,
+                                                       "ready":  200,
+                                                       "predict":  200,
+                                                       "entrada_invalida":  422
+                                                   },
+                                           "modelo":  {
+                                                          "versao":  "20260914T232434-92cce529",
+                                                          "backend":  "onnx"
+                                                      },
+                                           "requisicoes_validas_geradas":  21,
+                                           "prometheus":  {
+                                                              "coleta":  "ativa",
+                                                              "histograma":  "presente",
+                                                              "janela_taxa":  "20s",
+                                                              "instante_metricas_utc":  "2026-09-14T23:26:22.460000+00:00"
+                                                          },
+                                           "grafana":  {
+                                                           "fonte_dados":  "OK",
+                                                           "dashboard":  "medical-classifier",
+                                                           "paineis":  [
+                                                                           {
+                                                                               "titulo":  "Requisições de classificação",
+                                                                               "consultas":  [
+                                                                                                 {
+                                                                                                     "expressao":  "sum(http_requests_total{job=\"medical-api\",route=\"/predict\",method=\"POST\"}) or vector(0)",
+                                                                                                     "valor":  23.0
+                                                                                                 }
+                                                                                             ]
+                                                                           },
+                                                                           {
+                                                                               "titulo":  "Coleta de métricas",
+                                                                               "consultas":  [
+                                                                                                 {
+                                                                                                     "expressao":  "up{job=\"medical-api\"}",
+                                                                                                     "valor":  1.0
+                                                                                                 }
+                                                                                             ]
+                                                                           },
+                                                                           {
+                                                                               "titulo":  "Modelo pronto",
+                                                                               "consultas":  [
+                                                                                                 {
+                                                                                                     "expressao":  "(model_ready{job=\"medical-api\"} * on(job, instance) up{job=\"medical-api\"}) or vector(0)",
+                                                                                                     "valor":  1.0
+                                                                                                 }
+                                                                                             ]
+                                                                           },
+                                                                           {
+                                                                               "titulo":  "Chamadas de classificação por segundo",
+                                                                               "consultas":  [
+                                                                                                 {
+                                                                                                     "expressao":  "sum(rate(http_requests_total{job=\"medical-api\",route=\"/predict\",method=\"POST\"}[20s])) or vector(0)",
+                                                                                                     "valor":  0.7333333333333334
+                                                                                                 }
+                                                                                             ]
+                                                                           },
+                                                                           {
+                                                                               "titulo":  "Latência HTTP p50 e p95",
+                                                                               "consultas":  [
+                                                                                                 {
+                                                                                                     "expressao":  "histogram_quantile(0.50, sum by (le) (rate(http_request_duration_seconds_bucket{job=\"medical-api\",route=\"/predict\",method=\"POST\"}[20s])))",
+                                                                                                     "valor":  0.0025
+                                                                                                 },
+                                                                                                 {
+                                                                                                     "expressao":  "histogram_quantile(0.95, sum by (le) (rate(http_request_duration_seconds_bucket{job=\"medical-api\",route=\"/predict\",method=\"POST\"}[20s])))",
+                                                                                                     "valor":  0.00475
+                                                                                                 }
+                                                                                             ]
+                                                                           },
+                                                                           {
+                                                                               "titulo":  "Proporção de erros de classificação",
+                                                                               "consultas":  [
+                                                                                                 {
+                                                                                                     "expressao":  "100 * (sum(rate(http_requests_total{job=\"medical-api\",route=\"/predict\",method=\"POST\",status=~\"4..\"}[20s])) or vector(0)) / clamp_min((sum(rate(http_requests_total{job=\"medical-api\",route=\"/predict\",method=\"POST\"}[20s])) or vector(0)), 1e-9)",
+                                                                                                     "valor":  9.090909090909092
+                                                                                                 },
+                                                                                                 {
+                                                                                                     "expressao":  "100 * (sum(rate(http_requests_total{job=\"medical-api\",route=\"/predict\",method=\"POST\",status=~\"5..\"}[20s])) or vector(0)) / clamp_min((sum(rate(http_requests_total{job=\"medical-api\",route=\"/predict\",method=\"POST\"}[20s])) or vector(0)), 1e-9)",
+                                                                                                     "valor":  0.0
+                                                                                                 }
+                                                                                             ]
+                                                                           }
+                                                                       ]
+                                                       },
+                                           "inicio_utc":  "2026-09-14T23:25:52.480911+00:00",
+                                           "fim_utc":  "2026-09-14T23:26:22.989914+00:00"
                                        },
-                             "inicializacao_segundos":  25.28,
-                             "disco_livre_mib":  1638.6,
-                             "dag_verificado_em":  "2026-09-14T22:15:39.629801+00:00",
-                             "saude_consultada_em":  "2026-09-14T22:31:13.640625+00:00"
+                             "livre_host_mib":  2881.1,
+                             "video_historico_sha256":  "41d55f255cd0df8a2b06c6a3de0735d12e94a37e31b1cdbd62fe55c6751b1992",
+                             "observacao_tempo":  "A data lógica futura identifica a DAG; o tempo real do comando está em executar_dag.json."
                          },
     "airflow_construcao":  {
-                               "comando":  "docker compose -f docker-compose.airflow.yml build airflow",
-                               "codigo_saida":  0,
+                               "etapa":  "build_airflow",
+                               "comando":  [
+                                               "docker",
+                                               "compose",
+                                               "-f",
+                                               "docker-compose.airflow.yml",
+                                               "build",
+                                               "airflow"
+                                           ],
+                               "fonte_git":  "fa821effafcac0aece10b705e248365793384354",
+                               "inicio_utc":  "2026-09-14T23:22:01.122032+00:00",
+                               "livre_inicio_mib":  2849.9,
                                "interrompido_por_espaco":  false,
-                               "segundos":  124.2,
-                               "livre_host_mib":  1775.1,
-                               "log":  "C:\\estudos\\Tech-Challenge-fase-3\\reports\\docker\\build_airflow.log"
+                               "codigo_saida":  0,
+                               "segundos":  92.03,
+                               "fim_utc":  "2026-09-14T23:23:33.154250+00:00",
+                               "livre_fim_mib":  2849.6
                            },
-    "fonte_airflow_construcao":  "reports/docker/build_airflow_state.json",
-    "palavras_narracao":  451,
+    "fonte_airflow_construcao":  "reports/docker/pos_correcao/integracao_verificada.json",
+    "fonte_stack":  "reports/docker/pos_correcao/smoke_stack.json",
+    "fonte_airflow_execucao":  "reports/docker/pos_correcao/integracao_verificada.json",
+    "monitoramento":  {
+                          "versao_modelo":  "20260914T232434-92cce529",
+                          "instante_utc":  "2026-09-15T01:59:57.3170000Z",
+                          "volume":  289.0,
+                          "p95_segundos":  0.004750000000000001,
+                          "erros_4xx_percentual":  10.0,
+                          "quantidade_paineis":  6,
+                          "consultas":  [
+                                            {
+                                                "expressao":  "sum(http_requests_total{job=\"medical-api\",route=\"/predict\",method=\"POST\"}) or vector(0)",
+                                                "valor":  289.0
+                                            },
+                                            {
+                                                "expressao":  "histogram_quantile(0.95, sum by (le) (rate(http_request_duration_seconds_bucket{job=\"medical-api\",route=\"/predict\",method=\"POST\"}[20s])))",
+                                                "valor":  0.004750000000000001
+                                            },
+                                            {
+                                                "expressao":  "100 * (sum(rate(http_requests_total{job=\"medical-api\",route=\"/predict\",method=\"POST\",status=~\"4..\"}[20s])) or vector(0)) / clamp_min((sum(rate(http_requests_total{job=\"medical-api\",route=\"/predict\",method=\"POST\"}[20s])) or vector(0)), 1e-9)",
+                                                "valor":  10.0
+                                            }
+                                        ],
+                          "configuracao":  "Counter/Histogram em /metrics; Prometheus api:8000 a cada 5 s; Grafana prometheus-medical em http://prometheus:9090"
+                      },
+    "ci":  {
+               "execucao":  34908437830,
+               "commit":  "3a7ad7f052aa2ad246d399e4743f435bde8af221",
+               "url":  "https://github.com/callyafiune/Tech-Challenge-fase-3/actions/runs/34908437830",
+               "passos":  [
+                              "Executar análise estática e testes",
+                              "Construir a aplicação e o Airflow",
+                              "Executar as quatro etapas sobre o corpus público",
+                              "Verificar a stack de ponta a ponta"
+                          ]
+           },
+    "palavras_narracao":  525,
     "fontes":  [
+                   {
+                       "sha256":  "32ed26c8aa41dda6f7e279d793ea53f7d0e6f75f3bd00c556f3984625638f500",
+                       "caminho":  "scripts/gerar_video.ps1"
+                   },
                    {
                        "sha256":  "bfda7b50116e744a336e4c4dbd34bc1e068dff614aa54612acc4e0edf840a53f",
                        "caminho":  "reports/qualidade.json"
@@ -103,16 +487,36 @@
                        "caminho":  ".github/workflows/ci.yml"
                    },
                    {
-                       "sha256":  "349b77bd37623ed538430cf31382f36395e49f97cfe7b8dfed0c1c801b5a1986",
-                       "caminho":  "reports/smoke_stack.json"
+                       "sha256":  "8d16cc422c7e7718a6b4c4d9bc5a989f2796b9d2ac9825f4514f7dc95bab2ace",
+                       "caminho":  "monitoring/prometheus/prometheus.yml"
                    },
                    {
-                       "sha256":  "9df31502cb4bfae4a4f6a2a1c334a245767a7a42f64bee0d4610fb8be40a3142",
-                       "caminho":  "reports/airflow_execucao.json"
+                       "sha256":  "d897736549b5b4d4ed5e79b2907e08d0433f6bc16588a4c30063aaac751a483d",
+                       "caminho":  "monitoring/grafana/provisioning/datasources/prometheus.yml"
                    },
                    {
-                       "sha256":  "c9effd7adb7f5e4d2324182193a24e99039e1b41f87cb8e2e99d9339ad0ba383",
-                       "caminho":  "reports/docker/build_airflow_state.json"
+                       "sha256":  "a8c8f6f7494cf14820a93e8bc2155d4043b10524bf0bcdc618c5b764d2e0a24b",
+                       "caminho":  "monitoring/grafana/provisioning/dashboards/dashboard.yml"
+                   },
+                   {
+                       "sha256":  "526fc2cd79f36dccfba73dcaa2fb830f9ae9c203b9c504c78d0114a47a5cf872",
+                       "caminho":  "monitoring/grafana/dashboards/medical-classifier.json"
+                   },
+                   {
+                       "sha256":  "dba7e3fc04cccd15bd60b6f69008ae6d557d120b5992eb81b096332dadb5e65f",
+                       "caminho":  "reports/ci/34908437830/execucao.json"
+                   },
+                   {
+                       "sha256":  "b6e03e9e4e7d139453471f62fddb89c5bf725ccf1d3f9ff23987fc3d027bfae9",
+                       "caminho":  "reports/docker/pos_correcao/benchmark_http_execucao.json"
+                   },
+                   {
+                       "sha256":  "236437e60628ce2393bf5f67a1fd053e5fcdfdeb0c8474759250c1841961ee47",
+                       "caminho":  "reports/docker/pos_correcao/smoke_stack.json"
+                   },
+                   {
+                       "sha256":  "e325d20219efa9d9061e8aad98d54da2c38fd41a6d73d479ac9fd8d632169df4",
+                       "caminho":  "reports/docker/pos_correcao/integracao_verificada.json"
                    }
                ],
     "cenas":  [
@@ -120,10 +524,10 @@
                       "numero":  1,
                       "titulo":  "Classificação médica, com evidências",
                       "imagem":  "C:\\estudos\\Tech-Challenge-fase-3\\.local\\video\\cena-01.png",
-                      "narracao":  "Esta apresentação reúne evidências capturadas nesta execução do Tech Challenge, fase três. O cenário exige um serviço capaz de organizar textos médicos com resposta rápida e operação observável. Usamos resumos públicos em inglês e classificamos cinco condições médicas. A adaptação foi autorizada para o projeto. Trata-se de uma demonstração acadêmica: as saídas não representam urgência, diagnóstico ou orientação clínica.",
+                      "narracao":  "Esta apresentação reúne evidências registradas do Tech Challenge, fase três. O cenário exige um serviço capaz de organizar textos médicos com resposta rápida e operação observável. Usamos resumos públicos em inglês e classificamos cinco condições médicas. A adaptação foi autorizada para o projeto. Trata-se de uma demonstração acadêmica: as saídas não representam urgência, diagnóstico ou orientação clínica.",
                       "audio":  "C:\\estudos\\Tech-Challenge-fase-3\\.local\\video\\cena-01.wav",
                       "video":  "C:\\estudos\\Tech-Challenge-fase-3\\.local\\video\\cena-01.mp4",
-                      "duracao_segundos":  29.279501
+                      "duracao_segundos":  28.532245
                   },
                   {
                       "numero":  2,
@@ -154,35 +558,44 @@
                   },
                   {
                       "numero":  5,
-                      "titulo":  "Configuração e execução são evidências diferentes",
+                      "titulo":  "Execuções com versão e origem",
                       "imagem":  "C:\\estudos\\Tech-Challenge-fase-3\\.local\\video\\cena-05.png",
-                      "narracao":  "A verificação real da stack retornou sucesso. Ela enviou chamadas, consultou métricas e confirmou a fonte de dados e os painéis do Grafana. O relatório do Airflow confirma as quatro tarefas concluídas: ingestão, treinamento, validação e publicação, em uma execução identificada. O cartão mostra esses estados reais. O workflow do GitHub aparece como código estático; sua execução remota não é presumida. Essas evidências operacionais incluem outra versão publicada no Docker, distinta da versão do host mostrada nos gráficos.",
+                      "narracao":  "O Airflow concluiu ingestão, treinamento, validação e publicação na execução identificada. O GitHub Actions também concluiu testes, imagens, DAG e verificação da stack. O cartão vincula esse resultado ao commit registrado; ele não comprova revisões posteriores. A operação Docker usa outra versão, distinta do host nos gráficos históricos.",
                       "audio":  "C:\\estudos\\Tech-Challenge-fase-3\\.local\\video\\cena-05.wav",
                       "video":  "C:\\estudos\\Tech-Challenge-fase-3\\.local\\video\\cena-05.mp4",
-                      "duracao_segundos":  36.005397
+                      "duracao_segundos":  24.166077
                   },
                   {
                       "numero":  6,
-                      "titulo":  "Otimização medida no mesmo modelo",
+                      "titulo":  "Da requisição ao painel",
                       "imagem":  "C:\\estudos\\Tech-Challenge-fase-3\\.local\\video\\cena-06.png",
-                      "narracao":  "No teste oficial, a acurácia foi 63,92 por cento e a F1 macro foi 0,6385. A conversão preservou as classes na validação. Em 400 medições por motor, ONNX foi 3,52 vezes mais rápido na mediana da inferência completa. No HTTP local, fora de Docker, a aceleração foi 1,45 vezes em 200 chamadas por motor. Rede, validação e serialização reduzem o ganho observado na API.",
+                      "narracao":  "Na API, Counter conta requisições e Histogram mede duração. O endpoint barra metrics expõe essas séries. O Prometheus consulta api, porta oito mil, a cada cinco segundos. No Grafana, a fonte Prometheus e o dashboard são provisionados por arquivos YAML e JSON. Os painéis acompanham volume, latência e erros. Este cartão apresenta consultas reais: 289 chamadas acumuladas, p95 estimado de 4,75 milissegundos e 10,00 por cento de erros quatrocentos. As entradas inválidas foram intencionais. O p95 vem de faixas do histograma numa janela de vinte segundos; difere do benchmark HTTP a seguir.",
                       "audio":  "C:\\estudos\\Tech-Challenge-fase-3\\.local\\video\\cena-06.wav",
                       "video":  "C:\\estudos\\Tech-Challenge-fase-3\\.local\\video\\cena-06.mp4",
-                      "duracao_segundos":  34.065714
+                      "duracao_segundos":  46.585397
                   },
                   {
                       "numero":  7,
-                      "titulo":  "Reproduzir, verificar e declarar os limites",
+                      "titulo":  "Otimização medida no mesmo modelo",
                       "imagem":  "C:\\estudos\\Tech-Challenge-fase-3\\.local\\video\\cena-07.png",
-                      "narracao":  "O principal aprendizado é que otimização precisa preservar comportamento e demonstrar ganho no caminho realmente medido. Os artefatos, relatórios e respostas da API registram a versão usada. Revisões adversariais por bloco ajudam a encontrar falhas e exigem análise dos achados. Os limites de infraestrutura permanecem explícitos. Esta apresentação usa narração sintética e foi montada a partir de evidências locais, sem simular telas de sistemas ou validação clínica.",
+                      "narracao":  "Otimizamos a execução convertendo TF-IDF e regressão logística para ONNX. Neste ensaio histórico do host, a acurácia no teste foi 63,92 por cento e a F1 macro foi 0,6385. A conversão preservou as classes na validação. Em 400 medições por motor, ONNX foi 3,52 vezes mais rápido na mediana da inferência completa. No HTTP local, fora de Docker, a aceleração foi 1,45 vezes em 200 chamadas por motor. Rede, validação e serialização reduzem o ganho observado na API.",
                       "audio":  "C:\\estudos\\Tech-Challenge-fase-3\\.local\\video\\cena-07.wav",
                       "video":  "C:\\estudos\\Tech-Challenge-fase-3\\.local\\video\\cena-07.mp4",
+                      "duracao_segundos":  41.200816
+                  },
+                  {
+                      "numero":  8,
+                      "titulo":  "Reproduzir, verificar e declarar os limites",
+                      "imagem":  "C:\\estudos\\Tech-Challenge-fase-3\\.local\\video\\cena-08.png",
+                      "narracao":  "O principal aprendizado é que otimização precisa preservar comportamento e demonstrar ganho no caminho realmente medido. Os artefatos, relatórios e respostas da API registram a versão usada. Revisões adversariais por bloco ajudam a encontrar falhas e exigem análise dos achados. Os limites de infraestrutura permanecem explícitos. Esta apresentação usa narração sintética e foi montada a partir de evidências locais, sem simular telas de sistemas ou validação clínica.",
+                      "audio":  "C:\\estudos\\Tech-Challenge-fase-3\\.local\\video\\cena-08.wav",
+                      "video":  "C:\\estudos\\Tech-Challenge-fase-3\\.local\\video\\cena-08.mp4",
                       "duracao_segundos":  31.423583
                   }
               ],
-    "fim_utc":  "2026-09-14T22:49:51.2440872Z",
+    "fim_utc":  "2026-09-15T02:19:31.2505362Z",
     "arquivo_final":  "reports/video/apresentacao_star.mp4",
-    "sha256_video":  "41d55f255cd0df8a2b06c6a3de0735d12e94a37e31b1cdbd62fe55c6751b1992",
+    "sha256_video":  "b0d2a97a00c592bcdba4e06517e56aed15dcf81233a55d75d01f624587027fe7",
     "ffprobe":  {
                     "programs":  [
 
@@ -201,10 +614,10 @@
                                     }
                                 ],
                     "format":  {
-                                   "duration":  "219.626395",
-                                   "size":  "2409644"
+                                   "duration":  "260.876417",
+                                   "size":  "2849611"
                                }
                 },
-    "temporarios_bytes":  13566569,
+    "temporarios_bytes":  15809919,
     "duracao_validada":  true
 }

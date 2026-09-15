@@ -38,7 +38,7 @@ if (-not (Test-Path -LiteralPath .env)) {
 }
 ```
 
-O arquivo `requirements.lock` fixa as dependências da aplicação e de desenvolvimento. Após alterar o pacote em `src/`, repita a instalação com `--no-deps --no-build-isolation .` para atualizar o código instalado. Em Linux/macOS, crie o ambiente com `python3.11 -m venv .venv` e substitua `.\.venv\Scripts\python.exe` por `.venv/bin/python` nos comandos abaixo.
+O arquivo `requirements.lock` fixa as dependências da aplicação e de desenvolvimento. Após alterar o pacote em `src/`, repita a instalação com `--no-deps --no-build-isolation .` para atualizar o código instalado. Os exemplos desta página usam **PowerShell no Windows**. Para Bash ou Zsh, siga o [guia de execução Linux/macOS](docs/execucao_linux_macos.md), que adapta também variáveis de ambiente, cópia de arquivos e chamadas HTTP. A geração do vídeo usa ferramentas específicas do Windows; seus pré-requisitos estão no [roteiro STAR](docs/roteiro_star.md).
 
 ## Dados e treinamento
 
@@ -91,6 +91,8 @@ Depois do retreino real no Airflow, a versão Docker `20260914T221243-003d412d` 
 A [verificação da stack](reports/smoke_stack.json) usa essa versão `20260914T221243-003d412d` e confirmou a API, coleta Prometheus, seis painéis Grafana e oito consultas.
 
 Após a correção do exportador ONNX, a [nova integração local](reports/docker/pos_correcao/integracao_verificada.json) publicou **`20260914T232434-92cce529`**, atualmente carregada na API Docker. As quatro tarefas Airflow terminaram em 30,02 segundos; API, Prometheus, Grafana e Airflow ficaram saudáveis. O [novo smoke](reports/docker/pos_correcao/smoke_stack.json) confirmou seis painéis e oito consultas. No [benchmark em processo dessa versão](reports/docker/pos_correcao/latencia_modelo.json), o p50 foi **1,317915 → 0,346612 ms**, ou **3,80×**. Os resultados anteriores e o vídeo preservam suas versões e ambientes de medição.
+
+A [comparação HTTP atualizada](reports/docker/pos_correcao/latencia_http.json) usa essa mesma versão Docker `20260914T232434-92cce529`, em 8001/scikit-learn e 8000/ONNX: p50 de **5,68385 → 4,5707 ms**, ou **1,24×**, e p95 de **7,60603 → 5,816795 ms**, ou **1,31×**. Foram 200 chamadas por motor e 20 de aquecimento. O ganho menor que o da inferência em processo inclui o custo HTTP e não é tratado como regressão entre versões.
 
 ## Executar a API
 
@@ -148,7 +150,7 @@ Depois que o pipeline terminar, interrompa apenas o acompanhamento de logs com `
 ```powershell
 docker compose ps -a
 Invoke-RestMethod http://127.0.0.1:8000/ready
-.\.venv\Scripts\python.exe scripts/smoke_stack.py --requisicoes 100 --tempo-limite 120
+.\.venv\Scripts\python.exe scripts/smoke_stack.py --requisicoes 100 --tempo-limite 120 --saida reports/smoke_stack_novo.json
 ```
 
 | Serviço | Endereço local | Acesso |
@@ -160,6 +162,8 @@ Invoke-RestMethod http://127.0.0.1:8000/ready
 As portas são publicadas somente em loopback. A credencial mostrada é exclusiva da demonstração local. O Grafana provisiona o dashboard **Classificação médica — operação da API**, com seis painéis: total de classificações, coleta disponível, prontidão do modelo, chamadas por segundo, latência p50/p95 e percentuais de erros 4xx/5xx.
 
 O script de verificação envia chamadas válidas e inválidas, aguarda coletas, consulta Prometheus, verifica a conexão da fonte Grafana e executa as consultas dos painéis. O [resultado observado](reports/smoke_stack.json) confirmou 21 chamadas válidas, rejeições HTTP 422 e dados para os seis painéis. A [evidência de container](reports/docker/execucao_stack.json) também confirmou treino sem rede com corpus já disponível, usuário `10001:10001`, raiz somente para leitura e reinício com reutilização da mesma versão. A instrumentação usa rotas normalizadas e não adiciona textos clínicos aos logs ou rótulos. Detalhes: [monitoring/README.md](monitoring/README.md).
+
+O comando acima grava uma nova medição sem sobrescrever o smoke histórico. A captura usada na versão atual do vídeo está em [pos_correcao/smoke_stack.json](reports/docker/pos_correcao/smoke_stack.json); seu comando, argumentos, horários e código de saída estão na etapa `smoke_stack_atual` do [registro de execução](reports/docker/pos_correcao/benchmark_http_execucao.json). Ela foi coletada depois do benchmark HTTP e inclui chamadas acumuladas anteriores ao smoke.
 
 ```powershell
 docker compose down
@@ -207,6 +211,7 @@ O experimento já registrado em `latencia_http_local.json` usou ONNX em 8000 e s
 | Latência HTTP local observada | `reports/latencia_http_local.json` | APIs do host, fora de Docker |
 | Latência em processo no Docker | `reports/docker/latencia_modelo.json` | Modelo dentro do container, sem HTTP |
 | Latência HTTP Docker observada | `reports/docker/latencia_http.json` | Duas APIs em containers, mesma versão publicada pelo Airflow |
+| Latência HTTP Docker após a correção | `reports/docker/pos_correcao/latencia_http.json` | Duas APIs da versão operacional `20260914T232434-92cce529` |
 | Nova comparação HTTP | `reports/latencia_http.json` | Saída padrão do script; identificar os endpoints e o ambiente da execução |
 | Stack operacional | `reports/smoke_stack.json` | Confirmar prontidão, chamadas, coleta e consultas do dashboard |
 
@@ -262,7 +267,7 @@ A falha de paridade reproduzida no [CI 34906533919](reports/ci/34906533919/execu
 
 O [agente orquestrador](.claude/agents/orquestrador.md) acompanha os cinco blocos e chama a revisão adversarial Claude Code `fable` usando [scripts/review_block.py](scripts/review_block.py). Os pareceres e manifestos em `reports/reviews/` registram fontes, hashes e modelo reportado. Retorno zero da CLI não significa aprovação automática: os achados são analisados e as correções verificadas.
 
-O [registro das revisões adversariais](docs/revisoes_adversariais.md) relaciona achados, correções e decisões justificadas. A suíte consolidada em [testes.xml](reports/testes.xml) registra **78 casos aprovados, um ignorado e nenhuma falha ou erro**. O caso ignorado exige o ambiente Airflow; a execução real da DAG está registrada separadamente.
+O [registro das revisões adversariais](docs/revisoes_adversariais.md) relaciona achados, correções e decisões justificadas. A suíte consolidada em [testes.xml](reports/testes.xml) registra **104 casos aprovados, um ignorado e nenhuma falha ou erro**. O caso ignorado exige o ambiente Airflow; a execução real da DAG está registrada separadamente. A promoção direta e o reuso exigem avaliação aprovada, versões e hashes correspondentes e ganho de latência finito, preservando o ponteiro quando uma dessas verificações falha. Uma nova validação revoga a aprovação anterior do candidato; a versão ativa é preservada e exige outro candidato para revalidação.
 
 ## Relação com a fase 2 e documentação
 
@@ -271,7 +276,8 @@ Foram mantidos os padrões úteis da fase 2: estrutura de pacote Python, comando
 - [Arquitetura e decisões de operação](docs/arquitetura.md).
 - [Documentação do modelo, dados e limitações](docs/model_card.md).
 - [Plano dos blocos](docs/plano_implementacao.md) e [matriz de rastreabilidade](docs/matriz_rastreabilidade.md).
-- [Roteiro STAR](docs/roteiro_star.md) e [apresentação MP4 com narração sintética](reports/video/apresentacao_star.mp4). O vídeo tem **3min40s**, sete cartões programáticos e voz Microsoft Maria Desktop. O [manifesto](reports/video/evidencias.json) registra 219,626395 segundos, H.264/AAC, 1280×720, hashes das fontes e capturas reais. O MP4 integra os arquivos deste repositório.
+- [Conferência dos seis critérios de avaliação](docs/auditoria_criterios.md), com evidências e correções da auditoria.
+- [Roteiro STAR](docs/roteiro_star.md) e [apresentação MP4 com narração sintética](reports/video/apresentacao_star.mp4). O vídeo tem **4min21s**, oito cartões programáticos e voz Microsoft Maria Desktop. Inclui configuração e consultas reais de monitoração, DAG concluída e CI identificado pelo commit. O [manifesto](reports/video/evidencias.json) registra 260,876417 segundos, H.264/AAC, 1280×720 e hashes do gerador/fontes. As [67 verificações](reports/video/verificacao.json) e a [inspeção dos oito quadros](reports/video/inspecao_visual.json) correspondem ao MP4 atual, que integra os arquivos deste repositório.
 
 ## Resolução de problemas
 

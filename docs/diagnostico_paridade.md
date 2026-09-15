@@ -20,7 +20,7 @@ O [candidato remoto foi reconvertido](../reports/diagnostico_paridade/correcao_p
 
 ## Confirmação remota da correção
 
-O [CI 34908437830](../reports/ci/34908437830/execucao.json) terminou com sucesso no commit `3a7ad7f`: 78 testes aprovados, DAG completa, publicação do modelo, stack verificada e imagem preservada. A versão `20260914T232314-d0a18808` obteve aceleração p50 de 3,11× no runner; os critérios originais foram mantidos.
+O [CI 34908437830](../reports/ci/34908437830/execucao.json) terminou com sucesso no commit `3a7ad7f`: [78 testes aprovados](../reports/ci/34908437830/testes.xml), [DAG completa](../reports/ci/34908437830/airflow-dag.log), publicação do modelo, [stack verificada](../reports/ci/34908437830/smoke_stack.json) e imagem preservada. A versão `20260914T232314-d0a18808` obteve [aceleração p50 de 3,11×](../reports/ci/34908437830/20260914T000000-latencia_modelo.json) no runner; os critérios originais foram mantidos.
 
 O [diagnóstico 34908437779](../reports/diagnostico_paridade/34908437779/execucao.json) também terminou em dois runners independentes. No [runner 1](../reports/diagnostico_paridade/34908437779-runner-1.json), o controle com a biblioteca voltou a apresentar erro de 0,009424, enquanto a exportação corrigida apresentou 1,93 × 10⁻⁷. No [runner 2](../reports/diagnostico_paridade/34908437779-runner-2.json), ambos apresentaram 1,92 × 10⁻⁷. Os dois candidatos corrigidos tiveram concordância de classes de 100% e nenhuma amostra acima do limite de `1e-4`. O controle do segundo runner confirma que a falha depende do vocabulário selecionado no ambiente; não é necessário que todo treino a reproduza.
 
@@ -31,3 +31,19 @@ O [diagnóstico 34908437779](../reports/diagnostico_paridade/34908437779/execuca
 ```
 
 Use um diretório de saída novo a cada execução. O script preserva o candidato e seus grafos intermediários, produz `diagnostico.json` e não publica `current.json`. Uma execução bem-sucedida do diagnóstico significa que a investigação terminou; o campo `erro_gate_treinamento` informa se o candidato passou pelo critério. `pipeline_do_projeto` usa a exportação corrigida; `pipeline_conversor_padrao`, TF-IDF isolado e alternativas MatMul conservam a heurística da biblioteca como controle. No GitHub, os candidatos são artefatos temporários retidos por sete dias; os relatórios desta investigação foram preservados no repositório.
+
+O workflow de diagnóstico roda manualmente ou quando seu script/configuração muda. Essa é uma ferramenta de investigação; o CI principal verifica a paridade em cada alteração de código. `PYTHONHASHSEED` fixa a semente do processo, mas não controla o despacho SIMD do NumPy. A [execução com recursos de CPU restringidos](../reports/diagnostico_paridade/comando_validacao_mesmo_ambiente.json) registra separadamente `NPY_DISABLE_CPU_FEATURES` e `OPENBLAS_CORETYPE`; ela reproduziu o controle divergente e a conversão corrigida no mesmo ajuste.
+
+## Reconverter um candidato existente sem novo treinamento
+
+O [verificador de reconversão](../scripts/verificar_reconversao.py) recebe um baseline confiável já ajustado, seu grafo anterior e os CSVs preparados. Exporta o grafo corrigido somente em memória, compara validação/teste e confere que o estado do baseline e os arquivos originais foram preservados. Não treina, publica ou modifica o candidato. O [novo relatório reproduzível](../reports/diagnostico_paridade/reconversao_reproduzivel.json) repete os valores do candidato remoto cujo baseline tem SHA-256 `18a7c6799a4aa4c661c7ab534636146a10b77e5c924febd83e9ca75a303effa3`.
+
+O vínculo entre esse baseline e o ONNX anterior de SHA-256 `e9a489eaba6e275fe682f7328538fa32b53d7ff1fbec63a2db9840a541c2b5fb` está no campo `artefatos_sha256` do [diagnóstico remoto original](../reports/diagnostico_paridade/34907294809-runner-1.json). O script genérico registra os arquivos fornecidos; a associação histórica depende desse manifesto, sem inferir a origem apenas pela proximidade das probabilidades.
+
+Depois de baixar e extrair o artefato do diagnóstico em `.local/candidato-remoto/`, e de preparar os dados com o pipeline:
+
+```powershell
+.\.venv\Scripts\python.exe scripts/verificar_reconversao.py --baseline .local/candidato-remoto/candidato/baseline.joblib --onnx-anterior .local/candidato-remoto/candidato/model.onnx --dados data/prepared --saida .local/reconversao-nova.json
+```
+
+O comando exige um arquivo de saída novo. Se o artefato temporário tiver expirado, o script de diagnóstico pode produzir outro candidato e seu controle `conversor_padrao.onnx`; use esse controle em `--onnx-anterior`. A reconversão compara os mesmos pesos em cada execução. Um candidato novo não necessariamente terá o vocabulário que reproduziu a falha histórica.

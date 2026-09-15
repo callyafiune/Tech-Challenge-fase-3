@@ -1,44 +1,84 @@
 {
   "bloco": "B1",
   "modelo_solicitado": "fable",
-  "inicio_utc": "2026-09-14T23:15:22.497096+00:00",
+  "inicio_utc": "2026-09-15T02:12:49.612892+00:00",
   "arquivos": [
     {
       "caminho": "src/medical_classifier/training.py",
-      "sha256": "e71b3b99dcdd9c6c5f815ab64236752d7dcf21dcb96a6c7bda68a515f9824042",
-      "bytes": 8883
+      "sha256": "6bb896d8252258dce8fe34ae2ba0cbd66027d91cb6f45a55717541e5077d6d2d",
+      "bytes": 11445
+    },
+    {
+      "caminho": "src/medical_classifier/serving.py",
+      "sha256": "f1c4256d366e95b87473175fcc6bdab20c6e706816574702983324904aa5d0e4",
+      "bytes": 2853
+    },
+    {
+      "caminho": "src/medical_classifier/pipeline.py",
+      "sha256": "fd1fed000a89cbfd4e00835273dcbdf7d9261bda877f66cab8809a85e401817d",
+      "bytes": 6641
+    },
+    {
+      "caminho": "src/medical_classifier/airflow_tasks.py",
+      "sha256": "c9d2e64b1a061a6878c63e7b791822bee5794a77e1c7cff4029c2f56301f2afa",
+      "bytes": 4815
     },
     {
       "caminho": "tests/test_model.py",
-      "sha256": "928664ac44963fbde26f655f5a7a3d2347f2ecf5daa3d43f422c09c3c8734b8e",
-      "bytes": 6257
+      "sha256": "0debcea89a99e60485dc52190eb12d0a3db53ab75950376dc27f11bf49f2ee70",
+      "bytes": 10548
     },
     {
-      "caminho": "scripts/diagnosticar_paridade.py",
-      "sha256": "4b1221959ed53a44f8b83a8de431c84dcc2199d6bf557aff8cc261da2f9ed77f",
-      "bytes": 11146
+      "caminho": "tests/test_pipeline.py",
+      "sha256": "4f11aee29dbe53d0c4e738f97587d47418cb57e4c8b629212f04ffb6f2c5be4c",
+      "bytes": 5086
     },
     {
-      "caminho": ".github/workflows/diagnostico-paridade.yml",
-      "sha256": "7267b722c5149e62a872bfe3edb67ce0b57ef6420395e3b1d9a632285243737e",
-      "bytes": 1552
+      "caminho": "tests/test_api.py",
+      "sha256": "ed6108e21191e9287b6fec135f5ca7a2e546547cd52866c78de191241bcc3c01",
+      "bytes": 18547
+    },
+    {
+      "caminho": "scripts/verificar_reconversao.py",
+      "sha256": "5e3d15cc501129fe21bdcb14d55d260eefcacfcd27a00124bf0f43d8dba487de",
+      "bytes": 5082
     },
     {
       "caminho": "docs/diagnostico_paridade.md",
-      "sha256": "1779adf9d0d1b5bc60bfbd2f5911549df4d172e02443ce6741b31a6c97f50d43",
-      "bytes": 3933
+      "sha256": "845454baaa99d7b538d8f1f67af635c2afc3a42be033ee5db7d7075f791aaed8",
+      "bytes": 7194
     },
     {
-      "caminho": "reports/diagnostico_paridade/correcao_paridade_verificada.json",
-      "sha256": "06ca6834afd3639769aaa56645b7cd6dc02dbdd51d3b1b0c6e938653c4ef167b",
-      "bytes": 1090
+      "caminho": "reports/diagnostico_paridade/reconversao_reproduzivel.json",
+      "sha256": "1f01b61ec6c4f87a2fb9b68cc4f2426b7a31088cd234bb392c7c7047fa30e9c0",
+      "bytes": 1401
+    },
+    {
+      "caminho": "reports/testes.xml",
+      "sha256": "8bf6ab5f1f8485351d7bd69f21c8424b6d5fb879a25f23c08fb7a083280596b5",
+      "bytes": 12927
+    },
+    {
+      "caminho": "reports/ci/34908437830/testes.xml",
+      "sha256": "3bf83489c562866e3a164a75939a70a9c4850d92a0cea29aec5aff2232913666",
+      "bytes": 9690
+    },
+    {
+      "caminho": "reports/ci/34908437830/20260914T000000-latencia_modelo.json",
+      "sha256": "912b27e8c06dbd89bd33506e29b07dab15866c425746944f19a54102aac81341",
+      "bytes": 722
+    },
+    {
+      "caminho": "reports/ci/34908437830/execucao.json",
+      "sha256": "dba7e3fc04cccd15bd60b6f69008ae6d557d120b5992eb81b096332dadb5e65f",
+      "bytes": 5613
     }
   ],
-  "prompt_sha256": "4ad4b2bb62ccf581077a4f5bc93f0ba1e8242b36fece2c0b9cf5a3ea8a5271b0",
-  "contexto": "Revisão suplementar B1/B4 após causa raiz reproduzida no CI: conversor 1.19.1 perde bigramas quando componente unigram fica fora do vocabulário. Correção por cópia profunda e tuplas explícitas somente na exportação, sem alterar baseline, pesos, limites ou hiperparâmetros. Dois testes de regressão, 78 testes locais aprovados, candidato remoto reconvertido na validação e teste com erro abaixo de 3.2e-7. Revisar correção e ferramenta diagnóstica isolada, sem ampliar escopo. Modelo solicitado permanece fable.",
+  "prompt_sha256": "f231045dc9ccf16f5a722d9f5170c472512927769a133a807b3c356aab2491d9",
+  "contexto": "Revisao apos correcoes dos achados B1: promocao direta e reuso agora exigem avaliacao aprovada, versao e SHA vinculados, fator p50 finito maior ou igual a1, antes do retorno idempotente. Teste real reproduziu publicacao apos validate reprovar latencia antes da correcao. Exportador rejeita tokenizacao ambigua, cobre falta do primeiro/segundo/ambos unigramas e valida argmax no teste oficial. Nova reconversao reproduzivel sem fit nem alteracao dos artefatos originais confirma erros anteriores 0.009424/0.033729 e novos erros inferiores a1e-6. Suite local atual99passaram1ignorado; CI34908437830 refere-se ao commit anterior3a7 explicitamente, novo CI sera executado apos esta revisao. Fixtures sinteticas existem somente para isolar o contrato de API/promocao; pipeline real completo coberto pelo CI. Workflow diagnostico tem gatilhos limitados por projeto, enquanto CI principal sempre verifica paridade. Priorize falhas concretas, separe faltas de evidencia dos defeitos.",
   "timeout_segundos": 600,
   "aprovacao_automatica": false,
-  "fim_utc": "2026-09-14T23:15:25.127368+00:00",
+  "fim_utc": "2026-09-15T02:16:07.210455+00:00",
   "comando": [
     "C:\\Users\\Cally\\.vscode\\extensions\\anthropic.claude-code-2.1.270-win32-x64\\resources\\native-binary\\claude.exe",
     "-p",
@@ -56,9 +96,12 @@
     "json",
     "--no-session-persistence"
   ],
-  "modelos_reportados": [],
-  "exit_code": 1,
-  "codigo_saida_script": 1,
+  "modelos_reportados": [
+    "claude-fable-5-1",
+    "claude-haiku-4-5-20251001"
+  ],
+  "exit_code": 0,
+  "codigo_saida_script": 0,
   "stderr": "",
-  "erro": "A CLI reportou is_error=true; a revisão não foi concluída."
+  "erro": ""
 }
