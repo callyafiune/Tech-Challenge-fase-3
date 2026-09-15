@@ -1,0 +1,121 @@
+{
+  "id": 35033470146,
+  "name": "Diagnóstico da paridade ONNX",
+  "status": "completed",
+  "conclusion": "success",
+  "head_sha": "34e478123d94854198cf4788580b40d539d8d86c",
+  "head_branch": "main",
+  "html_url": "https://github.com/callyafiune/Tech-Challenge-fase-3/actions/runs/35033470146",
+  "created_at": "2026-09-15T22:57:44Z",
+  "updated_at": "2026-09-15T22:58:44Z",
+  "run_started_at": "2026-09-15T22:57:44Z",
+  "run_attempt": 1,
+  "jobs": [
+    {
+      "id": 104597111066,
+      "name": "Comparar camadas no runner 1",
+      "status": "completed",
+      "conclusion": "success",
+      "run_id": 35033470146,
+      "logs_url": null,
+      "steps": [
+        {
+          "name": "Set up job",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 1
+        },
+        {
+          "name": "Obter o código",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 2
+        },
+        {
+          "name": "Construir a mesma imagem do pipeline",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 3
+        },
+        {
+          "name": "Comparar transformações sem publicar modelo",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 4
+        },
+        {
+          "name": "Preservar diagnóstico e candidato isolado",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 5
+        },
+        {
+          "name": "Post Obter o código",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 10
+        },
+        {
+          "name": "Complete job",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 11
+        }
+      ]
+    },
+    {
+      "id": 104597111235,
+      "name": "Comparar camadas no runner 2",
+      "status": "completed",
+      "conclusion": "success",
+      "run_id": 35033470146,
+      "logs_url": null,
+      "steps": [
+        {
+          "name": "Set up job",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 1
+        },
+        {
+          "name": "Obter o código",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 2
+        },
+        {
+          "name": "Construir a mesma imagem do pipeline",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 3
+        },
+        {
+          "name": "Comparar transformações sem publicar modelo",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 4
+        },
+        {
+          "name": "Preservar diagnóstico e candidato isolado",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 5
+        },
+        {
+          "name": "Post Obter o código",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 10
+        },
+        {
+          "name": "Complete job",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 11
+        }
+      ]
+    }
+  ],
+  "commit_local_equivalente": "13e89a08a6d33cfd0af6291a0a4824d9f233dcd6",
+  "arvore_fonte": "affdc3337b704c42efe73e4fb84527d7c951f8af"
+}

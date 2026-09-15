@@ -88,7 +88,7 @@ O ganho foi **3,80× em processo** e **1,24× no HTTP**. Fontes: [qualidade](rep
 .\.venv\Scripts\python.exe -m pytest -q
 ```
 
-O [CI](.github/workflows/ci.yml) verifica código, imagens, DAG e stack. A [entrega manual](.github/workflows/entrega.yml) publica no GHCR a imagem de runtime validada pelo CI, sem reconstruí-la; essa publicação ainda não foi comprovada. Para reproduzir os benchmarks HTTP, siga o [guia](docs/execucao_linux_macos.md#benchmark-http-em-docker) com o ambiente completo de treinamento e desenvolvimento.
+O [CI](https://github.com/callyafiune/Tech-Challenge-fase-3/actions/runs/35033470421) verifica código, imagens, DAG e stack. A [entrega manual](.github/workflows/entrega.yml) publica no GHCR a imagem de runtime validada pelo CI, sem reconstruí-la; essa publicação ainda não foi comprovada. Para reproduzir os benchmarks HTTP, siga o [guia](docs/execucao_linux_macos.md#benchmark-http-em-docker) com o ambiente completo de treinamento e desenvolvimento.
 
 ## Arquitetura de produção
 

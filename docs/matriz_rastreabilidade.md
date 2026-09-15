@@ -1,6 +1,6 @@
 # Matriz de rastreabilidade — Tech Challenge Fase 3
 
-O objetivo autorizado é classificar cinco condições médicas do Medical Abstracts TC Corpus, em vez de urgência. Esta matriz registra evidências de 14/09/2026. **Implementado** significa arquivo ou comportamento existente; **verificado** exige execução registrada; **em andamento** indica trabalho que continua até haver evidência. Configuração de serviço não equivale a serviço executado.
+O projeto classifica cinco condições médicas do Medical Abstracts TC Corpus. Esta matriz registra evidências de 14 e 15/09/2026. **Implementado** significa arquivo ou comportamento existente; **verificado** exige execução registrada; **em andamento** indica trabalho que continua até haver evidência. Configuração de serviço não equivale a serviço executado. A separação das imagens passou nas verificações locais e no CI completo `35033470421`, commit `34e4781`.
 
 ## Requisitos e estado
 
@@ -9,17 +9,17 @@ O objetivo autorizado é classificar cinco condições médicas do Medical Abstr
 | R01 | Corpus real com pelo menos 2.000 exemplos | B1 | 5.285 de ajuste, 1.322 de validação e 2.888 de teste em [qualidade.json](../reports/qualidade.json) | Verificado |
 | R02 | Classificador textual leve | B1 | TF-IDF + regressão logística, artefatos e versão identificados | Verificado |
 | R03 | Técnica de otimização | B1 | ONNX com paridade na validação | Verificado |
-| R04 | Ganho de latência | B1 | 3,52× no p50 histórico do host; 3,80× em processo e 1,24× via HTTP na versão Docker `92cce529` | Verificado |
+| R04 | Ganho de latência | B1 | 3,52× no p50 histórico do host; 3,80× em processo na versão Docker `92cce529`; 1,35× no HTTP após separar as imagens | Verificado nos ensaios identificados |
 | R05 | Qualidade e impacto da otimização | B1 | Teste: acurácia 0,639197, F1 macro 0,638544, iguais nos dois motores | Verificado |
 | R06 | API FastAPI recebe texto e retorna classe | B2 | `/predict` 200 e versão no [smoke](../reports/smoke_stack.json) | Verificado |
 | R07 | Validação e prontidão | B2 | Limites de entrada, testes API e prontidão 1 → 0 → 1 em parada/reinício | Verificado |
-| R08 | Dockerfile funcional | B3 | [Imagem, treino sem rede, usuário e permissões](../reports/docker/execucao_stack.json) | Verificado |
-| R09 | Baseline de latência HTTP | B3 | [Host histórico](../reports/latencia_http_local.json): 1,45×; [Docker atual](../reports/docker/pos_correcao/latencia_http.json): 1,24× no p50 | Verificado nos dois ambientes |
-| R10 | CI/CD por push | B4 | [CI completo após a auditoria](../reports/ci/34921095963/execucao.json), commit `6426446` | CI verificado; publicação GHCR não executada |
-| R11 | Pelo menos duas automações | B4 | Lint, 104 testes aprovados, builds, DAG e stack concluídos no CI 34921095963 | Verificado no ambiente local e no GitHub Actions |
-| R12 | DAG ingestão → treino → salvamento | B4 | [Quatro tarefas concluídas](../reports/airflow_execucao.json), publicação real e standalone consultado | Verificado |
+| R08 | Dockerfile funcional | B3 | [Builds locais](../reports/docker/imagem_enxuta/builds.json), [dependências](../reports/docker/imagem_enxuta/verificacoes.json) e [CI dos perfis e Airflow](../reports/ci/35033470421/execucao.json) | Verificado localmente e no CI |
+| R09 | Baseline de latência HTTP | B3 | [Host histórico](../reports/latencia_http_local.json): 1,45×; [Docker com imagens separadas](../reports/docker/imagem_enxuta/latencia_http.json): 1,35× no p50 | Verificado nos dois ambientes |
+| R10 | CI/CD por push | B4 | [CI 35033470421](../reports/ci/35033470421/execucao.json), commit `34e4781`, com imagens separadas | CI completo verificado; GHCR não executado |
+| R11 | Pelo menos duas automações | B4 | Lint, 107 testes aprovados, builds, inventários, DAG e stack no CI 35033470421 | Verificado localmente e no GitHub Actions |
+| R12 | DAG ingestão → treino → salvamento | B4 | [Quatro tarefas no CI atual](../reports/ci/35033470421/airflow-dag.log), publicação real e [execução local histórica](../reports/airflow_execucao.json) | Verificado |
 | R13 | Instrumentação Prometheus | B2 | Contadores, histograma, prontidão e consultas reais | Verificado |
-| R14 | API + Prometheus + Grafana via Compose | B3 | [Smoke da stack](../reports/smoke_stack.json) com `sucesso=true` | Verificado |
+| R14 | API + Prometheus + Grafana via Compose | B3 | [Smoke com as imagens separadas](../reports/docker/imagem_enxuta/smoke_stack.json) com `sucesso=true` | Verificado localmente |
 | R15 | Grafana com três ou mais painéis | B3 | Seis painéis e oito consultas reais | Verificado |
 | R16 | Decisão de nuvem e batch/tempo real | B5 | [Arquitetura AWS proposta](arquitetura.md) | Documentado; AWS não provisionada |
 | R17 | Instruções de reprodução | B5 | [README](../README.md), dados, API, Compose e Airflow; execuções locais registradas | Documentado e verificado localmente |
@@ -27,8 +27,8 @@ O objetivo autorizado é classificar cinco condições médicas do Medical Abstr
 | R19 | Vídeo STAR até cinco minutos | B5 | [MP4](../reports/video/apresentacao_star.mp4) com 260,876417 segundos, oito cenas e monitoração explicada; [manifesto](../reports/video/evidencias.json) | Vídeo verificado e publicado no próprio repositório |
 | R20 | Condições médicas, sem urgência | B1/B2/B5 | Classes, API e [documentação do modelo](model_card.md) | Implementado e documentado |
 | R21 | Português Brasil | Todos | Documentação, comentários e relatórios explicativos | Verificado por inspeção |
-| R22 | Orquestrador e revisão fable por bloco | Todos | Agente, comando e 17 pareceres concluídos; B1 e B5 com quatro pareceres válidos cada | Verificado; correções e limites documentados |
-| R23 | Referência à fase 2 | B5 | Padrões e diferenças no README/arquitetura | Documentado |
+| R22 | Orquestrador e revisão fable por bloco | Todos | Agente, comando e 18 pareceres concluídos: B1=4, B2=2, B3=4, B4=4, B5=4 | Verificado; correções e limites documentados |
+| R24 | Imagem de inferência enxuta | B3 | API com 23 distribuições e redução local medida de 62,56%; [perfis e medidas](imagens_docker.md) | Verificado localmente e no CI |
 
 ## Dados e resultados
 
@@ -44,8 +44,10 @@ O teste contém 2.770 textos únicos e 231 linhas ambíguas; o teto de acurácia
 | Servidores Docker, `20260914T221243-003d412d`; cliente Windows | HTTP, 200 amostras/motor | 5,41015 ms | 4,0585 ms | 1,33× | [Relatório](../reports/docker/latencia_http.json) |
 | Docker local após correção, `20260914T232434-92cce529` | Modelo em processo, 400 amostras/motor | 1,317915 ms | 0,346612 ms | 3,80× | [Relatório](../reports/docker/pos_correcao/latencia_modelo.json) |
 | Servidores Docker após correção, mesma versão; cliente Windows | HTTP, 200 amostras/motor | 5,68385 ms | 4,5707 ms | 1,24× | [Relatório](../reports/docker/pos_correcao/latencia_http.json) |
+| Servidores Docker com imagens separadas, mesma versão; cliente Windows | HTTP, 200 amostras/motor | 6,8721 ms | 5,1066 ms | 1,35× | [Relatório](../reports/docker/imagem_enxuta/latencia_http.json) |
 | GitHub Actions, `20260914T232314-d0a18808` | Modelo em processo, 400 amostras/motor | 0,744446 ms | 0,239354 ms | 3,11× | [Relatório](../reports/ci/34908437830/20260914T000000-latencia_modelo.json) |
 | GitHub Actions após auditoria, `20260915T022734-e031e4fb` | Modelo em processo, 400 amostras/motor | 0,803890 ms | 0,227785 ms | 3,53× | [Relatório](../reports/ci/34921095963/20260914T000000-latencia_modelo.json) |
+| GitHub Actions com imagens separadas, `20260915T230048-695b0121` | Modelo em processo, 400 amostras/motor | 0,751024 ms | 0,240916 ms | 3,12× | [Relatório](../reports/ci/35033470421/20260914T000000-latencia_modelo.json) |
 
 Host e Docker têm versões e ambientes próprios. Os benchmarks usam lote um, os mesmos textos entre motores e ordem alternada. O piso de aceleração p50 é uma regra local sujeita a ruído; não há SLO nem medição de saturação.
 
@@ -61,11 +63,13 @@ Uma tentativa histórica de construção Airflow foi interrompida por espaço, c
 
 ## Testes e revisões
 
-A auditoria posterior foi concluída no [CI 34921095963](../reports/ci/34921095963/execucao.json), commit `6426446`: 104 testes aprovados, imagens, quatro tarefas Airflow e stack verificados. A [atualização local final](../reports/auditoria_criterios/runtime_final.json) conferiu as fontes corrigidas dentro da API e do Airflow, preservou o modelo `92cce529` e manteve os quatro serviços saudáveis. O [smoke final](../reports/auditoria_criterios/smoke_stack_final.json) tem arquivo próprio, sem alterar as evidências capturadas no vídeo. Os seis critérios foram conferidos individualmente na [auditoria final](auditoria_criterios.md).
+O [CI atual 35033470421](../reports/ci/35033470421/execucao.json), job `104597112047`, concluiu com sucesso no commit remoto `34e478123d94854198cf4788580b40d539d8d86c`. Sua árvore `affdc3337b704c42efe73e4fb84527d7c951f8af` coincide com o commit local `13e89a0`. O [JUnit](../reports/ci/35033470421/testes.xml) registra 107 testes aprovados, um ignorado, zero erros e zero falhas. Builds dos perfis/Airflow, inventários, quatro tarefas reais e [smoke](../reports/ci/35033470421/smoke_stack.json) passaram. A versão publicada no runner foi `20260915T230048-695b0121`. Os [dois runners de diagnóstico](../reports/ci/35033470146/execucao.json) também concluíram com sucesso na mesma revisão.
+
+O ciclo anterior da auditoria foi concluído no [CI 34921095963](../reports/ci/34921095963/execucao.json), commit `6426446`: 104 testes aprovados, imagens, quatro tarefas Airflow e stack verificados. A [atualização local daquele ciclo](../reports/auditoria_criterios/runtime_final.json) conferiu as fontes corrigidas dentro da API e do Airflow, preservou o modelo `92cce529` e manteve os quatro serviços saudáveis. Seu [smoke](../reports/auditoria_criterios/smoke_stack_final.json) tem arquivo próprio, sem alterar as evidências capturadas no vídeo. Esse CI não verificou a separação posterior dos perfis Docker.
 
 A [integração local após a correção](../reports/docker/pos_correcao/integracao_verificada.json) concluiu as quatro tarefas em 30,02 segundos e publicou `20260914T232434-92cce529`, mantendo a versão anterior. A API carregou a nova versão e os quatro serviços ficaram saudáveis; o novo smoke confirmou seis painéis e oito consultas. O commit local `fa821ef` e o remoto `3a7ad7f` possuem a mesma árvore Git, `1372ea830ae67647d3a6f50c9a5cee84d5dc0f75`; o SHA-256 do exportador também foi conferido dentro do Airflow.
 
-A suíte consolidada em [testes.xml](../reports/testes.xml) registra **104 casos aprovados, um ignorado, zero falhas e zero erros**. O caso ignorado exige o ambiente Airflow real; a DAG foi executada separadamente no container. Esse resultado local é independente da execução remota de CI. A [auditoria dos seis critérios](auditoria_criterios.md) identifica as verificações finais e as correções decorrentes da conferência.
+A suíte consolidada em [testes.xml](../reports/testes.xml) registra **107 casos aprovados, um ignorado, zero falhas e zero erros**. Ruff passou na análise e formatação de 25 arquivos, conforme o [registro local](../reports/docker/imagem_enxuta/verificacao_codigo.json). O caso ignorado exige o ambiente Airflow real; execuções históricas da DAG e sua importação atual são registradas separadamente. Esse resultado local é independente da execução remota de CI. A [auditoria dos seis critérios](auditoria_criterios.md) identifica as verificações e seus limites.
 
 Os pareceres mais recentes estão em [reports/reviews](../reports/reviews/), com rodadas anteriores nos subdiretórios numerados. Os manifestos preservam a solicitação `fable`, o uso de `claude-fable-5-1` e o modelo auxiliar reportado pela CLI. Parecer concluído não equivale a aprovação. O [tratamento dos achados](revisoes_adversariais.md) registra a contagem de rodadas, correções e decisões justificadas.
 
@@ -74,10 +78,20 @@ Os pareceres mais recentes estão em [reports/reviews](../reports/reviews/), com
 | Critério | Peso | Evidência disponível | Trabalho em acompanhamento |
 |---|---:|---|---|
 | Modelagem e otimização | 20% | Corpus real, qualidade, paridade e benchmarks | Vincular qualquer alteração posterior aos relatórios |
-| CI/CD | 15% | Workflows e CI remoto 34921095963 concluído com imagem validada | Publicação manual GHCR disponível, além do lint/test/build exigido |
+| CI/CD | 15% | Workflows e CI 35033470421 completo com imagens separadas | GHCR ainda não publicado |
 | Orquestração | 15% | Quatro tarefas concluídas no Airflow real, publicação e standalone consultado | Execução local registrada; produção permanece fora do escopo provisionado |
-| Monitoramento | 20% | Compose e smoke com seis painéis/oito consultas | Repetir verificações afetadas por correções posteriores |
+| Monitoramento | 20% | Compose e smoke local/remoto com seis painéis/oito consultas | Repetir verificações se houver novas alterações de implementação |
 | Documentação | 15% | README, arquitetura, modelo, plano, matriz, guia Linux/macOS e quatro revisões B5 | Histórico semântico consolidado |
 | Vídeo STAR | 15% | Roteiro e MP4 final de 4min21s, oito cartões inspecionados e narração sintética | Configuração da monitoração e resultados reais demonstrados |
+
+## Etapa posterior — otimização das imagens Docker
+
+Os [builds](../reports/docker/imagem_enxuta/builds.json) produziram runtime, treinamento e Airflow. A [comparação antes/depois](../reports/docker/imagem_enxuta/depois.json) registra API de **246.360.476 → 92.232.108 bytes (−62,56%)** e Airflow de **303.130.457 → 214.284.627 bytes (−29,31%)**. A imagem de treinamento mede 165.226.468 bytes. Esses valores são do campo Docker `Size`, não do consumo exclusivo de disco ou da transferência de rede.
+
+Os perfis [runtime](../reports/docker/imagem_enxuta/runtime-dependencias.json) e [treinamento](../reports/docker/imagem_enxuta/treinamento-dependencias.json) passaram com 23 e 35 distribuições. Os [50 pins foram preservados](../reports/docker/imagem_enxuta/pins_preservados.json). Quatro `pip check` externos e imports reais passaram nas [verificações isoladas](../reports/docker/imagem_enxuta/verificacoes.json). A [DAG importada](../reports/docker/imagem_enxuta/dag-importacao.json) tem quatro tarefas, três dependências e nenhuma falha de importação; esse ensaio não executou retreino.
+
+A [operação atual](../reports/docker/imagem_enxuta/runtime_verificado.json) reutilizou o modelo `20260914T232434-92cce529`, com `pipeline_reutilizado=true`. A captura identifica cinco serviços saudáveis durante o benchmark, incluindo a API scikit-learn temporária, encerrada depois da medição. API principal, Prometheus, Grafana e Airflow permanecem operacionais. O [smoke atual](../reports/docker/imagem_enxuta/smoke_stack.json) confirmou 101 chamadas válidas, duas rejeições, seis painéis e oito consultas. O [HTTP atual](../reports/docker/imagem_enxuta/latencia_http.json) usa 200 chamadas e 20 aquecimentos por motor, em outro ensaio da mesma versão preservada.
+
+A quarta revisão B3 gerou correções posteriores ao snapshot: pré-requisito de build do Airflow documentado, Compose de benchmark incluído na validação CI e teste de imports ampliado. Actionlint 1.7.12 e o CI completo `35033470421` passaram no workflow atualizado. O [ensaio de partida](../reports/docker/imagem_enxuta/partida.json) mediu medianas de **3,6301 s antes e 3,3974 s depois** até `/ready`, com três observações por imagem e todas abaixo de 80 s. Caches e carga não isolados impedem atribuir significância estatística ou SLO. O vídeo e seu manifesto permanecem os da captura anterior; o workflow capturado é consultável no [commit histórico](https://github.com/callyafiune/Tech-Challenge-fase-3/blob/65b1b34a6640b4b435baa9bed9ab2616af3c0981/.github/workflows/ci.yml), pois o arquivo atual mudou. O MP4 não foi usado para comprovar esta atualização de imagens.
 
 A execução remota inicial [34904519738](https://github.com/callyafiune/Tech-Challenge-fase-3/actions/runs/34904519738) falhou no gate de paridade ONNX durante o treino da DAG. O [CI posterior 34905435615](https://github.com/callyafiune/Tech-Challenge-fase-3/actions/runs/34905435615) concluiu com sucesso, com instrumentação de erro e os mesmos critérios preservados. A falha voltou no [CI 34906533919](../reports/ci/34906533919/execucao.json). A [investigação por camada](diagnostico_paridade.md) identificou e corrigiu a representação de bigramas no conversor: erro de validação de 0,009424 para 1,93 × 10⁻⁷ no candidato remoto, sem novo ajuste. O [CI da correção do exportador 34908437830](../reports/ci/34908437830/execucao.json) confirmou o ciclo completo corrigido, e dois runners de diagnóstico confirmaram a paridade. Os registros identificam commits e artefatos. Não há push GHCR ou infraestrutura AWS comprovados. O MP4 integra os arquivos do repositório. As evidências locais permanecem válidas dentro dos ambientes identificados.

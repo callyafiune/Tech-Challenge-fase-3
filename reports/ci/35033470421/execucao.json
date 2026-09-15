@@ -1,0 +1,189 @@
+{
+  "execucao": 35033470421,
+  "url": "https://github.com/callyafiune/Tech-Challenge-fase-3/actions/runs/35033470421",
+  "commit": "34e478123d94854198cf4788580b40d539d8d86c",
+  "arvore": "affdc3337b704c42efe73e4fb84527d7c951f8af",
+  "commit_local_equivalente": "13e89a08a6d33cfd0af6291a0a4824d9f233dcd6",
+  "status": "completed",
+  "conclusion": "success",
+  "criado_em_utc": "2026-09-15T22:57:44Z",
+  "atualizado_em_utc": "2026-09-15T23:02:19Z",
+  "jobs": [
+    {
+      "id": 104597112047,
+      "name": "Testes, contêineres e retreino real",
+      "status": "completed",
+      "conclusion": "success",
+      "run_id": 35033470421,
+      "logs_url": null,
+      "steps": [
+        {
+          "name": "Set up job",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 1
+        },
+        {
+          "name": "Obter o código desta revisão",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 2
+        },
+        {
+          "name": "Preparar Python 3.11",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 3
+        },
+        {
+          "name": "Instalar as dependências fixadas",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 4
+        },
+        {
+          "name": "Executar análise estática e testes",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 5
+        },
+        {
+          "name": "Validar as configurações Compose",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 6
+        },
+        {
+          "name": "Construir as imagens de inferência e treinamento",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 7
+        },
+        {
+          "name": "Conferir dependências, imports e inventários das imagens",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 8
+        },
+        {
+          "name": "Construir o Airflow com o ambiente de treinamento",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 9
+        },
+        {
+          "name": "Importar a DAG com o Airflow real",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 10
+        },
+        {
+          "name": "Executar as quatro etapas sobre o corpus público",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 11
+        },
+        {
+          "name": "Iniciar API, Prometheus e Grafana com a versão publicada",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 12
+        },
+        {
+          "name": "Verificar a stack de ponta a ponta",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 13
+        },
+        {
+          "name": "Preservar a imagem que passou em todas as verificações",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 14
+        },
+        {
+          "name": "Disponibilizar a imagem validada para entrega",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 15
+        },
+        {
+          "name": "Recolher relatórios e logs",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 16
+        },
+        {
+          "name": "Preservar evidências da execução",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 17
+        },
+        {
+          "name": "Encerrar os serviços do runner",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 18
+        },
+        {
+          "name": "Post Preparar Python 3.11",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 35
+        },
+        {
+          "name": "Post Obter o código desta revisão",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 36
+        },
+        {
+          "name": "Complete job",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 37
+        }
+      ]
+    }
+  ],
+  "artifacts": [
+    {
+      "id": 10423120055,
+      "name": "evidencias-ci-35033470421-1",
+      "size_in_bytes": 3156711,
+      "url": "https://api.github.com/repos/callyafiune/Tech-Challenge-fase-3/actions/artifacts/10423120055",
+      "archive_download_url": "https://api.github.com/repos/callyafiune/Tech-Challenge-fase-3/actions/artifacts/10423120055/zip",
+      "expired": false,
+      "created_at": "2026-09-15T23:02:13Z",
+      "expires_at": "2026-09-29T23:02:12Z",
+      "updated_at": "2026-09-15T23:02:13Z",
+      "digest": "sha256:3fd953ceaac0b869b8866a8b9684e215d4c583a3f91d9d1cd053fbb11e226574",
+      "workflow_run": {
+        "id": 35033470421,
+        "repository_id": 1370511453,
+        "head_repository_id": 1370511453,
+        "head_branch": "main",
+        "head_sha": "34e478123d94854198cf4788580b40d539d8d86c"
+      }
+    },
+    {
+      "id": 10422840919,
+      "name": "imagem-validada-34e478123d94854198cf4788580b40d539d8d86c-35033470421-1",
+      "size_in_bytes": 102998241,
+      "url": "https://api.github.com/repos/callyafiune/Tech-Challenge-fase-3/actions/artifacts/10422840919",
+      "archive_download_url": "https://api.github.com/repos/callyafiune/Tech-Challenge-fase-3/actions/artifacts/10422840919/zip",
+      "expired": false,
+      "created_at": "2026-09-15T23:02:11Z",
+      "expires_at": "2026-09-22T23:02:09Z",
+      "updated_at": "2026-09-15T23:02:11Z",
+      "digest": "sha256:904f4c73250eb40d377a59230ca64099b6369c879ec33c27d67675bfea2e2807",
+      "workflow_run": {
+        "id": 35033470421,
+        "repository_id": 1370511453,
+        "head_repository_id": 1370511453,
+        "head_branch": "main",
+        "head_sha": "34e478123d94854198cf4788580b40d539d8d86c"
+      }
+    }
+  ]
+}

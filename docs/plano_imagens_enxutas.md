@@ -22,13 +22,13 @@
 - [x] Usar a imagem de treinamento no pipeline, benchmark scikit-learn e base do Airflow.
 - [x] Atualizar CI para construir/testar os perfis, impedir dependências de treino/dev na API e manter a entrega da imagem validada.
 - [x] Construir as imagens, comparar tamanhos e dependências, verificar reuso do pipeline, importação da DAG, API e consultas Grafana/Prometheus.
-- [ ] Repetir o retreino completo no CI com a nova imagem.
+- [x] Repetir o retreino completo no CI com a nova imagem.
 
 ## Bloco 3 — revisão e entrega
 
 - [x] Registrar matriz de dependências, comandos e comparação medida em documentação própria.
 - [x] Submeter o bloco de implementação a revisão adversarial Claude Code `fable`; corrigir achados confirmados e registrar decisões.
-- [ ] Executar Ruff, suíte local, checks de dependências e CI completo.
-- [ ] Publicar a implementação e os relatórios; preservar vídeo e evidências anteriores identificados como capturas históricas.
+- [x] Executar Ruff, suíte local, checks de dependências e CI completo.
+- [x] Publicar a implementação e os relatórios; preservar vídeo e evidências anteriores identificados como capturas históricas.
 
-As imagens locais, a importação real da DAG, o reuso do pipeline, a API e o monitoramento foram verificados. A execução completa de retreino e o CI da revisão final serão registrados após a publicação do código.
+As imagens locais, a importação real da DAG, o reuso do pipeline, a API, o monitoramento e a partida até `/ready` foram verificados. O [CI 35033470421](../reports/ci/35033470421/execucao.json), no commit remoto `34e4781`, concluiu 107 testes aprovados e um ignorado, builds dos perfis e Airflow, inventários, quatro tarefas reais e smoke. Publicou a versão `20260915T230048-695b0121` no runner e disponibilizou a imagem validada como artefato de entrega. Os [dois runners de diagnóstico](../reports/ci/35033470146/execucao.json) também concluíram com sucesso. A implementação e os relatórios estão identificados pelo commit e pelos artefatos; a consolidação documental posterior não altera a árvore de código validada.

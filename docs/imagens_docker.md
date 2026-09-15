@@ -109,6 +109,14 @@ docker image inspect --format "{{.Id}} {{.Size}}" medical-classifier-treino:loca
 docker image inspect --format "{{.Id}} {{.Size}}" medical-classifier-airflow:local
 ```
 
+O [ensaio de partida até `/ready`](../reports/docker/imagem_enxuta/partida.json) registrou medianas de **3,6301 s antes e 3,3974 s depois**, com três observações por imagem e todas abaixo de 80 s. A medição inclui criação e inicialização do container. Caches não foram limpos e a carga da máquina não foi isolada; o resultado não estabelece ganho estatístico ou SLO.
+
+## Validação no GitHub Actions
+
+O [CI 35033470421](../reports/ci/35033470421/execucao.json), commit `34e4781`, concluiu **107 testes aprovados e um ignorado**, builds dos perfis e Airflow, inventários de 23/35 distribuições, quatro tarefas reais e [smoke](../reports/ci/35033470421/smoke_stack.json). O runner publicou `20260915T230048-695b0121`, com [p50 em processo de 0,751024 → 0,240916 ms](../reports/ci/35033470421/20260914T000000-latencia_modelo.json), ou **3,12×**. Os [dois runners de diagnóstico](../reports/ci/35033470146/execucao.json) também concluíram com sucesso.
+
+O [inventário da imagem no CI](../reports/ci/35033470421/imagens/runtime-imagem.json) registra 279.477.291 bytes. Esse valor pertence ao daemon do runner e não é comparado aos 92.232.108 bytes locais: a redução apresentada acima foi medida no mesmo Docker Desktop, com seu próprio critério de contabilização.
+
 ## Proveniência das evidências
 
-Esta alteração de empacotamento é posterior à gravação do vídeo STAR e aos benchmarks históricos. O MP4, seu manifesto e as fontes da captura são preservados. Esses resultados continuam válidos para as versões e imagens ali identificadas; não são apresentados como testes da nova imagem. As medições e verificações desta alteração devem ficar em `reports/docker/imagem_enxuta/`, sem sobrescrever relatórios de qualidade, latência ou monitoração usados pelo vídeo.
+Esta alteração de empacotamento é posterior à gravação do vídeo STAR e aos benchmarks históricos. O MP4 e seu manifesto permanecem intactos. O workflow atual mudou; a versão correspondente ao hash da captura está no [commit histórico `65b1b34`](https://github.com/callyafiune/Tech-Challenge-fase-3/blob/65b1b34a6640b4b435baa9bed9ab2616af3c0981/.github/workflows/ci.yml). As demais 13 fontes do manifesto mantêm seus hashes. O vídeo não é apresentado como teste da nova imagem; esta atualização tem evidências próprias em `reports/docker/imagem_enxuta/` e `reports/ci/35033470421/`.

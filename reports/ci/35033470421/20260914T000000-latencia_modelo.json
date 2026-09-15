@@ -1,0 +1,25 @@
+{
+  "sklearn": {
+    "amostras": 400,
+    "media_ms": 0.7556664375,
+    "p50_ms": 0.7510239999999999,
+    "p95_ms": 0.9052147499999998,
+    "p99_ms": 0.9949735200000001
+  },
+  "onnx": {
+    "amostras": 400,
+    "media_ms": 0.24304446,
+    "p50_ms": 0.240916,
+    "p95_ms": 0.30771009999999993,
+    "p99_ms": 0.34557703999999995
+  },
+  "fator_aceleracao_p50": 3.117368709425692,
+  "fator_aceleracao_p95": 2.9417778291970267,
+  "metodo": "Inferência completa, lote 1, ordem alternada, mesmos textos, sem HTTP",
+  "aquecimento_por_motor": 30,
+  "semente": 42,
+  "threads_nativas": 1,
+  "plataforma": "Linux-6.17.0-1022-azure-x86_64-with-glibc2.36",
+  "processador": "",
+  "versao_modelo": "20260915T230048-695b0121"
+}
