@@ -3,11 +3,10 @@
 import json
 from pathlib import Path
 
-import joblib
 import numpy as np
 import onnxruntime as ort
 
-from medical_classifier.data import CLASSES, normalize, sha256
+from medical_classifier.contracts import CLASSES, normalize, sha256
 
 
 def resolve_release(model_dir: Path) -> Path:
@@ -55,7 +54,15 @@ class Predictor:
                 str(release / filename), sess_options=options, providers=["CPUExecutionProvider"]
             )
         else:
-            self.model = joblib.load(release / filename)
+            try:
+                import joblib
+
+                self.model = joblib.load(release / filename)
+            except ImportError as error:
+                raise RuntimeError(
+                    "O backend sklearn exige dependências de treinamento. "
+                    "Instale medical-classifier[treinamento] ou use a imagem de treinamento."
+                ) from error
 
     def predict(self, texts: list[str]) -> np.ndarray:
         """Retorna probabilidades nas cinco classes, na ordem dos ids 1 a 5."""

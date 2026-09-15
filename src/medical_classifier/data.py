@@ -2,7 +2,6 @@
 
 import hashlib
 import json
-import re
 import urllib.request
 from dataclasses import dataclass
 from pathlib import Path
@@ -10,25 +9,10 @@ from pathlib import Path
 import pandas as pd
 from sklearn.model_selection import train_test_split
 
-CLASSES = {
-    1: "Neoplasias",
-    2: "Doenças do sistema digestivo",
-    3: "Doenças do sistema nervoso",
-    4: "Doenças cardiovasculares",
-    5: "Condições patológicas gerais",
-}
+from medical_classifier.contracts import CLASSES, normalize, sha256
+
 REVISION = "70a2d9106c724729be8b3c4ddb00d1b14ec300c8"
 SOURCE = "https://raw.githubusercontent.com/sebischair/Medical-Abstracts-TC-Corpus"
-
-
-def sha256(path: Path) -> str:
-    """Calcula a impressão digital de um arquivo."""
-    return hashlib.sha256(path.read_bytes()).hexdigest()
-
-
-def normalize(text: str) -> str:
-    """Unifica caixa e espaços antes da vetorização e da auditoria."""
-    return re.sub(r"\s+", " ", text.lower()).strip()
 
 
 def download_data(directory: Path) -> dict:

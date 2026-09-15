@@ -1,0 +1,148 @@
+{
+  "sucesso": true,
+  "instante_utc": "2026-09-15T22:53:47.747843+00:00",
+  "containers": [
+    {
+      "nome": "medical-classifier-api-1",
+      "imagem": "sha256:5617e32e0ad11c543d32cfab09ad179b32793910221de0a3a1b255397b967dc3",
+      "estado": "running",
+      "saida": 0,
+      "saude": "healthy",
+      "inicio": "2026-09-15T22:48:48.737222639Z",
+      "usuario": "10001:10001",
+      "raiz_somente_leitura": true,
+      "volumes": [
+        {
+          "nome": "medical-classifier_modelos",
+          "destino": "/app/models",
+          "escrita": false
+        }
+      ]
+    },
+    {
+      "nome": "medical-classifier-prometheus-1",
+      "imagem": "sha256:5ce7540c3c00ef4ab0c9d2c995c6a5b9c421f44b4a115d97a2c7af3b1c21cbb0",
+      "estado": "running",
+      "saida": 0,
+      "saude": "healthy",
+      "inicio": "2026-09-15T22:48:49.421536652Z",
+      "usuario": "nobody",
+      "raiz_somente_leitura": true,
+      "volumes": [
+        {
+          "nome": "medical-classifier_prometheus-dados",
+          "destino": "/prometheus",
+          "escrita": true
+        }
+      ]
+    },
+    {
+      "nome": "medical-classifier-grafana-1",
+      "imagem": "sha256:f772d434e8fab0049deb2b1b30abd43342bcfca1537614aa8d36080232cf4283",
+      "estado": "running",
+      "saida": 0,
+      "saude": "healthy",
+      "inicio": "2026-09-15T22:49:00.762192294Z",
+      "usuario": "472",
+      "raiz_somente_leitura": true,
+      "volumes": [
+        {
+          "nome": "medical-classifier_grafana-dados",
+          "destino": "/var/lib/grafana",
+          "escrita": true
+        }
+      ]
+    },
+    {
+      "nome": "medical-classifier-airflow-airflow-1",
+      "imagem": "sha256:2cc9d90a79dd3d35a3209ad07ea9f70b5e1771c00d1a52191a8df6e22e9c7642",
+      "estado": "running",
+      "saida": 0,
+      "saude": "healthy",
+      "inicio": "2026-09-15T22:49:03.468559606Z",
+      "usuario": "10001:0",
+      "raiz_somente_leitura": false,
+      "volumes": [
+        {
+          "nome": "medical-classifier-airflow_airflow-estado",
+          "destino": "/opt/airflow/estado",
+          "escrita": true
+        },
+        {
+          "nome": "medical-classifier_dados",
+          "destino": "/app/data",
+          "escrita": true
+        },
+        {
+          "nome": "medical-classifier_modelos",
+          "destino": "/app/models",
+          "escrita": true
+        }
+      ]
+    },
+    {
+      "nome": "medical-classifier-pipeline-1",
+      "imagem": "sha256:a15688140c748dde33bdc8cd74dd5a289652583aaf1b3bf721e48c83c1184290",
+      "estado": "exited",
+      "saida": 0,
+      "saude": null,
+      "inicio": "2026-09-15T22:48:37.214472092Z",
+      "usuario": "10001:10001",
+      "raiz_somente_leitura": true,
+      "volumes": [
+        {
+          "nome": "medical-classifier_dados",
+          "destino": "/app/data",
+          "escrita": true
+        },
+        {
+          "nome": "medical-classifier_modelos",
+          "destino": "/app/models",
+          "escrita": true
+        }
+      ]
+    },
+    {
+      "nome": "medical-classifier-api-original-1",
+      "imagem": "sha256:a15688140c748dde33bdc8cd74dd5a289652583aaf1b3bf721e48c83c1184290",
+      "estado": "running",
+      "saida": 0,
+      "saude": "healthy",
+      "inicio": "2026-09-15T22:49:53.110459154Z",
+      "usuario": "10001:10001",
+      "raiz_somente_leitura": true,
+      "volumes": [
+        {
+          "nome": "medical-classifier_modelos",
+          "destino": "/app/models",
+          "escrita": false
+        }
+      ]
+    }
+  ],
+  "prontidao": {
+    "status": "pronto",
+    "versao_modelo": "20260914T232434-92cce529",
+    "backend": "onnx"
+  },
+  "airflow": {
+    "dag_processor": {
+      "latest_dag_processor_heartbeat": null,
+      "status": null
+    },
+    "metadatabase": {
+      "status": "healthy"
+    },
+    "scheduler": {
+      "latest_scheduler_heartbeat": "2026-09-15T22:53:44.913431+00:00",
+      "status": "healthy"
+    },
+    "triggerer": {
+      "latest_triggerer_heartbeat": "2026-09-15T22:53:45.793118+00:00",
+      "status": "healthy"
+    }
+  },
+  "pipeline_reutilizado": true,
+  "smoke": "smoke_stack.json",
+  "benchmark_http": "latencia_http.json"
+}

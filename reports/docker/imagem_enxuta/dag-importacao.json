@@ -1,0 +1,21 @@
+{
+  "sucesso": true,
+  "dag": "retreino_medico",
+  "tarefas": {
+    "ingestao": [],
+    "treinamento": [
+      "ingestao"
+    ],
+    "validacao": [
+      "treinamento"
+    ],
+    "publicacao": [
+      "validacao"
+    ]
+  },
+  "max_active_runs": 1,
+  "max_active_tasks": 1,
+  "catchup": false,
+  "retreino_executado": false,
+  "erros_importacao": {}
+}

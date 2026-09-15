@@ -28,7 +28,7 @@ jobs:
       - name: Obter o código
         uses: actions/checkout@v4
       - name: Construir a mesma imagem do pipeline
-        run: docker build --tag medical-classifier:diagnostico .
+        run: docker build --target treinamento --tag medical-classifier:diagnostico .
       - name: Comparar transformações sem publicar modelo
         run: |
           mkdir -p reports/diagnostico_paridade

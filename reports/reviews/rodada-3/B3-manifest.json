@@ -1,0 +1,77 @@
+{
+  "bloco": "B3",
+  "modelo_solicitado": "fable",
+  "inicio_utc": "2026-09-14T22:08:31.472846+00:00",
+  "arquivos": [
+    {
+      "caminho": "Dockerfile",
+      "sha256": "21c75be0782d27414c736699d0cc84bd34fb51d24b9b58d0b11ef0f8600eea59",
+      "bytes": 1586
+    },
+    {
+      "caminho": ".dockerignore",
+      "sha256": "7cb4c1877b5e93ca10439f2177b02cd0aa67bbe84f52fa2f863e25dda39b7d8f",
+      "bytes": 240
+    },
+    {
+      "caminho": "requirements.lock",
+      "sha256": "7b4708337496ac4725e2fe0227ac7bce9b2912f38b699013d7c43589fe656deb",
+      "bytes": 987
+    },
+    {
+      "caminho": "pyproject.toml",
+      "sha256": "034e32bae249a88dee5b88e486360a7bfa678301dfa22d92174bedd5edf52b3d",
+      "bytes": 1018
+    },
+    {
+      "caminho": "scripts/smoke_stack.py",
+      "sha256": "8a039af1dbc0dec8fe999ec3947ab548e88dd385144918cbb0d14788076590cc",
+      "bytes": 12881
+    },
+    {
+      "caminho": "tests/test_smoke_stack.py",
+      "sha256": "abdc019191bd5076a93d57a12712ef92db1ccb76ce0ebfbf212969270cfd2da0",
+      "bytes": 5153
+    },
+    {
+      "caminho": "monitoring/README.md",
+      "sha256": "131f6017ee741d202afd3897e410652885071dc6bd9beb7a371c82ee51a9ae37",
+      "bytes": 4586
+    },
+    {
+      "caminho": "reports/docker/build_app.log",
+      "sha256": "01018ec4273b07546298e424a2be4a02bc4f327178f81f2e19f6434d3b6078a0",
+      "bytes": 3599
+    }
+  ],
+  "prompt_sha256": "6553f4b0f22732fb452aed4da0304b3ef3e1bbc8229e9a88c9b754635436d5aa",
+  "contexto": "Terceira rodada FOCADA exclusivamente no novo Dockerfile e nas correcoes do smoke. Runtime herda FROM dependencias, preserva /opt/venv e instala wheel pequeno em camada separada. Build novo concluiu codigo0 (log anexo), digest04875aff7dd271b654986a33392e577fe3a09d6c2769875b023ca560fc837377. O lock unico com treino/runtime/dev e decisao aceita neste trabalho academico; nao redesenhar dependencias. Airflow esta sendo alterado em bloco separado para FROM medical-classifier:local e symlink /opt/model-venv -> /opt/venv. Nao avalie B4 nem arquivos ausentes neste parecer focado. Smoke agora usa parametro time do Prometheus, fixo no timestamp devolvido pela consulta que confirmou a coleta, preservando janela20s durante esperas do Grafana. HTTP401 e403 distinguem credenciais persistidas/permissoes. Teste novo reproduziu as tres falhas ANTES da correcao (3failed), depois 3passed; Ruffcheck/formatpassed. Esses testes usam simulacao HTTP deterministica e nao provam a execucao da nova imagem na stack. Evidencias Docker existentes referem-se a imagem anterior; a nova imagem AINDA nao foi reimplantada nem teve smoke Docker repetido. Nao declarar essa verificacao concluida. Avaliar corretude das mudancas e da regressao, sem repetir alegacoes de snapshot antigo sobre22chamadas pois smoke anterior FINAL gerou23chamadas e versaoa767fe94 aposultimaimplantacao. Saida1 da revisao previa sobre vinculo imagem/modelo sera tratada na verificacao integrada final pelo orquestrador.",
+  "timeout_segundos": 600,
+  "aprovacao_automatica": false,
+  "fim_utc": "2026-09-14T22:11:09.133609+00:00",
+  "comando": [
+    "C:\\Users\\Cally\\.vscode\\extensions\\anthropic.claude-code-2.1.270-win32-x64\\resources\\native-binary\\claude.exe",
+    "-p",
+    "--model",
+    "fable",
+    "--effort",
+    "medium",
+    "--safe-mode",
+    "--strict-mcp-config",
+    "--permission-mode",
+    "dontAsk",
+    "--tools",
+    "",
+    "--output-format",
+    "json",
+    "--no-session-persistence"
+  ],
+  "modelos_reportados": [
+    "claude-fable-5-1",
+    "claude-haiku-4-5-20251001"
+  ],
+  "exit_code": 0,
+  "codigo_saida_script": 0,
+  "stderr": "",
+  "erro": ""
+}

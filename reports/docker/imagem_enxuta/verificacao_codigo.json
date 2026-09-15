@@ -1,0 +1,87 @@
+{
+  "sucesso": true,
+  "verificacoes": [
+    {
+      "verificacao": "ruff",
+      "comando": [
+        ".venv/Scripts/python.exe",
+        "-m",
+        "ruff",
+        "check",
+        "src",
+        "tests",
+        "scripts",
+        "dags"
+      ],
+      "codigo_saida": 0,
+      "fim_utc": "2026-09-15T22:53:09.468585+00:00"
+    },
+    {
+      "verificacao": "formato",
+      "comando": [
+        ".venv/Scripts/python.exe",
+        "-m",
+        "ruff",
+        "format",
+        "--check",
+        "src",
+        "tests",
+        "scripts",
+        "dags"
+      ],
+      "codigo_saida": 0,
+      "fim_utc": "2026-09-15T22:53:09.689266+00:00"
+    },
+    {
+      "verificacao": "testes",
+      "comando": [
+        ".venv/Scripts/python.exe",
+        "-m",
+        "pytest",
+        "-q",
+        "--junitxml=reports/testes.xml"
+      ],
+      "codigo_saida": 0,
+      "fim_utc": "2026-09-15T22:53:34.187627+00:00"
+    },
+    {
+      "verificacao": "compose",
+      "comando": [
+        "docker",
+        "compose",
+        "config",
+        "--quiet"
+      ],
+      "codigo_saida": 0,
+      "fim_utc": "2026-09-15T22:53:34.651794+00:00"
+    },
+    {
+      "verificacao": "compose_benchmark",
+      "comando": [
+        "docker",
+        "compose",
+        "-f",
+        "docker-compose.yml",
+        "-f",
+        "docker-compose.benchmark.yml",
+        "config",
+        "--quiet"
+      ],
+      "codigo_saida": 0,
+      "fim_utc": "2026-09-15T22:53:35.044811+00:00"
+    },
+    {
+      "verificacao": "compose_airflow",
+      "comando": [
+        "docker",
+        "compose",
+        "-f",
+        "docker-compose.airflow.yml",
+        "config",
+        "--quiet"
+      ],
+      "codigo_saida": 0,
+      "fim_utc": "2026-09-15T22:53:35.654597+00:00"
+    }
+  ]
+}

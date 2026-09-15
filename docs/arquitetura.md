@@ -2,7 +2,7 @@
 
 ## Escopo
 
-O serviço classifica um resumo médico em inglês em uma das cinco categorias do Medical Abstracts TC Corpus. A alteração do objetivo de urgência para condições médicas foi autorizada pelo usuário. A decisão arquitetural responde ao exercício de disponibilizar inferência textual com baixa latência, retreino controlado e observabilidade.
+O serviço classifica um resumo médico em inglês em uma das cinco categorias do Medical Abstracts TC Corpus. A arquitetura oferece inferência textual com baixa latência, retreino controlado e observabilidade.
 
 A implementação executável deste repositório é local, em Docker Compose. A implantação AWS descrita a seguir é uma proposta de produção; não há provisionamento, endereço público ou recursos AWS criados por estes arquivos.
 
@@ -47,11 +47,17 @@ O custo da proposta inclui tarefas Fargate em execução, ALB, armazenamento, co
 
 O Compose principal tem os serviços `pipeline`, `api`, `prometheus` e `grafana`. O pipeline termina antes de a API iniciar; os dados e os modelos ficam em volumes nomeados. O container da API usa UID/GID `10001:10001`, sistema de arquivos de leitura e volume de modelos somente para leitura. As portas publicadas ficam em `127.0.0.1`.
 
+Inferência e treinamento têm imagens próprias. O target `runtime`, imagem `medical-classifier:local`, contém FastAPI, Uvicorn, Prometheus Client, NumPy, ONNX Runtime e suas dependências transitivas. O target `treinamento`, imagem `medical-classifier-treino:local`, acrescenta scikit-learn, pandas, joblib, ONNX e o conversor necessários ao pipeline. O serviço principal fixa o motor ONNX. A imagem de runtime é o último estágio do Dockerfile e, portanto, a saída padrão de `docker build .`.
+
+O Dockerfile usa a mesma base `python:3.11.16-slim-bookworm` nos dois perfis. O wheel é produzido num estágio de construção separado, com `requirements-build.lock`; essas ferramentas não são copiadas para os ambientes operacionais. `requirements-runtime.lock` fixa as dependências de inferência e `requirements-treinamento.lock` inclui esse arquivo e acrescenta as de treinamento. O ambiente completo do host e dos testes permanece em `requirements.lock`, reunindo os perfis e ferramentas de desenvolvimento. A separação dos imports permite servir ONNX sem importar as bibliotecas de treinamento.
+
+Os ambientes `/opt/venv` e `/opt/airflow-venv` são criados sem sua própria cópia de pip. A base oficial Python conserva o pip global, usado durante a construção para instalar e verificar os ambientes com `--python`. A imagem também conserva a biblioteca padrão, dependências transitivas de ONNX Runtime e componentes da base Debian; a redução não representa uma imagem sem gerenciador de pacotes ou um mínimo absoluto. Os [perfis e as medidas](imagens_docker.md) identificam o que mudou e como foi medido.
+
 O comando do Compose usa `--reutilizar`: se já existe uma versão íntegra com relatórios aprovados e vinculados a seus hashes/identificador, o início não treina novamente. A primeira execução ainda precisa produzir o modelo. O [registro Docker](../reports/docker/execucao_stack.json) comprovou treino sem rede após disponibilizar o corpus, permissões restritas e reinício mantendo a versão.
 
 Prometheus consulta `/metrics` pelo DNS da API dentro da rede Compose, e Grafana usa o DNS do Prometheus. O provisionamento inclui a fonte `prometheus-medical` e o dashboard `medical-classifier`. O JSON versionado é a fonte do dashboard; chamadas reais geram as séries consultadas pelo script `scripts/smoke_stack.py`.
 
-O complemento `docker-compose.benchmark.yml` acrescenta `api-original`, com scikit-learn e porta local 8001. As duas APIs compartilham o volume de modelos, permitindo comparar o mesmo bundle com motores distintos. O verificador HTTP exige a mesma versão antes de medir.
+O complemento `docker-compose.benchmark.yml` acrescenta `api-original`, com a imagem `medical-classifier-treino:local`, motor scikit-learn e porta local 8001. As duas APIs compartilham o volume de modelos, permitindo comparar o mesmo bundle com motores distintos. O cliente de benchmark exige os perfis `treinamento` e `dev` no host; o verificador HTTP exige a mesma versão antes de medir.
 
 ## Ciclo de vida dos artefatos
 
@@ -73,7 +79,7 @@ Na demonstração Airflow, um identificador de execução delimita `/app/data/ru
 
 O treino acionado manualmente pelo Compose e o treino da DAG compartilham o destino de modelos. Execute um produtor por vez. A troca atômica evita um JSON parcial, mas não define uma política de prioridade entre duas publicações independentes.
 
-A retenção é manual: mantenha a versão atual, a anterior e seus relatórios. Outras execuções só devem ser retiradas depois de arquivadas suas evidências e conferida a ausência de consumidores. Os volumes compartilhados são declarados externos na composição do Airflow; não os apague para limpar o estado do orquestrador. A imagem Airflow deriva da imagem da aplicação e instala o orquestrador em ambiente separado. `/opt/model-venv` aponta para `/opt/venv`, preservando os caminhos originais; a DAG usa o interpretador com `python -m`.
+A retenção é manual: mantenha a versão atual, a anterior e seus relatórios. Outras execuções só devem ser retiradas depois de arquivadas suas evidências e conferida a ausência de consumidores. Os volumes compartilhados são declarados externos na composição do Airflow; não os apague para limpar o estado do orquestrador. A imagem Airflow deriva de `medical-classifier-treino:local` e instala o orquestrador em ambiente separado. Execute `docker compose build api pipeline` antes de construir o Airflow. `/opt/model-venv` aponta para `/opt/venv`, preservando os caminhos originais e evitando uma segunda cópia das dependências do modelo; a DAG usa o interpretador com `python -m`.
 
 As constraints do Airflow 2.11 para Python 3.11 usam a revisão `338bcef28071e8b833876554c502079adb3739d0`, com SHA-256 `b32ab3fa687c0e04b2260526fee79813bfb7944da5b6805e429c9f71b07c53f3`. A verificação desse arquivo limita mudanças acidentais de dependências; a construção e o teste real da imagem continuam necessários.
 
@@ -83,7 +89,7 @@ O diretório de modelos é uma fonte confiável da implantação. Hashes detecta
 
 ## CI/CD implementado
 
-`ci.yml` configura validação de código, testes, Compose, imagens, importação/execução da DAG e funcionamento da stack. `entrega.yml` oferece publicação manual no GHCR a partir de `main`, usando o arquivo de imagem já validado pelo CI. A entrega confere SHA-256 e ID e não reconstrói a imagem antes do push. O token temporário do GitHub autentica a publicação. A investigação de uma falha de paridade localizou a representação incorreta de bigramas no conversor; a correção e os testes estão em [diagnostico_paridade.md](diagnostico_paridade.md). O push GHCR não foi comprovado, e esses arquivos não instalam infraestrutura AWS.
+`ci.yml` configura validação de código, testes, Compose, construção dos perfis de inferência/treinamento e do Airflow, importação/execução da DAG e funcionamento da stack. `entrega.yml` oferece publicação manual no GHCR a partir de `main`, usando o arquivo da imagem de runtime já validado pelo CI. A entrega confere SHA-256 e ID e não reconstrói a imagem antes do push. O token temporário do GitHub autentica a publicação. A investigação de uma falha de paridade localizou a representação incorreta de bigramas no conversor; a correção e os testes estão em [diagnostico_paridade.md](diagnostico_paridade.md). O diagnóstico precisa do target `treinamento`. O push GHCR não foi comprovado, e esses arquivos não instalam infraestrutura AWS.
 
 O artefato de imagem do CI é retido por sete dias. Depois da expiração, um novo CI completo deve gerar e validar outra imagem antes da publicação. Os disparos manuais de entrega não possuem controle de concorrência, por isso `latest` acompanha o envio que terminou por último. Para identificar uma versão, use a tag do commit e o digest da imagem.
 
@@ -91,12 +97,14 @@ O [CI remoto 34908437830](../reports/ci/34908437830/execucao.json) concluiu com 
 
 A tag com SHA identifica a revisão do código; `latest` é uma referência conveniente e mutável. Para o desenho de produção, a revisão da tarefa ECS deveria usar digest de imagem e versão explícita do modelo. Os relatórios no repositório e os artefatos do workflow cumprem papéis distintos: um resultado local não comprova que o workflow já foi executado pelo GitHub.
 
+A separação das imagens foi implementada depois dos CIs e do vídeo citados como evidências históricas. Ela não altera versões de Python/bibliotecas, normalização ou modelos ONNX. Novas verificações têm relatórios próprios; o vídeo e os arquivos usados em sua captura preservam os hashes originais e não comprovam automaticamente esta atualização do empacotamento.
+
 ## Observabilidade e limites
 
 As métricas medem disponibilidade de coleta, prontidão do modelo, quantidade de requisições, duração e erros HTTP. Método, rota normalizada e status mantêm a quantidade de séries controlada. Textos recebidos não são rótulos nem conteúdo de logs da aplicação.
 
 O dashboard não mede automaticamente acurácia em produção, deriva ou qualidade clínica. Essas avaliações exigiriam rótulos confiáveis e um processo de acompanhamento que não faz parte do serviço atual. As métricas de qualidade do projeto vêm das partições avaliadas durante o pipeline.
 
-## Continuidade com a fase 2
+## Ferramentas do modelo
 
-Foram reaproveitados princípios de configuração explícita, pacote Python, API FastAPI, testes, lint, containers sem root, prontidão, versões identificáveis e documentação de evidências. A fase 3 concentra-se em inferência e operação de um modelo textual leve. DVC, MLflow e PyTorch não são dependências necessárias para esse escopo; os arquivos do modelo e o ponteiro de publicação formam um contrato menor que pode ser inspecionado diretamente.
+A aplicação usa configuração explícita, pacote Python, API FastAPI, testes, lint, containers sem root, prontidão e versões identificáveis. O modelo textual linear não exige PyTorch. Arquivos versionados e o ponteiro de publicação atendem ao armazenamento local desta demonstração sem depender de DVC ou MLflow.

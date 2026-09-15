@@ -1,6 +1,6 @@
 services:
   api-original:
-    image: medical-classifier:local
+    image: medical-classifier-treino:local
     init: true
     read_only: true
     tmpfs:

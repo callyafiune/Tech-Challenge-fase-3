@@ -2,9 +2,10 @@
 *
 !Dockerfile
 !Dockerfile.airflow
-!requirements.lock
+!requirements-runtime.lock
+!requirements-treinamento.lock
+!requirements-build.lock
 !pyproject.toml
-!README.md
 !src/
 !src/**
 !dags/

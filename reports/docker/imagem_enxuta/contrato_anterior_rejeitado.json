@@ -1,0 +1,312 @@
+{
+  "sucesso": false,
+  "perfil": "runtime",
+  "python": {
+    "versao": "3.11.16",
+    "executavel": "/opt/venv/bin/python"
+  },
+  "pacotes": [
+    {
+      "nome": "annotated-types",
+      "versao": "0.8.0"
+    },
+    {
+      "nome": "anyio",
+      "versao": "4.15.1"
+    },
+    {
+      "nome": "certifi",
+      "versao": "2026.7.22"
+    },
+    {
+      "nome": "click",
+      "versao": "8.5.0"
+    },
+    {
+      "nome": "coloredlogs",
+      "versao": "15.0.1"
+    },
+    {
+      "nome": "fastapi",
+      "versao": "0.116.2"
+    },
+    {
+      "nome": "flatbuffers",
+      "versao": "25.12.19"
+    },
+    {
+      "nome": "h11",
+      "versao": "0.16.0"
+    },
+    {
+      "nome": "hatchling",
+      "versao": "1.32.0"
+    },
+    {
+      "nome": "httpcore",
+      "versao": "1.0.9"
+    },
+    {
+      "nome": "httpx",
+      "versao": "0.28.1"
+    },
+    {
+      "nome": "humanfriendly",
+      "versao": "10.0"
+    },
+    {
+      "nome": "idna",
+      "versao": "3.19"
+    },
+    {
+      "nome": "iniconfig",
+      "versao": "2.3.0"
+    },
+    {
+      "nome": "joblib",
+      "versao": "1.5.3"
+    },
+    {
+      "nome": "medical-classifier",
+      "versao": "0.1.0"
+    },
+    {
+      "nome": "ml-dtypes",
+      "versao": "0.6.0"
+    },
+    {
+      "nome": "mpmath",
+      "versao": "1.3.0"
+    },
+    {
+      "nome": "numpy",
+      "versao": "2.2.6"
+    },
+    {
+      "nome": "onnx",
+      "versao": "1.19.1"
+    },
+    {
+      "nome": "onnxruntime",
+      "versao": "1.23.2"
+    },
+    {
+      "nome": "packaging",
+      "versao": "26.3"
+    },
+    {
+      "nome": "pandas",
+      "versao": "2.3.3"
+    },
+    {
+      "nome": "pathspec",
+      "versao": "1.1.1"
+    },
+    {
+      "nome": "pip",
+      "versao": "24.0"
+    },
+    {
+      "nome": "pluggy",
+      "versao": "1.6.0"
+    },
+    {
+      "nome": "prometheus-client",
+      "versao": "0.22.1"
+    },
+    {
+      "nome": "protobuf",
+      "versao": "7.36.1"
+    },
+    {
+      "nome": "pydantic",
+      "versao": "2.13.5"
+    },
+    {
+      "nome": "pydantic-core",
+      "versao": "2.46.5"
+    },
+    {
+      "nome": "pygments",
+      "versao": "2.21.0"
+    },
+    {
+      "nome": "pytest",
+      "versao": "8.4.2"
+    },
+    {
+      "nome": "python-dateutil",
+      "versao": "2.9.0.post0"
+    },
+    {
+      "nome": "pytz",
+      "versao": "2026.3.post1"
+    },
+    {
+      "nome": "pyyaml",
+      "versao": "6.0.3"
+    },
+    {
+      "nome": "ruff",
+      "versao": "0.13.3"
+    },
+    {
+      "nome": "scikit-learn",
+      "versao": "1.7.2"
+    },
+    {
+      "nome": "scipy",
+      "versao": "1.17.1"
+    },
+    {
+      "nome": "setuptools",
+      "versao": "79.0.1"
+    },
+    {
+      "nome": "six",
+      "versao": "1.17.0"
+    },
+    {
+      "nome": "skl2onnx",
+      "versao": "1.19.1"
+    },
+    {
+      "nome": "starlette",
+      "versao": "0.48.0"
+    },
+    {
+      "nome": "sympy",
+      "versao": "1.14.0"
+    },
+    {
+      "nome": "threadpoolctl",
+      "versao": "3.6.0"
+    },
+    {
+      "nome": "tomlkit",
+      "versao": "0.15.1"
+    },
+    {
+      "nome": "trove-classifiers",
+      "versao": "2026.6.1.19"
+    },
+    {
+      "nome": "typing-extensions",
+      "versao": "4.16.0"
+    },
+    {
+      "nome": "typing-inspection",
+      "versao": "0.4.4"
+    },
+    {
+      "nome": "tzdata",
+      "versao": "2026.4"
+    },
+    {
+      "nome": "uvicorn",
+      "versao": "0.35.0"
+    }
+  ],
+  "fechamento": [
+    "annotated-types",
+    "anyio",
+    "certifi",
+    "click",
+    "coloredlogs",
+    "fastapi",
+    "flatbuffers",
+    "h11",
+    "httpcore",
+    "httpx",
+    "humanfriendly",
+    "idna",
+    "joblib",
+    "medical-classifier",
+    "ml-dtypes",
+    "mpmath",
+    "numpy",
+    "onnx",
+    "onnxruntime",
+    "packaging",
+    "pandas",
+    "prometheus-client",
+    "protobuf",
+    "pydantic",
+    "pydantic-core",
+    "python-dateutil",
+    "pytz",
+    "scikit-learn",
+    "scipy",
+    "six",
+    "skl2onnx",
+    "starlette",
+    "sympy",
+    "threadpoolctl",
+    "typing-extensions",
+    "typing-inspection",
+    "tzdata",
+    "uvicorn"
+  ],
+  "extras_ativados": {},
+  "fora_do_fechamento": [
+    "hatchling",
+    "iniconfig",
+    "pathspec",
+    "pip",
+    "pluggy",
+    "pygments",
+    "pytest",
+    "pyyaml",
+    "ruff",
+    "setuptools",
+    "tomlkit",
+    "trove-classifiers"
+  ],
+  "proibidos_presentes": [
+    "hatchling",
+    "httpx",
+    "joblib",
+    "ml-dtypes",
+    "onnx",
+    "pandas",
+    "pip",
+    "pytest",
+    "pyyaml",
+    "ruff",
+    "scikit-learn",
+    "scipy",
+    "setuptools",
+    "skl2onnx",
+    "threadpoolctl"
+  ],
+  "imports": [
+    {
+      "modulo": "fastapi",
+      "sucesso": true
+    },
+    {
+      "modulo": "uvicorn",
+      "sucesso": true
+    },
+    {
+      "modulo": "prometheus_client",
+      "sucesso": true
+    },
+    {
+      "modulo": "numpy",
+      "sucesso": true
+    },
+    {
+      "modulo": "onnxruntime",
+      "sucesso": true
+    },
+    {
+      "modulo": "medical_classifier.api",
+      "sucesso": true
+    }
+  ],
+  "erros": [
+    "Pacotes fora do fechamento do perfil: hatchling, iniconfig, pathspec, pip, pluggy, pygments, pytest, pyyaml, ruff, setuptools, tomlkit, trove-classifiers.",
+    "Pacotes proibidos neste perfil: hatchling, httpx, joblib, ml-dtypes, onnx, pandas, pip, pytest, pyyaml, ruff, scikit-learn, scipy, setuptools, skl2onnx, threadpoolctl."
+  ]
+}

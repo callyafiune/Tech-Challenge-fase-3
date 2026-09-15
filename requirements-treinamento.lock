@@ -1,0 +1,15 @@
+# Dependências adicionais para treinar, converter e comparar os modelos.
+-r requirements-runtime.lock
+joblib==1.5.3
+ml-dtypes==0.5.4 ; python_full_version >= '3.14'
+ml-dtypes==0.6.0 ; python_full_version < '3.14'
+onnx==1.19.1
+pandas==2.3.3
+python-dateutil==2.9.0.post0
+pytz==2026.3.post1
+scikit-learn==1.7.2
+scipy==1.17.1
+six==1.17.0
+skl2onnx==1.19.1
+threadpoolctl==3.6.0
+tzdata==2026.4

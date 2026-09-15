@@ -17,6 +17,10 @@ x-app: &app
 services:
   pipeline:
     <<: *app
+    build:
+      context: .
+      target: treinamento
+    image: medical-classifier-treino:local
     command:
       - python
       - -m
@@ -40,7 +44,7 @@ services:
     <<: *app
     environment:
       MODEL_DIR: /app/models
-      MODEL_BACKEND: ${MODEL_BACKEND:-onnx}
+      MODEL_BACKEND: onnx
     ports:
       - "127.0.0.1:${API_PORT:-8000}:8000"
     volumes:

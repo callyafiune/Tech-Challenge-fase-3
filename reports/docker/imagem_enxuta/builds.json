@@ -1,0 +1,31 @@
+[
+  {
+    "etapa": "build_api_treino",
+    "comando": [
+      "docker",
+      "compose",
+      "build",
+      "api",
+      "pipeline"
+    ],
+    "inicio_utc": "2026-09-15T22:39:12.746196+00:00",
+    "fim_utc": "2026-09-15T22:43:45.732711+00:00",
+    "segundos": 272.9877208999824,
+    "codigo_saida": 0
+  },
+  {
+    "etapa": "build_airflow",
+    "comando": [
+      "docker",
+      "compose",
+      "-f",
+      "docker-compose.airflow.yml",
+      "build",
+      "airflow"
+    ],
+    "inicio_utc": "2026-09-15T22:43:45.750779+00:00",
+    "fim_utc": "2026-09-15T22:45:40.700701+00:00",
+    "segundos": 114.95132580003701,
+    "codigo_saida": 0
+  }
+]

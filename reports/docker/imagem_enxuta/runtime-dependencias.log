@@ -1,0 +1,158 @@
+{
+  "sucesso": true,
+  "perfil": "runtime",
+  "python": {
+    "versao": "3.11.16",
+    "executavel": "/opt/venv/bin/python"
+  },
+  "pacotes": [
+    {
+      "nome": "annotated-types",
+      "versao": "0.8.0"
+    },
+    {
+      "nome": "anyio",
+      "versao": "4.15.1"
+    },
+    {
+      "nome": "click",
+      "versao": "8.5.0"
+    },
+    {
+      "nome": "coloredlogs",
+      "versao": "15.0.1"
+    },
+    {
+      "nome": "fastapi",
+      "versao": "0.116.2"
+    },
+    {
+      "nome": "flatbuffers",
+      "versao": "25.12.19"
+    },
+    {
+      "nome": "h11",
+      "versao": "0.16.0"
+    },
+    {
+      "nome": "humanfriendly",
+      "versao": "10.0"
+    },
+    {
+      "nome": "idna",
+      "versao": "3.19"
+    },
+    {
+      "nome": "medical-classifier",
+      "versao": "0.1.0"
+    },
+    {
+      "nome": "mpmath",
+      "versao": "1.3.0"
+    },
+    {
+      "nome": "numpy",
+      "versao": "2.2.6"
+    },
+    {
+      "nome": "onnxruntime",
+      "versao": "1.23.2"
+    },
+    {
+      "nome": "packaging",
+      "versao": "26.3"
+    },
+    {
+      "nome": "prometheus-client",
+      "versao": "0.22.1"
+    },
+    {
+      "nome": "protobuf",
+      "versao": "7.36.1"
+    },
+    {
+      "nome": "pydantic",
+      "versao": "2.13.5"
+    },
+    {
+      "nome": "pydantic-core",
+      "versao": "2.46.5"
+    },
+    {
+      "nome": "starlette",
+      "versao": "0.48.0"
+    },
+    {
+      "nome": "sympy",
+      "versao": "1.14.0"
+    },
+    {
+      "nome": "typing-extensions",
+      "versao": "4.16.0"
+    },
+    {
+      "nome": "typing-inspection",
+      "versao": "0.4.4"
+    },
+    {
+      "nome": "uvicorn",
+      "versao": "0.35.0"
+    }
+  ],
+  "fechamento": [
+    "annotated-types",
+    "anyio",
+    "click",
+    "coloredlogs",
+    "fastapi",
+    "flatbuffers",
+    "h11",
+    "humanfriendly",
+    "idna",
+    "medical-classifier",
+    "mpmath",
+    "numpy",
+    "onnxruntime",
+    "packaging",
+    "prometheus-client",
+    "protobuf",
+    "pydantic",
+    "pydantic-core",
+    "starlette",
+    "sympy",
+    "typing-extensions",
+    "typing-inspection",
+    "uvicorn"
+  ],
+  "extras_ativados": {},
+  "fora_do_fechamento": [],
+  "proibidos_presentes": [],
+  "imports": [
+    {
+      "modulo": "fastapi",
+      "sucesso": true
+    },
+    {
+      "modulo": "uvicorn",
+      "sucesso": true
+    },
+    {
+      "modulo": "prometheus_client",
+      "sucesso": true
+    },
+    {
+      "modulo": "numpy",
+      "sucesso": true
+    },
+    {
+      "modulo": "onnxruntime",
+      "sucesso": true
+    },
+    {
+      "modulo": "medical_classifier.api",
+      "sucesso": true
+    }
+  ],
+  "erros": []
+}
+[0;93m2026-09-15 22:50:06.843017065 [W:onnxruntime:Default, device_discovery.cc:164 DiscoverDevicesForPlatform] GPU device discovery failed: device_discovery.cc:89 ReadFileContents Failed to open file: "/sys/class/drm/card0/device/vendor"[m

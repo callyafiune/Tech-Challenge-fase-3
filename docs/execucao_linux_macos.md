@@ -16,6 +16,8 @@ fi
 
 O `.env` fornece a senha da demonstração local do Grafana. A instalação do pacote deve ser repetida após alterar `src/`, usando o mesmo comando com `--no-deps --no-build-isolation .`.
 
+`requirements.lock` instala o ambiente completo de inferência, treinamento, build e desenvolvimento e é a opção preferida para reprodução. Ele reúne os locks de cada perfil. A alternativa `.venv/bin/python -m pip install '.[treinamento,dev]'` usa os limites do `pyproject.toml`, sem fixar todas as versões transitivas. O extra `treinamento` é necessário para pipeline e scikit-learn; `scripts/benchmark_http.py` exige **`treinamento` e `dev`**, inclusive HTTPX. A instalação simples `pip install .` atende às dependências de inferência ONNX.
+
 ## Dados, modelo e API local
 
 ```bash
@@ -40,7 +42,8 @@ Encerre a API local com `Ctrl+C` antes de usar a porta 8000 no Docker. A atribui
 ```bash
 docker info
 docker compose config --quiet
-docker compose up --build -d
+docker compose build api pipeline
+docker compose up -d
 docker compose logs -f pipeline
 ```
 
@@ -54,6 +57,8 @@ curl --fail --silent --show-error http://127.0.0.1:8000/ready
 
 API: `http://127.0.0.1:8000/docs`; Prometheus: `http://127.0.0.1:9090`; Grafana: `http://127.0.0.1:3000`. As credenciais e os painéis são descritos no [README principal](../README.md) e no [guia de monitoramento](../monitoring/README.md). O treinamento do host e o do Compose possuem armazenamentos próprios; consulte `/ready` para identificar a versão.
 
+O serviço `api` usa o target `runtime`, imagem `medical-classifier:local`, e fixa o motor ONNX. O serviço `pipeline` usa o target `treinamento`, imagem `medical-classifier-treino:local`, com as dependências adicionais do modelo. Um `docker build .` produz o runtime; tarefas de treinamento e diagnóstico de paridade precisam de `--target treinamento`. Consulte [imagens_docker.md](imagens_docker.md) para os perfis e a medição de tamanho.
+
 ## Benchmark HTTP em Docker
 
 O primeiro treinamento local também produz `data/prepared/validacao.csv`, usado como entrada do cliente de benchmark. Com a stack ativa:
@@ -64,7 +69,7 @@ docker compose -f docker-compose.yml -f docker-compose.benchmark.yml up -d --no-
 docker compose -f docker-compose.yml -f docker-compose.benchmark.yml stop api-original
 ```
 
-As duas APIs precisam ter carregado a mesma versão. Depois de um retreino, reinicie ambas antes de medir; o script rejeita versões ou motores incompatíveis. O novo relatório tem caminho próprio e não substitui os benchmarks históricos.
+O serviço `api-original` usa `medical-classifier-treino:local`, construída com o serviço `pipeline`. O cliente HTTP roda no host com as dependências completas instaladas acima. As duas APIs precisam ter carregado a mesma versão. Depois de um retreino, reinicie ambas antes de medir; o script rejeita versões ou motores incompatíveis. O novo relatório tem caminho próprio e não substitui os benchmarks históricos.
 
 Para comparar APIs **do host**, use dois terminais, com os mesmos artefatos `models/`:
 
@@ -87,7 +92,7 @@ Em um terceiro terminal:
 Inicialize primeiro a stack principal para criar os volumes externos de dados/modelos. Execute um produtor de modelos por vez: aguarde o pipeline Compose terminar antes do retreino Airflow.
 
 ```bash
-docker compose build api
+docker compose build api pipeline
 docker compose -f docker-compose.airflow.yml build airflow
 docker compose -f docker-compose.airflow.yml up -d airflow
 docker compose -f docker-compose.airflow.yml logs -f airflow
@@ -104,6 +109,8 @@ curl --fail --silent --show-error http://127.0.0.1:8000/ready
 ```
 
 A data lógica identifica a execução. A DAG é criada pausada; o comando acima executa suas quatro tarefas manualmente. O modelo publicado só entra na API depois do reinício.
+
+O `Dockerfile.airflow` deriva de `medical-classifier-treino:local`, que precisa existir antes do build Airflow. O orquestrador usa `/opt/airflow-venv`; as tarefas usam `/opt/model-venv`, link para o ambiente de treinamento `/opt/venv`. Os ambientes operacionais não duplicam pip; o pip da base Python verifica cada ambiente pelo argumento `--python`, conforme o [guia das imagens](imagens_docker.md).
 
 ## Qualidade e encerramento
 

@@ -1,5 +1,5 @@
-# Reutiliza as camadas da aplicação; construa medical-classifier:local primeiro.
-FROM medical-classifier:local
+# O retreino exige a imagem de treinamento; a API permanece independente do Airflow.
+FROM medical-classifier-treino:local
 
 USER root
 ENV PATH="/opt/airflow-venv/bin:$PATH" \
@@ -19,10 +19,10 @@ ENV PATH="/opt/airflow-venv/bin:$PATH" \
 ADD --checksum=sha256:b32ab3fa687c0e04b2260526fee79813bfb7944da5b6805e429c9f71b07c53f3 \
     https://raw.githubusercontent.com/apache/airflow/338bcef28071e8b833876554c502079adb3739d0/constraints-3.11.txt \
     /opt/airflow-constraints-3.11.txt
-RUN /usr/local/bin/python -m venv /opt/airflow-venv \
-    && /opt/airflow-venv/bin/python -m pip install --no-cache-dir --no-compile \
+RUN /usr/local/bin/python -m venv --without-pip /opt/airflow-venv \
+    && /usr/local/bin/python -m pip --python /opt/airflow-venv/bin/python install --no-cache-dir --no-compile \
         "apache-airflow==2.11.0" --constraint /opt/airflow-constraints-3.11.txt \
-    && /opt/airflow-venv/bin/python -m pip check \
+    && /usr/local/bin/python -m pip --python /opt/airflow-venv/bin/python check \
     && ln -s /opt/venv /opt/model-venv \
     && mkdir -p /opt/airflow/dags /opt/airflow/estado \
     && chown -R 10001:0 /opt/airflow \

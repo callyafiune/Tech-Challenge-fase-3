@@ -1,56 +1,116 @@
 {
   "bloco": "B3",
   "modelo_solicitado": "fable",
-  "inicio_utc": "2026-09-14T22:08:31.472846+00:00",
+  "inicio_utc": "2026-09-15T22:41:31.483116+00:00",
   "arquivos": [
     {
       "caminho": "Dockerfile",
-      "sha256": "21c75be0782d27414c736699d0cc84bd34fb51d24b9b58d0b11ef0f8600eea59",
-      "bytes": 1586
+      "sha256": "4358bcfb3c483b808bbdf63b4b95e42585e0922189bc81884a4b73359721a585",
+      "bytes": 2500
+    },
+    {
+      "caminho": "Dockerfile.airflow",
+      "sha256": "98321ec89247eaf7b3a9541abdb9185be51c85388911e8e14d5d0a30438998f3",
+      "bytes": 1863
+    },
+    {
+      "caminho": "docker-compose.yml",
+      "sha256": "35254d9ef5c85b70d71ff3ef065e506d138fb3a4b3379fd0704afc31d8f18a26",
+      "bytes": 3256
+    },
+    {
+      "caminho": "docker-compose.benchmark.yml",
+      "sha256": "ce8dfe6da28fcf936c88ccd4c416cdd5f014fbafc13efd1844f65443f1554c9a",
+      "bytes": 452
+    },
+    {
+      "caminho": "docker-compose.airflow.yml",
+      "sha256": "ca417e514095bbf9c5514d5a915cbed643a1cd02f426ad38904ee83906a7f6c6",
+      "bytes": 1534
     },
     {
       "caminho": ".dockerignore",
-      "sha256": "7cb4c1877b5e93ca10439f2177b02cd0aa67bbe84f52fa2f863e25dda39b7d8f",
-      "bytes": 240
-    },
-    {
-      "caminho": "requirements.lock",
-      "sha256": "7b4708337496ac4725e2fe0227ac7bce9b2912f38b699013d7c43589fe656deb",
-      "bytes": 987
+      "sha256": "0b10c20bd4868671dbf5c65dcc1e54b5f5c888e95279860541ef1c909c772820",
+      "bytes": 293
     },
     {
       "caminho": "pyproject.toml",
-      "sha256": "034e32bae249a88dee5b88e486360a7bfa678301dfa22d92174bedd5edf52b3d",
-      "bytes": 1018
+      "sha256": "25e973ae0d233e948d43ae1ee85e91d42511a1887a49012acde434785104d4d1",
+      "bytes": 1039
     },
     {
-      "caminho": "scripts/smoke_stack.py",
-      "sha256": "8a039af1dbc0dec8fe999ec3947ab548e88dd385144918cbb0d14788076590cc",
-      "bytes": 12881
+      "caminho": "requirements-runtime.lock",
+      "sha256": "725a088f6df342bd0c77206b5e6bc9956374ebf766dd06de83dbb390ef3b18ea",
+      "bytes": 516
     },
     {
-      "caminho": "tests/test_smoke_stack.py",
-      "sha256": "abdc019191bd5076a93d57a12712ef92db1ccb76ce0ebfbf212969270cfd2da0",
-      "bytes": 5153
+      "caminho": "requirements-treinamento.lock",
+      "sha256": "2d17b6c596e9e6573fff09c9a5f009964c124cb52ea8589591a365767ab1f932",
+      "bytes": 388
     },
     {
-      "caminho": "monitoring/README.md",
-      "sha256": "131f6017ee741d202afd3897e410652885071dc6bd9beb7a371c82ee51a9ae37",
-      "bytes": 4586
+      "caminho": "requirements-build.lock",
+      "sha256": "4f0ae0d076679c57678054712ae91ec2de817d19baed696f9f5269d146eb8154",
+      "bytes": 189
     },
     {
-      "caminho": "reports/docker/build_app.log",
-      "sha256": "01018ec4273b07546298e424a2be4a02bc4f327178f81f2e19f6434d3b6078a0",
-      "bytes": 3599
+      "caminho": "requirements.lock",
+      "sha256": "76b334e6c58af253b4aafbb31f7418016a187d99284f0f2e260182471ec5aaf3",
+      "bytes": 291
+    },
+    {
+      "caminho": "src/medical_classifier/contracts.py",
+      "sha256": "584088effb1555c58b4d5b4f4ddd909f8032ec1b6ba5a562f3deac5bba9135e1",
+      "bytes": 642
+    },
+    {
+      "caminho": "src/medical_classifier/data.py",
+      "sha256": "23306d1b062cb2c2e4f895482bc91625f285f3536f72e98f17e76ff8c13811cb",
+      "bytes": 5241
+    },
+    {
+      "caminho": "src/medical_classifier/serving.py",
+      "sha256": "c425816bb6ac6f65b99eb7ea17bb62342367ea0aeb87639ed501832f9b7cc68c",
+      "bytes": 3173
+    },
+    {
+      "caminho": "src/medical_classifier/api.py",
+      "sha256": "927038a9554bff67442bc432a908873011c00ec54fb1a072aa2eede37ec718af",
+      "bytes": 9748
+    },
+    {
+      "caminho": "tests/test_runtime_dependencies.py",
+      "sha256": "31efc6d7092884f3685393f981c54a1fe05d7f387c18b4d4ad5e2748d732994e",
+      "bytes": 4523
+    },
+    {
+      "caminho": "scripts/verificar_dependencias_imagem.py",
+      "sha256": "81f8c5649631c608eef5ef50af7b627103e2bc247498314e3d086c305c12e03c",
+      "bytes": 7236
+    },
+    {
+      "caminho": ".github/workflows/ci.yml",
+      "sha256": "4f65481a961bb43d8517ed23b246bf65cbe006c5a6dd04de828f446594e31c03",
+      "bytes": 6905
+    },
+    {
+      "caminho": ".github/workflows/diagnostico-paridade.yml",
+      "sha256": "5d7175b6a606c40b1c1bcdcbdc352a937b723824f0f63f8d380cb29e9b990575",
+      "bytes": 1620
+    },
+    {
+      "caminho": "docs/plano_imagens_enxutas.md",
+      "sha256": "b67e6a995245407950bf80b7478de8a75c53c0c75a66500ca4d1cbc421f54089",
+      "bytes": 2867
     }
   ],
-  "prompt_sha256": "6553f4b0f22732fb452aed4da0304b3ef3e1bbc8229e9a88c9b754635436d5aa",
-  "contexto": "Terceira rodada FOCADA exclusivamente no novo Dockerfile e nas correcoes do smoke. Runtime herda FROM dependencias, preserva /opt/venv e instala wheel pequeno em camada separada. Build novo concluiu codigo0 (log anexo), digest04875aff7dd271b654986a33392e577fe3a09d6c2769875b023ca560fc837377. O lock unico com treino/runtime/dev e decisao aceita neste trabalho academico; nao redesenhar dependencias. Airflow esta sendo alterado em bloco separado para FROM medical-classifier:local e symlink /opt/model-venv -> /opt/venv. Nao avalie B4 nem arquivos ausentes neste parecer focado. Smoke agora usa parametro time do Prometheus, fixo no timestamp devolvido pela consulta que confirmou a coleta, preservando janela20s durante esperas do Grafana. HTTP401 e403 distinguem credenciais persistidas/permissoes. Teste novo reproduziu as tres falhas ANTES da correcao (3failed), depois 3passed; Ruffcheck/formatpassed. Esses testes usam simulacao HTTP deterministica e nao provam a execucao da nova imagem na stack. Evidencias Docker existentes referem-se a imagem anterior; a nova imagem AINDA nao foi reimplantada nem teve smoke Docker repetido. Nao declarar essa verificacao concluida. Avaliar corretude das mudancas e da regressao, sem repetir alegacoes de snapshot antigo sobre22chamadas pois smoke anterior FINAL gerou23chamadas e versaoa767fe94 aposultimaimplantacao. Saida1 da revisao previa sobre vinculo imagem/modelo sera tratada na verificacao integrada final pelo orquestrador.",
+  "prompt_sha256": "180057dd46b0fc10945148223856789e7c1cd964a06fa6f23ce3def62a794148",
+  "contexto": "Usuario exige imagem Docker mais enxuta: API ONNX separada de treinamento e desenvolvimento, mantendo pipeline/benchmark/Airflow. Runtime so5dependenciasdiretas e transitivas obrigatorias; treinamentoadicionaextras; dev/buildfora. Venvssemduplicacaopip/setuptools, pipglobaldaimagePythonoficialusadoexternamente. Targetpadraoruntime, pipelinetreino, AirflowFROMtreino, benchmarksklearnusatreino. Versoesexistentespreservadas, dados/modelos/contratonormalizacaonaoalterados. Testesisoladoscomartefatorealbloqueiamimportstreino; suite107aprovados1ignorado. Builds/medicaoestaoemexecucao;naoalegamossucessoainda. CIverificafechamentotransitivodosperfis, DAGEsmokereais, entregapreservaAPIvalidada. AuditefalhasconcretasdeDocker/Compose/lock/import/integracao e lacunasquequebremosfluxos; nao exigirretiradadedependenciastransitivasdeclaradasnemimagemcustomONNXcompilada. Documentacaoemeditorevisaoevidenciaseraatualizadaaposmedicoes.",
   "timeout_segundos": 600,
   "aprovacao_automatica": false,
-  "fim_utc": "2026-09-14T22:11:09.133609+00:00",
+  "fim_utc": "2026-09-15T22:48:16.073860+00:00",
   "comando": [
-    "C:\\Users\\Cally\\.vscode\\extensions\\anthropic.claude-code-2.1.270-win32-x64\\resources\\native-binary\\claude.exe",
+    "C:\\Users\\Cally\\.vscode\\extensions\\anthropic.claude-code-2.1.272-win32-x64\\resources\\native-binary\\claude.exe",
     "-p",
     "--model",
     "fable",

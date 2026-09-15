@@ -1,5 +1,6 @@
 name: medical-classifier-airflow
 
+# Pré-requisito: docker compose build pipeline (imagem local de treinamento).
 services:
   airflow:
     build:

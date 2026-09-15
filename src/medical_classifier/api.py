@@ -18,7 +18,7 @@ from starlette.concurrency import run_in_threadpool
 from starlette.exceptions import HTTPException as StarletteHTTPException
 from starlette.types import ASGIApp, Message, Receive, Scope, Send
 
-from medical_classifier.data import CLASSES
+from medical_classifier.contracts import CLASSES
 from medical_classifier.metrics import HttpMetrics, HttpMetricsMiddleware
 from medical_classifier.serving import Predictor
 

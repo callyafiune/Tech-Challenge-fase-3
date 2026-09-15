@@ -1,0 +1,38 @@
+{
+  "registrado_em_utc": "2026-09-15T22:50:01.261718+00:00",
+  "metodo_tamanho": "Campo Size de docker image inspect, em bytes, no mesmo Docker Desktop e plataforma de antes.json. Não representa transferência de rede nem tamanho do venv descompactado.",
+  "referencia_anterior": "antes.json",
+  "api": {
+    "tag": "medical-classifier:local",
+    "imagem": "sha256:5617e32e0ad11c543d32cfab09ad179b32793910221de0a3a1b255397b967dc3",
+    "tamanho_docker_bytes": 92232108,
+    "plataforma": "linux/amd64",
+    "usuario": "10001:10001",
+    "comparacao": {
+      "imagem_anterior": "sha256:2065c72b758e285d7d8f4946e0a59376f90fa772bb0ccade55fedce1ee84d920",
+      "tamanho_anterior_bytes": 246360476,
+      "reducao_bytes": 154128368,
+      "reducao_percentual": 62.562132734310836
+    }
+  },
+  "treinamento": {
+    "tag": "medical-classifier-treino:local",
+    "imagem": "sha256:a15688140c748dde33bdc8cd74dd5a289652583aaf1b3bf721e48c83c1184290",
+    "tamanho_docker_bytes": 165226468,
+    "plataforma": "linux/amd64",
+    "usuario": "10001:10001"
+  },
+  "airflow": {
+    "tag": "medical-classifier-airflow:local",
+    "imagem": "sha256:2cc9d90a79dd3d35a3209ad07ea9f70b5e1771c00d1a52191a8df6e22e9c7642",
+    "tamanho_docker_bytes": 214284627,
+    "plataforma": "linux/amd64",
+    "usuario": "10001:0",
+    "comparacao": {
+      "imagem_anterior": "sha256:7b5eab2e6daec5e97012a1e9ac9a544b875edbb3e105f7a81243472422cd04d8",
+      "tamanho_anterior_bytes": 303130457,
+      "reducao_bytes": 88845830,
+      "reducao_percentual": 29.30943689370019
+    }
+  }
+}
