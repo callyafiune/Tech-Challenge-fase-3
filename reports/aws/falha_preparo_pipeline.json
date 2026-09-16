@@ -1,0 +1,89 @@
+{
+  "revisao": "901c8f89fcceb8677813709d04e390d50ded5a0d",
+  "execucao_implantacao": 35040175430,
+  "comando_implantacao": "f1fcd3d7-78bc-408d-bf52-642b67395a69",
+  "espera_antes_execucao_segundos": 1717.547,
+  "execucao_segundos": 33.872,
+  "leitura_recibo": {
+    "run": 35045938455,
+    "job": 104635640274
+  },
+  "inspecao_compose": {
+    "run": 35046098137,
+    "job": 104636118376
+  },
+  "reproducao": {
+    "run": 35046589424,
+    "job": 104637621756,
+    "resultados": [
+      {
+        "revisao": "901c8f89fcceb8677813709d04e390d50ded5a0d",
+        "sucesso": false,
+        "erro": "RuntimeError",
+        "mensagem": "Comando docker compose falhou: código 1.",
+        "corte_iniciado": false,
+        "recuperacao_em_andamento": false,
+        "rollback_concluido": false,
+        "memoria_disponivel_mib": 1679,
+        "imagens": {
+          "runtime": "076516546831.dkr.ecr.eu-west-1.amazonaws.com/tech-challenge-fase-3@sha256:654e7afdf306f1ff504f40269176aef91d45ad73e85b9a73e5aca6ee6b00025a",
+          "treinamento": "076516546831.dkr.ecr.eu-west-1.amazonaws.com/tech-challenge-fase-3@sha256:66a3dc3423dec3a5a37606f2d0f70e170d029eec19bc4746762d0e35a66b4094"
+        },
+        "legados_ativos": [],
+        "quantidade_erros_rollback": 0
+      },
+      {
+        "compose_config_codigo": 0,
+        "compose_config_erro": ""
+      },
+      {
+        "disco_total_gib": 29.93,
+        "disco_livre_gib": 22.5
+      },
+      {
+        "consulta": [
+          "docker",
+          "compose",
+          "version"
+        ],
+        "codigo": 0,
+        "resultado": "5.3.1\n"
+      },
+      {
+        "consulta": [
+          "docker",
+          "image",
+          "ls"
+        ],
+        "codigo": 0,
+        "resultado": "076516546831.dkr.ecr.eu-west-1.amazonaws.com/tech-challenge-fase-3:fase3-treinamento-901c8f89fcceb8677813709d04e390d50ded5a0d 511MB\n076516546831.dkr.ecr.eu-west-1.amazonaws.com/tech-challenge-fase-3:fase3-runtime-901c8f89fcceb8677813709d04e390d50ded5a0d 279MB\ngrafana/grafana:13.2.1 1.39GB\nprom/prometheus:v3.14.0 261MB\n076516546831.dkr.ecr.eu-west-1.amazonaws.com/tech-challenge-fase-2:533dc2740ece75e1316ffa36537342535f89c63d 1.54GB\n"
+      },
+      {
+        "consulta": [
+          "docker",
+          "ps",
+          "-a"
+        ],
+        "codigo": 0,
+        "resultado": ""
+      },
+      {
+        "autenticacao_ecr": "renovada"
+      },
+      {
+        "etapa": "baixar_imagens",
+        "codigo": 0,
+        "saida": "",
+        "erro": " Image prom/prometheus:v3.14.0 Pulling \n Image grafana/grafana:13.2.1 Pulling \n Image 076516546831.dkr.ecr.eu-west-1.amazonaws.com/tech-challenge-fase-3@sha256:654e7afdf306f1ff504f40269176aef91d45ad73e85b9a73e5aca6ee6b00025a Pulling \n Image 076516546831.dkr.ecr.eu-west-1.amazonaws.com/tech-challenge-fase-3@sha256:654e7afdf306f1ff504f40269176aef91d45ad73e85b9a73e5aca6ee6b00025a Pulled \n Image prom/prometheus:v3.14.0 Pulled \n Image grafana/grafana:13.2.1 Pulled \n"
+      },
+      {
+        "etapa": "criar_pipeline_parado",
+        "codigo": 1,
+        "saida": "",
+        "erro": "unknown flag: --no-deps\n"
+      }
+    ]
+  },
+  "causa": "docker compose create rejeita a opção --no-deps.",
+  "corte_iniciado": false
+}

@@ -1,6 +1,6 @@
 # Verificação da automação AWS
 
-**Estado:** CI remoto concluído com sucesso na revisão `eacd3b9`; implantação bloqueada pela autenticação OIDC. A tentativa não publicou imagens no ECR nem enviou comandos ao SSM, e não implantou a fase 3 na EC2.
+**Estado:** a revisão `901c8f8` passou no CI, autenticou por OIDC e publicou as imagens no ECR. A execução remota falhou no preparo do Compose, antes da troca da API. A causa foi reproduzida e corrigida; a implantação dessa correção ainda exige validação remota.
 
 ## Revisão adversarial
 
@@ -39,7 +39,28 @@ O contrato do pipeline foi conferido em `medical_classifier.pipeline`: a saída 
 
 Na [execução 35038813631](https://github.com/callyafiune/Tech-Challenge-fase-3/actions/runs/35038813631), referente à revisão `eacd3b9` de `main`, o [job de CI 104613859320](https://github.com/callyafiune/Tech-Challenge-fase-3/actions/runs/35038813631/job/104613859320) terminou com sucesso. O [job de implantação 104614737817](https://github.com/callyafiune/Tech-Challenge-fase-3/actions/runs/35038813631/job/104614737817) falhou ao executar `sts:AssumeRoleWithWebIdentity`, na autenticação OIDC, antes das etapas de ECR e SSM.
 
-Esse resultado comprova o CI daquela revisão e o bloqueio de autenticação; não comprova implantação ou inferência da fase 3 no endereço público. Os ajustes posteriores à terceira revisão têm as verificações locais descritas abaixo e precisam de uma nova execução remota para evidenciar sua publicação.
+Esse resultado é histórico. Na [execução 35040175430](https://github.com/callyafiune/Tech-Challenge-fase-3/actions/runs/35040175430), revisão `901c8f8`, OIDC, ECR e envio SSM funcionaram. O comando `f1fcd3d7-78bc-408d-bf52-642b67395a69` aguardou 1.717,547 segundos até o início registrado e executou por 33,872 segundos. O recibo registra `corte_iniciado: false`: essa tentativa não substituiu a API anterior.
+
+O [diagnóstico remoto](../reports/aws/falha_preparo_pipeline.json) confirmou configuração válida, 22,5 GiB livres e download das imagens concluído. A reprodução isolada retornou `unknown flag: --no-deps` em `docker compose create --no-deps pipeline`. O comando passou a ser `docker compose create pipeline`; esse serviço não possui dependências. O teste de regressão captura o comando completo gerado pela implantação e usa a CLI real com `--help`, sem depender de daemon: falhou antes da correção e passou depois. As opções válidas de `run` e `up` foram preservadas.
+
+O diagnóstico usou SSM, sem abrir SSH ou alterar grupos de segurança. Os pareceres do [diagnóstico](../reports/reviews/diagnostico-ssm/B4.md), da [reprodução controlada](../reports/reviews/diagnostico-preparo/B4.md) e da [correção](../reports/reviews/B4.md) preservam os respectivos escopos.
+
+### Tratamento da revisão da correção
+
+O [diff enviado ao revisor](../reports/reviews/correcao_preparo.diff) preserva o snapshot do comando e de sua regressão. As correções posteriores do cliente SSM são verificadas pelos testes, sem atribuir aprovação automática ao parecer.
+
+| Achado | Decisão e evidência |
+|---|---|
+| Observação menor que a soma dos limites SSM | O prazo é de 3.300 s (600 + 2.400 + 300 s de margem); uma expiração informa resultado indeterminado e exige consulta antes de repetir |
+| Falha transitória de consulta interrompe imediatamente o acompanhamento | Códigos transitórios conhecidos recebem novas consultas com espera limitada; o comando remoto não é reenviado |
+| Código seguro da falha de consulta perdido no artefato | O artefato preserva `ErroConsulta`, além da última resposta disponível |
+| Consulta expirada não aparece após o primeiro estado | O progresso inclui o contador de consultas sem resposta |
+| Regressão cobre somente `create` | Escopo mantido no defeito reproduzido. `run` e `up` não foram alterados; sua execução integra os ensaios da stack |
+| Possível download antes da guarda de memória | Não confirmado: a primeira guarda ocorre antes da autenticação e de qualquer download; a imagem de treinamento já é obtida antes de `create`. Outra guarda confere a memória imediatamente antes do pipeline |
+| Espera de 1.717 s parecer incompatível com envio de 600 s | A AWS define o prazo total de entrega como a soma do parâmetro de envio e do prazo do documento: 600 + 2.400 = 3.000 s. O registro não identifica a causa do atraso do agente |
+| Evidências externas ausentes do snapshot | Os links das execuções reais estão no relatório de diagnóstico; a CLI e os testes foram executados separadamente. O parecer continua sendo análise estática |
+
+O contrato de timeout está na [documentação do Systems Manager](https://docs.aws.amazon.com/systems-manager/latest/userguide/monitor-commands.html). Os artefatos de falha preservam a resposta SSM para diagnóstico; o console imprime apenas campos permitidos e o caminho de recibo validado.
 
 ## Treinamento com recursos limitados
 
@@ -47,15 +68,15 @@ O [ensaio local](../reports/aws/treino_limitado.json) executou o pipeline comple
 
 ## Testes e permissões
 
-A [suíte local completa](../reports/aws/testes_locais.xml) terminou com 159 testes aprovados e dois ignorados no Windows. Ruff verificou 29 arquivos e o actionlint passou. Os casos de implantação exercitam memória insuficiente, ordem entre preparo e corte, recuperação de políticas de reinício e limpeza após timeout, SIGALRM e SIGTERM. A verificação Compose usa o parser real.
+A [suíte local completa](../reports/aws/testes_locais.xml) terminou com 181 testes aprovados e dois ignorados no Windows: integração Airflow em container e sinais POSIX. Ruff verificou 29 arquivos no escopo do CI e o actionlint passou. Os casos de implantação exercitam memória insuficiente, ordem entre preparo e corte, recuperação de políticas de reinício e limpeza após timeout, SIGALRM e SIGTERM. A verificação Compose usa o parser real. Os 29 testes do cliente SSM cobrem progresso, consultas expiradas, erros transitórios, preservação de evidências e resultado indeterminado quando o acompanhamento termina sem resposta final.
 
-O conjunto de [testes de implantação](../tests/test_aws_deployment.py) terminou com 44 aprovados e um ignorado por exigir POSIX. Inclui a marcação de Airflow herdado ou explícito, a recusa de estado incoerente e versões Compose com sufixo, antigas ou inválidas. Também verifica a limpeza por rótulo, o orçamento decrescente de recuperação e a gravação do recibo antes das operações de retorno.
+O conjunto de [testes de implantação](../tests/test_aws_deployment.py) terminou com 45 aprovados e um ignorado por exigir POSIX. Inclui a regressão da CLI `create`, a marcação de Airflow herdado ou explícito, a recusa de estado incoerente e versões Compose com sufixo, antigas ou inválidas. Também verifica a limpeza por rótulo, o orçamento decrescente de recuperação e a gravação do recibo antes das operações de retorno.
 
 O [ensaio Linux de permissões](../reports/aws/permissoes_linux.json) confirmou que os usuários 472 e 65534 conseguem ler configurações extraídas sob `umask 077`. A cópia sintética sem os ajustes de permissões reproduziu a falha. Containers temporários foram removidos, sem montagem dos volumes da stack.
 
 ## Limites operacionais
 
-A revisão adicional de OIDC/IAM está no [parecer B4](../reports/reviews/B4.md). A documentação esclarece que a edição de confiança substitui o documento inteiro, distingue o bucket dispensável da fase 3 de recursos legados e vincula os metadados públicos do repositório ao [registro da primeira tentativa](../reports/aws/autenticacao_inicial.json). O workflow registra uma lista explícita de campos públicos, incluindo referências de branch e workflow, e mascara o token. A comparação do `sub` real com a confiança AWS continua pendente; o exemplo usa o formato padrão documentado para a data de criação do repositório. O script remoto autentica no ECR e obtém digests por `docker image inspect`, sem exigir `ecr:DescribeImages` na EC2. Regras de aprovação do environment podem suspender o deploy automático até aprovação.
+A revisão adicional de OIDC/IAM está no [parecer preservado](../reports/reviews/aws-oidc/B4.md). O workflow registra uma lista explícita de campos públicos e mascara o token. A autenticação da revisão `901c8f8` confirmou o `sub` com IDs imutáveis descrito em [aws.md](aws.md). O script remoto autentica no ECR e obtém digests por `docker image inspect`, sem exigir `ecr:DescribeImages` na EC2. Regras de aprovação do environment podem suspender o deploy automático até aprovação.
 
 O retorno automático depende de o host, o Docker e os volumes continuarem disponíveis. Encerramento forçado, falta de disco ou falha do host podem impedir a recuperação. O procedimento manual e os arquivos de estado estão descritos em [aws.md](aws.md).
 

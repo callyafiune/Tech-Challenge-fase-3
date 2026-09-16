@@ -20,7 +20,7 @@ Esta conferência cobre os entregáveis presentes no repositório, sem afirmar a
 
 ## Verificação complementar
 
-A suíte local com a automação AWS passou em **159 testes**, com dois casos ignorados no Windows; nenhuma falha ou erro. Ruff passou na análise e formatação de 29 arquivos. O [resultado JUnit](../reports/aws/testes_locais.xml), a [verificação AWS](verificacao_aws.md) e o [registro de revisões Fable](revisoes_adversariais.md) documentam os achados, as correções e os limites. A verificação anterior das imagens permanece em [verificacao_codigo.json](../reports/docker/imagem_enxuta/verificacao_codigo.json).
+A suíte local com a automação AWS passou em **181 testes**, com dois casos ignorados no Windows; nenhuma falha ou erro. Ruff passou na análise e formatação de 29 arquivos no escopo do CI. O [resultado JUnit](../reports/aws/testes_locais.xml), a [verificação AWS](verificacao_aws.md) e o [registro de revisões Fable](revisoes_adversariais.md) documentam os achados, as correções e os limites. A verificação anterior das imagens permanece em [verificacao_codigo.json](../reports/docker/imagem_enxuta/verificacao_codigo.json).
 
 O [CI atual](../reports/ci/35033470421/execucao.json) concluiu a verificação do empacotamento separado, com 107 testes aprovados, um ignorado, DAG real e [smoke remoto](../reports/ci/35033470421/smoke_stack.json). O CI `34921095963`, a [atualização local daquele ciclo](../reports/auditoria_criterios/runtime_final.json) e seu [smoke](../reports/auditoria_criterios/smoke_stack_final.json) permanecem históricos.
 

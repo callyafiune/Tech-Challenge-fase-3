@@ -476,7 +476,7 @@ def implantar_travado(args) -> dict:
         compose(estado, "pull", "api", "prometheus", "grafana")
         if estado["imagens"].get("airflow"):
             compose(estado, "config", "--quiet", airflow=True)
-        compose(estado, "create", "--no-deps", "pipeline")
+        compose(estado, "create", "pipeline")
         ponteiro_anterior = ponteiro(estado["imagens"]["runtime"])
         minimo = MEMORIA_REUSO_MIB if ponteiro_anterior else MEMORIA_MINIMA_MIB
         estado["memoria_antes_pipeline_mib"] = verificar_memoria(minimo_mib=minimo)

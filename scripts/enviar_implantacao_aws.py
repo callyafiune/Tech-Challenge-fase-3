@@ -10,6 +10,7 @@ import argparse
 import base64
 import json
 import os
+import re
 import shlex
 import subprocess
 import sys
@@ -24,13 +25,47 @@ TEXTO_EXEMPLO = (
     "The study evaluated cardiovascular risk factors and the association "
     "between hypertension and coronary artery disease."
 )
+ESTADOS_TRANSITORIOS = {"Pending", "InProgress", "Delayed", "Cancelling"}
+ESTADOS_CONHECIDOS = ESTADOS_TRANSITORIOS | {
+    "Success",
+    "Failed",
+    "Cancelled",
+    "TimedOut",
+    "RegistroPendente",
+    "ConsultaSemResposta",
+}
+ERROS_AWS_CONHECIDOS = {
+    "InvocationDoesNotExist",
+    "AccessDenied",
+    "AccessDeniedException",
+    "InvalidInstanceId",
+    "InvalidCommandId",
+    "Throttling",
+    "ThrottlingException",
+    "ExpiredToken",
+    "UnrecognizedClientException",
+    "RequestExpired",
+    "InternalServerError",
+    "ServiceUnavailable",
+}
+ERROS_AWS_TRANSITORIOS = {
+    "Throttling",
+    "ThrottlingException",
+    "ServiceUnavailable",
+    "InternalServerError",
+}
+MAX_TENTATIVAS_TRANSITORIAS = 5
+PRAZO_ENTREGA_SSM = 600
+PRAZO_EXECUCAO_SSM = 2400
+MARGEM_OBSERVACAO_SSM = 300
+PADRAO_RECIBO = r"/opt/tech-challenge-fase-3/releases/\d{8}T\d{12}Z-[a-f0-9]{12}/receipt\.json"
 
 
 def parametros_ssm(fonte: bytes, argumentos: list[str]) -> dict:
     """Transporta código e argumentos sem depender de SSH ou interpolar credenciais."""
     codigo = base64.b64encode(fonte).decode("ascii")
     parametros = {
-        "executionTimeout": ["2400"],
+        "executionTimeout": [str(PRAZO_EXECUCAO_SSM)],
         "commands": [
             "set -eu",
             "umask 077",
@@ -78,7 +113,18 @@ def consultar(url: str, corpo: dict | None = None) -> dict:
         return json.load(resposta)
 
 
-def aws(argumentos: argparse.Namespace, comando: list[str]) -> dict:
+def codigo_erro_aws(texto: str) -> str:
+    return next(
+        (
+            palavra
+            for palavra in re.findall(r"\b[A-Za-z][A-Za-z0-9]*\b", texto)
+            if palavra in ERROS_AWS_CONHECIDOS
+        ),
+        "NaoIdentificado",
+    )
+
+
+def aws(argumentos: argparse.Namespace, comando: list[str], *, prazo_segundos: float = 60) -> dict:
     """Executa a AWS CLI sem imprimir tokens ou exportar credenciais para o servidor."""
     resultado = subprocess.run(
         [
@@ -98,17 +144,97 @@ def aws(argumentos: argparse.Namespace, comando: list[str]) -> dict:
         capture_output=True,
         encoding="utf-8",
         env={**os.environ, "AWS_PAGER": ""},
-        timeout=60,
+        timeout=prazo_segundos,
     )
     if resultado.returncode:
-        raise RuntimeError(resultado.stderr.strip() or "A AWS CLI retornou erro.")
+        codigo = codigo_erro_aws(resultado.stderr)
+        raise RuntimeError(f"A AWS CLI retornou erro ({codigo}); saída bruta omitida.")
     return json.loads(resultado.stdout)
 
 
+def diagnostico_remoto(resultado: dict) -> dict:
+    """Aceita somente o contrato conhecido; mensagens e campos arbitrários não viram logs."""
+    try:
+        remoto = json.loads(resultado.get("StandardOutputContent", ""))
+    except (ValueError, TypeError):
+        return {}
+    if not isinstance(remoto, dict) or type(remoto.get("sucesso")) is not bool:
+        return {}
+    diagnostico = {"sucesso": remoto["sucesso"]}
+    recibo = remoto.get("receipt")
+    if isinstance(recibo, str) and re.fullmatch(PADRAO_RECIBO, recibo):
+        diagnostico["receipt"] = recibo
+    mensagem = remoto.get("mensagem")
+    if isinstance(mensagem, str):
+        encontrado = re.fullmatch(rf"Implantação falhou; consulte ({PADRAO_RECIBO})\.", mensagem)
+        if encontrado:
+            diagnostico["receipt"] = encontrado.group(1)
+    return diagnostico
+
+
+def progresso_ssm(
+    resultado: dict,
+    inicio: float,
+    consultas_sem_resposta: int = 0,
+    erro_consulta: str | None = None,
+) -> dict:
+    estado = resultado.get("Status")
+    estado = estado if estado in ESTADOS_CONHECIDOS else "Desconhecido"
+    inicio_remoto = resultado.get("ExecutionStartDateTime")
+    if not isinstance(inicio_remoto, str) or not re.fullmatch(
+        r"\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}(?:\.\d{1,6})?(?:Z|\+00:00)", inicio_remoto
+    ):
+        inicio_remoto = None
+    elif inicio_remoto:
+        try:
+            datetime.fromisoformat(inicio_remoto.replace("Z", "+00:00"))
+        except ValueError:
+            inicio_remoto = None
+    return {
+        "evento": "progresso_ssm",
+        "estado": estado,
+        "tempo_observado_segundos": round(time.monotonic() - inicio, 1),
+        "inicio_execucao_utc": inicio_remoto,
+        "consultas_sem_resposta": consultas_sem_resposta,
+        "erro_consulta": erro_consulta,
+    }
+
+
+def preservar_falha(argumentos: argparse.Namespace, resultado: dict) -> str:
+    """Preserva a evidência original no artefato, exibindo apenas diagnóstico permitido."""
+    arquivo = argumentos.saida.with_name("falha_ssm.json")
+    arquivo.write_text(json.dumps(resultado, ensure_ascii=False, indent=2), encoding="utf-8")
+    diagnostico = diagnostico_remoto(resultado)
+    detalhe = (
+        " Diagnóstico remoto: " + json.dumps(diagnostico, ensure_ascii=False) if diagnostico else ""
+    )
+    return f"Artefato preservado em {arquivo}.{detalhe}"
+
+
 def aguardar(argumentos: argparse.Namespace, comando_id: str) -> dict:
-    """Tolera a consistência eventual do SSM e nunca interpreta erro como sucesso."""
-    limite = time.monotonic() + 2500
+    """Mostra transições e início remoto, com intervalo máximo de 60 s entre avisos."""
+    inicio = ultimo_aviso = time.monotonic()
+    limite = inicio + PRAZO_ENTREGA_SSM + PRAZO_EXECUCAO_SSM + MARGEM_OBSERVACAO_SSM
+    assinatura = None
+    consultas_sem_resposta = tentativas_transitorias = 0
+    erro_consulta = None
+    resultado = {"CommandId": comando_id, "InstanceId": argumentos.instancia}
+
+    def avisar():
+        nonlocal ultimo_aviso, assinatura
+        progresso = progresso_ssm(resultado, inicio, consultas_sem_resposta, erro_consulta)
+        nova = (progresso["estado"], progresso["inicio_execucao_utc"], erro_consulta)
+        if nova != assinatura or time.monotonic() - ultimo_aviso >= 60:
+            print(json.dumps(progresso, ensure_ascii=False), file=sys.stderr, flush=True)
+            ultimo_aviso, assinatura = time.monotonic(), nova
+
     while time.monotonic() < limite:
+        if assinatura is not None and time.monotonic() - ultimo_aviso >= 60:
+            avisar()
+        prazo = min(30, limite - time.monotonic(), ultimo_aviso + 60 - time.monotonic())
+        if prazo <= 0:
+            continue
+        intervalo = 5
         try:
             resultado = aws(
                 argumentos,
@@ -120,24 +246,70 @@ def aguardar(argumentos: argparse.Namespace, comando_id: str) -> dict:
                     "--instance-id",
                     argumentos.instancia,
                 ],
+                prazo_segundos=prazo,
             )
+        except subprocess.TimeoutExpired:
+            consultas_sem_resposta += 1
+            tentativas_transitorias = 0
+            erro_consulta = "TimeoutConsulta"
+            if "Status" not in resultado:
+                resultado["Status"] = "ConsultaSemResposta"
         except RuntimeError as erro:
-            if "InvocationDoesNotExist" not in str(erro):
-                raise
-        else:
-            estado = resultado["Status"]
-            if estado == "Success":
-                return resultado
-            if estado not in {"Pending", "InProgress", "Delayed"}:
-                argumentos.saida.with_name("falha_ssm.json").write_text(
-                    json.dumps(resultado, ensure_ascii=False, indent=2), encoding="utf-8"
+            erro_consulta = codigo_erro_aws(str(erro))
+            if erro_consulta == "InvocationDoesNotExist":
+                tentativas_transitorias = 0
+                resultado = {**resultado, "Status": "RegistroPendente"}
+            elif erro_consulta in ERROS_AWS_TRANSITORIOS:
+                tentativas_transitorias += 1
+                intervalo = min(30, 5 * 2 ** (tentativas_transitorias - 1))
+            avisar()
+            if (
+                erro_consulta not in ERROS_AWS_TRANSITORIOS | {"InvocationDoesNotExist"}
+                or tentativas_transitorias >= MAX_TENTATIVAS_TRANSITORIAS
+            ):
+                detalhe = preservar_falha(
+                    argumentos,
+                    {
+                        **resultado,
+                        "ErroConsulta": erro_consulta,
+                        "TentativasConsulta": tentativas_transitorias,
+                        "ResultadoIndeterminado": True,
+                    },
                 )
                 raise RuntimeError(
-                    f"O comando SSM {comando_id} terminou com estado {estado}. "
-                    "Consulte a saída no Systems Manager antes de repetir a implantação."
+                    f"Consulta SSM interrompida ({erro_consulta}); resultado remoto indeterminado. "
+                    f"O comando pode continuar em execução; consulte-o antes de repetir. {detalhe}"
+                ) from None
+        else:
+            erro_consulta = None
+            tentativas_transitorias = 0
+            avisar()
+            estado = progresso_ssm(resultado, inicio)["estado"]
+            if estado == "Success":
+                return resultado
+            if estado not in ESTADOS_TRANSITORIOS:
+                detalhe = preservar_falha(argumentos, resultado)
+                raise RuntimeError(
+                    f"O comando SSM {comando_id} terminou com estado {estado}. {detalhe}"
                 )
-        time.sleep(5)
-    raise TimeoutError(f"O comando SSM {comando_id} não concluiu no prazo observado.")
+        avisar()
+        pausa = min(intervalo, limite - time.monotonic(), ultimo_aviso + 60 - time.monotonic())
+        if pausa > 0:
+            time.sleep(pausa)
+    detalhe = preservar_falha(
+        argumentos,
+        {
+            **resultado,
+            "ObservacaoExpirada": True,
+            "ResultadoIndeterminado": True,
+            "ErroConsulta": erro_consulta,
+            "ConsultasSemResposta": consultas_sem_resposta,
+        },
+    )
+    raise TimeoutError(
+        f"Observação do comando SSM {comando_id} encerrada com resultado indeterminado. "
+        f"O comando pode continuar em execução; consulte-o antes de repetir. {detalhe}"
+    )
 
 
 def executar(argumentos: argparse.Namespace) -> dict:
@@ -204,7 +376,7 @@ def executar(argumentos: argparse.Namespace) -> dict:
             "--parameters",
             "file://" + str(arquivo.resolve()),
             "--timeout-seconds",
-            "600",
+            str(PRAZO_ENTREGA_SSM),
             "--comment",
             f"Fase 3: {argumentos.revisao}",
         ],

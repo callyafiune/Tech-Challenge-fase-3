@@ -1,10 +1,12 @@
 # Fase 3 na EC2 existente
 
-**Estado: configuração preparada; implantação remota ainda não confirmada.** A existência dos arquivos e a validação local do Compose não demonstram que a EC2 já serve a fase 3. A confirmação exige a execução remota e as respostas da API com a versão do modelo publicada.
+**Estado: OIDC, ECR e SSM verificados; implantação da fase 3 ainda não confirmada.** A revisão `901c8f8` falhou no preparo do Compose antes da troca da API. A causa e a correção estão na [verificação AWS](verificacao_aws.md). A confirmação exige uma nova execução remota e respostas públicas com a versão do modelo publicada.
 
 ## GitHub Actions e recursos de destino
 
 O fluxo principal é [`.github/workflows/implantar-aws.yml`](../.github/workflows/implantar-aws.yml), iniciado automaticamente por cada push na `main`. Ele chama o CI reutilizável para a mesma revisão e só após aprovação assume o papel AWS por OIDC e publica no ECR as imagens de inferência e treinamento produzidas e verificadas pelo CI, sem reconstruí-las. Airflow também usa a imagem verificada pelo CI e é publicado quando solicitado. A implantação segue para a EC2 por SSM. O runner recebe credenciais temporárias; esse caminho não exige perfil AWS local nem chaves de acesso salvas nos secrets do GitHub.
+
+Esse fluxo não usa SSH nem EC2 Instance Connect; a porta 22 pode permanecer fechada. O cliente mostra o estado SSM, o tempo observado e, quando disponível, o horário de início efetivo. Os avisos periódicos distinguem espera pelo agente de execução já iniciada. Em falha, preserva a resposta SSM no artefato da execução e mostra o caminho validado do recibo, quando disponível. A expiração do acompanhamento não confirma que o comando remoto terminou: consulte seu estado antes de repetir a implantação.
 
 | Recurso | Identificação |
 |---|---|

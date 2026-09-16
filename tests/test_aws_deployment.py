@@ -29,8 +29,8 @@ ROTULO_TEMPORARIO = "io.github.callyafiune.tech-challenge-fase-3.temporario=ssm"
 
 
 @pytest.fixture
-def compose_config(tmp_path):
-    """Usa o parser real do Compose, inclusive suas regras de merge e tags de override."""
+def docker_compose_cli():
+    """Localiza a CLI sem exigir conexão com um daemon Docker."""
     docker = shutil.which("docker")
     if docker is None:
         pytest.skip("Docker Compose é necessário para verificar os manifests de implantação.")
@@ -39,6 +39,13 @@ def compose_config(tmp_path):
     )
     if disponivel.returncode:
         pytest.skip("O plugin Docker Compose não está disponível neste ambiente.")
+    return docker
+
+
+@pytest.fixture
+def compose_config(tmp_path, docker_compose_cli):
+    """Usa o parser real do Compose, inclusive suas regras de merge e tags de override."""
+    docker = docker_compose_cli
     arquivo_env = tmp_path / "vazio.env"
     arquivo_env.write_text("", encoding="utf-8")
     ambiente = {
@@ -619,6 +626,33 @@ def ambiente_implantacao(implantacao, monkeypatch, tmp_path):
 
 def comandos_observados(ambiente):
     return [valor for evento, valor in ambiente.eventos if evento == "comando"]
+
+
+def test_comando_create_gerado_pela_implantacao_e_aceito_pela_cli_real(
+    docker_compose_cli, ambiente_implantacao
+):
+    """--help valida as opções do comando capturado sem criar containers nem usar o daemon."""
+    ambiente = ambiente_implantacao
+    assert ambiente.executar()["sucesso"] is True
+    comandos = [
+        comando
+        for comando in comandos_observados(ambiente)
+        if comando[:2] == ["docker", "compose"] and "create" in comando
+    ]
+    assert comandos, "A preparação do volume deve gerar um comando Compose create."
+    env = os.environ.copy()
+    for variavel in ("DOCKER_CONTEXT", "DOCKER_TLS_VERIFY", "DOCKER_CERT_PATH"):
+        env.pop(variavel, None)
+    env["DOCKER_HOST"] = "tcp://127.0.0.1:1"
+    for comando in comandos:
+        resultado = subprocess.run(
+            [docker_compose_cli, *comando[1:], "--help"],
+            capture_output=True,
+            encoding="utf-8",
+            env=env,
+            timeout=30,
+        )
+        assert resultado.returncode == 0, resultado.stderr
 
 
 def test_memoria_insuficiente_aborta_antes_de_pull_treino_ou_corte(ambiente_implantacao):

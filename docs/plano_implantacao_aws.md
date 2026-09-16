@@ -8,7 +8,7 @@
 
 - [x] Identificar endpoint, instância, região e ECR pela implantação anterior.
 - [x] Conferir resposta pública da aplicação anterior.
-- [ ] Obter uma sessão AWS com permissões de implantação e inspecionar a capacidade da instância.
+- [x] Obter uma sessão AWS com permissões de implantação e inspecionar a capacidade da instância.
 - [x] Criar sobreposições Compose que consumam imagens ECR sem construir no servidor.
 - [x] Preparar automação de instalação, verificação e retorno para a versão anterior.
 
@@ -17,13 +17,13 @@
 - [x] Validar os manifests e os caminhos de falha da automação.
 - [x] Submeter a implementação a três rodadas de revisão adversarial Claude Code `fable` e tratar os achados com verificações locais.
 - [x] Executar o CI remoto e verificar o encadeamento automático até a tentativa de autenticação da implantação.
-- [ ] Publicar as imagens com identificação da revisão e conferir seus digests.
+- [x] Publicar as imagens com identificação da revisão e conferir seus digests.
 - [ ] Preparar arquivos e modelos na instância, verificando o candidato antes da troca da porta pública.
 - [ ] Substituir a aplicação anterior e verificar `/health`, `/ready` e `/predict` externamente.
 - [ ] Registrar recursos, imagens, modelo e resultado da implantação, sem credenciais.
 
-**Estado:** a [execução 35038813631](https://github.com/callyafiune/Tech-Challenge-fase-3/actions/runs/35038813631) da revisão `eacd3b9` concluiu o CI com sucesso. O job de implantação falhou na autenticação OIDC (`sts:AssumeRoleWithWebIdentity`), antes de publicar imagens no ECR ou enviar comandos ao SSM. Nenhuma implantação da fase 3 ocorreu nessa tentativa.
+**Estado:** a [execução 35040175430](https://github.com/callyafiune/Tech-Challenge-fase-3/actions/runs/35040175430), revisão `901c8f8`, concluiu CI, autenticação OIDC, publicação ECR e envio SSM. A implantação falhou antes da troca da API porque `docker compose create` rejeita `--no-deps`. A reprodução remota e a correção estão registradas na [verificação AWS](verificacao_aws.md).
 
-Os ajustes posteriores à terceira revisão incluem o artefato Airflow produzido pelo CI, a identificação de imagem herdada, a recusa de estado anterior junto a legados ativos, a validação do destino antes da publicação e o suporte a sufixos de versão do Compose. O conjunto específico de implantação passou 44 testes, com um ignorado por exigir POSIX. Os [resultados e limites](verificacao_aws.md) distinguem a revisão validada remotamente das alterações verificadas localmente.
+O comando de criação foi corrigido e recebeu uma regressão com a CLI real. O cliente SSM também passou a mostrar progresso e o início efetivo da execução. As correções foram submetidas à revisão adversarial `fable`; os achados e testes posteriores estão na [verificação AWS](verificacao_aws.md).
 
-A autenticação OIDC precisa ser corrigida antes das etapas ainda pendentes. As cinco variáveis e as políticas necessárias estão descritas em [aws.md](aws.md); a confirmação de ECR, SSM, capacidade da instância e inferência pública permanece necessária.
+As cinco variáveis e as políticas necessárias estão descritas em [aws.md](aws.md). ECR, SSM e capacidade inicial foram conferidos. A próxima execução precisa concluir o preparo do modelo, a troca da aplicação e a validação pública.
