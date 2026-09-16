@@ -1,0 +1,107 @@
+name: Ler recibo da implantação AWS
+
+on:
+  push:
+    branches: [diagnostico/ssm-recibo]
+
+permissions:
+  contents: read
+  id-token: write
+
+jobs:
+  consultar:
+    runs-on: ubuntu-latest
+    timeout-minutes: 6
+    environment: production
+    steps:
+      - name: Autenticar a consulta por OIDC
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          role-to-assume: ${{ vars.AWS_ROLE_ARN }}
+          aws-region: eu-west-1
+          role-session-name: consulta-recibo-${{ github.run_id }}
+      - name: Consultar somente o recibo da execução que falhou
+        shell: python
+        run: |
+          import json
+          import pathlib
+          import re
+          import subprocess
+          import time
+
+          def aws(*argumentos):
+              resultado = subprocess.run(
+                  ['aws', '--region', 'eu-west-1', '--no-cli-pager',
+                   '--cli-connect-timeout', '5', '--cli-read-timeout', '10',
+                   *argumentos, '--output', 'json'],
+                  capture_output=True, text=True, timeout=20,
+              )
+              if resultado.returncode:
+                  if argumentos[:2] == ('ssm', 'get-command-invocation') and 'InvocationDoesNotExist' in resultado.stderr:
+                      raise LookupError('A invocação ainda não foi propagada.')
+                  erro = re.search(r'An error occurred \(([A-Za-z0-9]+)\) when calling the ([A-Za-z0-9]+) operation', resultado.stderr)
+                  resumo = ': '.join(erro.groups()) if erro else 'erro não identificado'
+                  raise RuntimeError('A consulta AWS falhou: ' + resumo + '; código ' + str(resultado.returncode))
+              return json.loads(resultado.stdout)
+
+          if aws('sts', 'get-caller-identity')['Account'] != '076516546831':
+              raise RuntimeError('A sessão não pertence à conta esperada.')
+
+          codigo = '''import json
+          from pathlib import Path
+          caminho = Path('/opt/tech-challenge-fase-3/releases/20260916T011838140279Z-901c8f89fcce/receipt.json')
+          if not caminho.is_file():
+              print(json.dumps({'erro': 'recibo_ausente', 'caminho': str(caminho)}))
+              raise SystemExit(1)
+          if caminho.stat().st_size > 65536:
+              print(json.dumps({'erro': 'recibo_excede_limite'}))
+              raise SystemExit(1)
+          try:
+              recibo = json.loads(caminho.read_text(encoding='utf-8'))
+          except Exception as erro:
+              print(json.dumps({'erro': type(erro).__name__}))
+              raise SystemExit(1)
+          campos = ['revisao', 'sucesso', 'erro', 'mensagem', 'corte_iniciado',
+                    'recuperacao_em_andamento', 'rollback_concluido', 'rollback_erros',
+                    'memoria_disponivel_mib', 'memoria_antes_pipeline_mib',
+                    'memoria_minima_pipeline_mib', 'imagens', 'modelo', 'legados_ativos']
+          retorno = {k: recibo[k] for k in campos if k in recibo}
+          for campo in ['erro', 'mensagem']:
+              if campo in retorno:
+                  retorno[campo] = str(retorno[campo])[:500]
+          if 'rollback_erros' in retorno:
+              retorno['quantidade_erros_rollback'] = len(retorno.pop('rollback_erros'))
+          saida = json.dumps(retorno, ensure_ascii=True)
+          if len(saida) > 20000:
+              saida = json.dumps({'erro': retorno.get('erro'), 'mensagem': retorno.get('mensagem'), 'truncado': True})
+          print(saida)
+          '''
+          parametros = {'executionTimeout': ['60'],
+                        'commands': ["python3 - <<'PY_RECIBO'\n" + codigo + '\nPY_RECIBO']}
+          arquivo = pathlib.Path('consulta-recibo.json')
+          arquivo.write_text(json.dumps(parametros), encoding='utf-8')
+          envio = aws('ssm', 'send-command', '--instance-ids', 'i-024a7c79b3ec2bfa1',
+                      '--document-name', 'AWS-RunShellScript', '--timeout-seconds', '60',
+                      '--comment', 'Ler somente o recibo da falha de implantação da fase 3',
+                      '--parameters', 'file://' + str(arquivo))
+          identificador = envio['Command']['CommandId']
+          print('Consulta SSM enviada: ' + identificador, flush=True)
+          limite = time.monotonic() + 150
+          while time.monotonic() < limite:
+              # A propagação eventual não deve encerrar a consulta antecipadamente.
+              time.sleep(5)
+              try:
+                  resposta = aws('ssm', 'get-command-invocation', '--command-id', identificador,
+                                 '--instance-id', 'i-024a7c79b3ec2bfa1')
+              except LookupError:
+                  continue
+              estado = resposta['Status']
+              print('Estado da consulta: ' + estado, flush=True)
+              if estado not in {'Pending', 'InProgress', 'Delayed'}:
+                  print('Código de saída remoto: ' + str(resposta.get('ResponseCode')), flush=True)
+                  print(resposta.get('StandardOutputContent', ''), flush=True)
+                  if estado != 'Success':
+                      raise RuntimeError('A leitura do recibo terminou com estado ' + estado)
+                  break
+          else:
+              raise TimeoutError('A leitura não concluiu no prazo; não reenviar automaticamente.')
