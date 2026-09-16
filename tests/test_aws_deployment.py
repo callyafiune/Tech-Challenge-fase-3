@@ -490,6 +490,8 @@ def ambiente_implantacao(implantacao, monkeypatch, tmp_path):
         falha=None,
         falha_disparada=False,
         legado=legado,
+        ativos=[legado],
+        versao_compose="2.24.4",
         memoria_apos_limpeza=None,
         incluir_airflow=False,
         recibos_antes_restauracao=[],
@@ -508,11 +510,12 @@ def ambiente_implantacao(implantacao, monkeypatch, tmp_path):
     def executar(comando, entrada=None):
         eventos.append(("comando", comando))
         if comando[:4] == ["docker", "compose", "version", "--short"]:
-            return "2.24.4"
+            return contexto.versao_compose
         if comando[:2] == ["aws", "ecr"]:
             return "token-sintetico"
         if comando[:3] == ["docker", "image", "inspect"]:
-            return json.dumps([{"RepoDigests": [f"{REPOSITORIO}@sha256:{'b' * 64}"]}])
+            digest = comando[3] if "@sha256:" in comando[3] else f"{REPOSITORIO}@sha256:{'b' * 64}"
+            return json.dumps([{"RepoDigests": [digest]}])
         if comando[:2] == ["docker", "compose"]:
             operacoes = comando[comando.index("-f", comando.index("-f") + 1) + 2 :]
             if operacoes[0] == "run":
@@ -584,7 +587,7 @@ def ambiente_implantacao(implantacao, monkeypatch, tmp_path):
     monkeypatch.setattr(implantacao, "executar", executar)
     monkeypatch.setattr(implantacao, "conferir_api", conferir_api)
     monkeypatch.setattr(implantacao, "ponteiro", ler_ponteiro)
-    monkeypatch.setattr(implantacao, "containers_ativos", lambda: [legado])
+    monkeypatch.setattr(implantacao, "containers_ativos", lambda: contexto.ativos)
     monkeypatch.setattr(implantacao, "esperar", esperar)
     monkeypatch.setattr(implantacao.urllib.request, "urlopen", baixar_fontes)
     monkeypatch.setattr(implantacao.shutil, "which", lambda nome: nome)
@@ -639,6 +642,7 @@ def test_corte_so_acontece_apos_candidato_e_desativa_reinicio_do_legado(ambiente
     ambiente = ambiente_implantacao
     resultado = ambiente.executar()
     assert resultado["sucesso"] is True
+    assert resultado["airflow_herdado"] is False
     comandos = comandos_observados(ambiente)
     desativar = ["docker", "update", "--restart=no", "fase2-api"]
     parar = ["docker", "stop", "fase2-api"]
@@ -779,3 +783,76 @@ def test_espera_http_respeita_prazo_restante_da_recuperacao(implantacao, monkeyp
     with pytest.raises(RuntimeError):
         implantacao.esperar("http://servico-sintetico/ready")
     assert relogio[0] <= 640
+
+
+def estado_anterior(ambiente):
+    """Representa uma fase 3 publicada, com digest Airflow rastreável da revisão anterior."""
+    estado = {
+        "diretorio": str(ambiente.raiz / "releases/anterior"),
+        "arquivo_env": str(ambiente.raiz / "releases/anterior/implantacao.env"),
+        "modelo": "modelo-anterior",
+        "imagens": {"airflow": f"{REPOSITORIO}@sha256:{'c' * 64}"},
+    }
+    (ambiente.raiz / "current.json").write_text(json.dumps(estado), encoding="utf-8")
+    return estado
+
+
+@pytest.mark.parametrize("explicito", [False, True])
+def test_recibo_distingue_airflow_herdado_de_imagem_solicitada(ambiente_implantacao, explicito):
+    ambiente = ambiente_implantacao
+    anterior = estado_anterior(ambiente)
+    ambiente.ativos = [
+        {
+            **ambiente.legado,
+            "Id": "fase3-api",
+            "Config": {"Labels": {"com.docker.compose.project": "medical-classifier"}},
+        }
+    ]
+    ambiente.incluir_airflow = explicito
+
+    resultado = ambiente.executar()
+
+    assert resultado["sucesso"] is True
+    assert resultado["airflow_herdado"] is (not explicito)
+    esperado = f"{REPOSITORIO}@sha256:{'b' * 64}" if explicito else anterior["imagens"]["airflow"]
+    assert resultado["imagens"]["airflow"] == esperado
+    recibo = json.loads(Path(resultado["receipt"]).read_text(encoding="utf-8"))
+    assert recibo["airflow_herdado"] is (not explicito)
+
+
+def test_estado_fase3_com_legado_ativo_aborta_antes_de_mudar_servicos(ambiente_implantacao):
+    ambiente = ambiente_implantacao
+    estado_anterior(ambiente)
+    corrente = ambiente.raiz / "current.json"
+    conteudo_anterior = corrente.read_bytes()
+
+    with pytest.raises(RuntimeError) as falha:
+        ambiente.executar()
+
+    assert "legados ativos" in str(falha.value.__cause__)
+    comandos = comandos_observados(ambiente)
+    assert not any(
+        comando[:2] in (["docker", "stop"], ["docker", "update"]) for comando in comandos
+    )
+    assert not any(comando[:2] == ["docker", "compose"] and "up" in comando for comando in comandos)
+    assert ("api", 8000) not in ambiente.eventos
+    assert corrente.read_bytes() == conteudo_anterior
+    assert not ambiente.temporarios
+
+
+def test_compose_com_sufixo_de_distribuicao_permite_implantacao(ambiente_implantacao):
+    ambiente = ambiente_implantacao
+    ambiente.versao_compose = "v2.24.4+ds1"
+    assert ambiente.executar()["sucesso"] is True
+
+
+@pytest.mark.parametrize(
+    ("versao", "mensagem"),
+    [("2.24.3+ds1", "2.24.4"), ("versao-desconhecida", "não é reconhecida")],
+)
+def test_compose_incompativel_aborta_antes_do_download(ambiente_implantacao, versao, mensagem):
+    ambiente = ambiente_implantacao
+    ambiente.versao_compose = versao
+    with pytest.raises(RuntimeError, match=mensagem):
+        ambiente.executar()
+    assert ("download", None) not in ambiente.eventos

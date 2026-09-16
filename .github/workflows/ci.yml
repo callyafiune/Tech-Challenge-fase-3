@@ -6,6 +6,11 @@ on:
   pull_request:
   workflow_dispatch:
   workflow_call:
+    inputs:
+      preservar_airflow:
+        description: Disponibilizar a imagem Airflow verificada para implantação.
+        type: boolean
+        default: false
     outputs:
       imagem_artefato_id:
         description: Identificador do artefato produzido pela validação concluída.
@@ -108,6 +113,8 @@ jobs:
       - name: Verificar a stack de ponta a ponta
         run: python scripts/smoke_stack.py --tempo-limite 120 --saida reports/smoke_stack.json
       - name: Preservar a imagem que passou em todas as verificações
+        env:
+          PRESERVAR_AIRFLOW: ${{ inputs.preservar_airflow }}
         run: |
           mkdir -p imagem
           docker image inspect medical-classifier:local --format '{{.Id}}' > imagem/id.txt
@@ -116,6 +123,11 @@ jobs:
           docker image inspect medical-classifier-treino:local --format '{{.Id}}' > imagem/treinamento-id.txt
           docker save medical-classifier-treino:local | gzip -1 > imagem/treinamento.tar.gz
           sha256sum imagem/treinamento.tar.gz > imagem/treinamento.tar.gz.sha256
+          if [ "$PRESERVAR_AIRFLOW" = true ]; then
+            docker image inspect medical-classifier-airflow:local --format '{{.Id}}' > imagem/airflow-id.txt
+            docker save medical-classifier-airflow:local | gzip -1 > imagem/airflow.tar.gz
+            sha256sum imagem/airflow.tar.gz > imagem/airflow.tar.gz.sha256
+          fi
       - name: Disponibilizar a imagem validada para entrega
         id: imagem_validada
         uses: actions/upload-artifact@v4

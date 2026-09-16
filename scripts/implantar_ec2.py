@@ -113,6 +113,16 @@ def argumentos(argv=None):
     return args
 
 
+def validar_versao_compose(versao: str) -> tuple[int, int, int]:
+    encontrada = re.match(r"^v?(\d+)\.(\d+)\.(\d+)", versao.strip())
+    if encontrada is None:
+        raise RuntimeError("A versão retornada pelo Docker Compose não é reconhecida.")
+    numeros = tuple(map(int, encontrada.groups()))
+    if numeros < (2, 24, 4):
+        raise RuntimeError("Docker Compose 2.24.4 ou superior é necessário.")
+    return numeros
+
+
 def executar(comando: list[str], entrada: str | None = None) -> str:
     """Captura saídas sem divulgar credenciais, conteúdo de env ou respostas do AWS CLI."""
     ambiente = os.environ.copy()
@@ -376,9 +386,7 @@ def implantar(args) -> dict:
         for programa in ("docker", "aws"):
             if not shutil.which(programa):
                 raise RuntimeError(f"Pré-requisito ausente: {programa}.")
-        versao = executar(["docker", "compose", "version", "--short"]).strip().lstrip("v")
-        if tuple(map(int, versao.split(".")[:3])) < (2, 24, 4):
-            raise RuntimeError("Docker Compose 2.24.4 ou superior é necessário.")
+        validar_versao_compose(executar(["docker", "compose", "version", "--short"]))
         APP_DIR.mkdir(parents=True, exist_ok=True)
         with (APP_DIR / "implantacao.lock").open("a") as trava:
             fcntl.flock(trava, fcntl.LOCK_EX | fcntl.LOCK_NB)
@@ -403,6 +411,8 @@ def implantar_travado(args) -> dict:
         "diretorio": str(pasta),
         "arquivo_env": str(pasta / "implantacao.env"),
         "imagens": {},
+        "airflow_herdado": args.imagem_airflow is None
+        and bool((anterior or {}).get("imagens", {}).get("airflow")),
     }
     legados, cortado, ponteiro_anterior, temporarios = [], False, None, []
     try:
@@ -518,6 +528,11 @@ def implantar_travado(args) -> dict:
             for c in ativos
             if (c["Config"].get("Labels") or {}).get("com.docker.compose.project") == LEGADO
         ]
+        if anterior and legados:
+            raise RuntimeError(
+                "Há uma implantação anterior da fase 3 e legados ativos; "
+                "reconcilie esse estado antes de atualizar."
+            )
         estado["politicas_legadas"] = {
             c["Id"]: c["HostConfig"]["RestartPolicy"] for c in ativos if c["Id"] in legados
         }

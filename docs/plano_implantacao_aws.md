@@ -15,10 +15,15 @@
 ## Verificação e implantação
 
 - [x] Validar os manifests e os caminhos de falha da automação.
-- [ ] Submeter a implementação a revisão adversarial Claude Code `fable` e tratar os achados.
+- [x] Submeter a implementação a três rodadas de revisão adversarial Claude Code `fable` e tratar os achados com verificações locais.
+- [x] Executar o CI remoto e verificar o encadeamento automático até a tentativa de autenticação da implantação.
 - [ ] Publicar as imagens com identificação da revisão e conferir seus digests.
 - [ ] Preparar arquivos e modelos na instância, verificando o candidato antes da troca da porta pública.
 - [ ] Substituir a aplicação anterior e verificar `/health`, `/ready` e `/predict` externamente.
 - [ ] Registrar recursos, imagens, modelo e resultado da implantação, sem credenciais.
 
-**Estado:** automação preparada e verificada localmente; implantação remota pendente. As cinco variáveis e as políticas necessárias estão descritas em [aws.md](aws.md). O IP público responde ao health da aplicação anterior. A execução do workflow precisa confirmar autenticação OIDC, permissões no ECR e acesso ao SSM antes da troca.
+**Estado:** a [execução 35038813631](https://github.com/callyafiune/Tech-Challenge-fase-3/actions/runs/35038813631) da revisão `eacd3b9` concluiu o CI com sucesso. O job de implantação falhou na autenticação OIDC (`sts:AssumeRoleWithWebIdentity`), antes de publicar imagens no ECR ou enviar comandos ao SSM. Nenhuma implantação da fase 3 ocorreu nessa tentativa.
+
+Os ajustes posteriores à terceira revisão incluem o artefato Airflow produzido pelo CI, a identificação de imagem herdada, a recusa de estado anterior junto a legados ativos, a validação do destino antes da publicação e o suporte a sufixos de versão do Compose. O conjunto específico de implantação passou 44 testes, com um ignorado por exigir POSIX. Os [resultados e limites](verificacao_aws.md) distinguem a revisão validada remotamente das alterações verificadas localmente.
+
+A autenticação OIDC precisa ser corrigida antes das etapas ainda pendentes. As cinco variáveis e as políticas necessárias estão descritas em [aws.md](aws.md); a confirmação de ECR, SSM, capacidade da instância e inferência pública permanece necessária.

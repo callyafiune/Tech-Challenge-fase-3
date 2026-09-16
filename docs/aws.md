@@ -4,7 +4,7 @@
 
 ## GitHub Actions e recursos de destino
 
-O fluxo principal é [`.github/workflows/implantar-aws.yml`](../.github/workflows/implantar-aws.yml), iniciado automaticamente por cada push na `main`. Ele chama o CI reutilizável para a mesma revisão e só após aprovação assume o papel AWS por OIDC e publica no ECR as imagens de inferência e treinamento produzidas e verificadas pelo CI, sem reconstruí-las. Airflow é construído e publicado quando solicitado. A implantação segue para a EC2 por SSM. O runner recebe credenciais temporárias; esse caminho não exige perfil AWS local nem chaves de acesso salvas nos secrets do GitHub.
+O fluxo principal é [`.github/workflows/implantar-aws.yml`](../.github/workflows/implantar-aws.yml), iniciado automaticamente por cada push na `main`. Ele chama o CI reutilizável para a mesma revisão e só após aprovação assume o papel AWS por OIDC e publica no ECR as imagens de inferência e treinamento produzidas e verificadas pelo CI, sem reconstruí-las. Airflow também usa a imagem verificada pelo CI e é publicado quando solicitado. A implantação segue para a EC2 por SSM. O runner recebe credenciais temporárias; esse caminho não exige perfil AWS local nem chaves de acesso salvas nos secrets do GitHub.
 
 | Recurso | Identificação |
 |---|---|
@@ -29,7 +29,7 @@ Configure as cinco **Actions Variables** abaixo no repositório. Todas são usad
 | `ECR_REPOSITORY` | `tech-challenge-fase-3` | Repositório das imagens de inferência, treino e Airflow |
 | `PUBLIC_API_URL` | `http://54.246.245.167:8000` | Origem usada na validação pública da implantação |
 
-Essas variáveis não criam permissões IAM, confiança OIDC, repositório ECR ou acesso ao SSM. **S3 e DVC não são dependências deste fluxo da fase 3.** Não é necessária uma variável de bucket. Eventuais permissões S3 da fase anterior devem permanecer até a migração ser concluída e sua remoção ser autorizada.
+Essas variáveis não criam permissões IAM, confiança OIDC, repositório ECR ou acesso ao SSM. **S3 e DVC não são dependências deste fluxo da fase 3.** Não é necessária uma variável de bucket. As permissões para o bucket `dvc-tech-challenge-fase-3` são dispensáveis. Preserve permissões de outros buckets enquanto forem necessárias a serviços legados ou ao retorno à fase 2.
 
 ## Preparar IAM uma vez, sem substituir acessos existentes
 
@@ -43,7 +43,11 @@ Os arquivos abaixo são referências para um administrador aplicar manualmente. 
 
 No IAM, confirme o provedor OIDC `token.actions.githubusercontent.com` com audiência `sts.amazonaws.com`. Em [Roles → tech-challenge-deploy-role](https://console.aws.amazon.com/iam/home#/roles/details/tech-challenge-deploy-role), preserve a política de confiança atual e incorpore a declaração `ConfiarGitHubFase3Production`. **Não substitua toda a confiança da role compartilhada pelo arquivo de exemplo**, pois outras declarações podem ser necessárias à fase 2 ou a outros fluxos. A AWS distingue a confiança, que autoriza assumir o papel, das permissões que o papel concede. [Documentação IAM sobre OIDC](https://docs.aws.amazon.com/IAM/latest/UserGuide/id_roles_create_for-idp_oidc.html).
 
-A confiança da fase 3 exige exatamente `repo:callyafiune/Tech-Challenge-fase-3:environment:production`. Por isso, o job de implantação usa o environment `production`. Configure esse environment no GitHub para aceitar implantação da branch `main`, preservando as regras de aprovação adotadas pelo projeto. A forma do `sub` muda quando um environment é usado. [Configuração OIDC oficial do GitHub para AWS](https://docs.github.com/en/actions/how-tos/secure-your-work/security-harden-deployments/oidc-in-aws).
+A política de exemplo usa o identificador padrão esperado para este repositório: `repo:callyafiune@16156667/Tech-Challenge-fase-3@1370511453:environment:production`. O GitHub inclui IDs imutáveis no `sub` de repositórios criados após 15/07/2026; este repositório foi criado em 14/09/2026. Os IDs conferidos na API do GitHub estão no [registro de autenticação inicial](../reports/aws/autenticacao_inicial.json). Compare o `sub` efetivamente emitido com o exemplo antes de aplicá-lo, respeitando maiúsculas e minúsculas e eventuais personalizações. [Referência oficial de identificadores OIDC](https://docs.github.com/en/actions/reference/security/oidc#immutable-subject-claims).
+
+O job usa o environment `production`, que passa a compor o `sub` no lugar da branch. Configure esse environment no GitHub para aceitar implantação da branch `main`, preservando as regras de aprovação adotadas pelo projeto. Revisores obrigatórios, quando configurados, fazem o deploy aguardar aprovação mesmo com o gatilho automático. A etapa `Registrar os parâmetros públicos da identidade OIDC` mostra somente emissor, audiência, assunto, repositório, IDs, ambiente e referências da branch e do workflow. O token fica mascarado e não é gravado em arquivo nem exibido. Em caso de `Not authorized to perform sts:AssumeRoleWithWebIdentity`, compare esses campos com **Trust relationships / Relações de confiança** de `tech-challenge-deploy-role`; alterações na política de permissões da EC2 não corrigem essa autenticação. [Configuração OIDC oficial do GitHub para AWS](https://docs.github.com/en/actions/how-tos/secure-your-work/security-harden-deployments/oidc-in-aws).
+
+A edição pelo console ou por `update-assume-role-policy` substitui o documento de confiança completo. Antes de salvar, copie a política vigente e acrescente a declaração da fase 3 ao seu array `Statement`, mantendo as outras declarações. Use no `sub` o valor confirmado pelo workflow. O arquivo de exemplo isolado não deve substituir esse documento combinado.
 
 Adicione a política de implantação sem remover políticas existentes. O exemplo usa um perfil administrativo local exclusivamente para essa configuração inicial; ele não é necessário no runner OIDC:
 
@@ -66,6 +70,8 @@ aws iam put-role-policy --profile $perfilAdminAws --role-name $nomePapelInstanci
 ```
 
 A política adicional da EC2 contém somente autenticação ECR e leitura de camadas/imagens do repositório da fase 3. Ela não substitui a política que mantém o agente SSM operacional e não concede publicação de imagens. [Permissões e exemplos oficiais do ECR](https://docs.aws.amazon.com/AmazonECR/latest/userguide/repository-policy-examples.html).
+
+Para o agente SSM, use a política gerenciada `arn:aws:iam::aws:policy/AmazonSSMManagedInstanceCore`. Após confirmar sua associação à role da EC2, os blocos equivalentes de uma política inline podem ser retirados para evitar duplicação. Os blocos `ListDvcPrefix` e `ReadWriteDvcObjects` para `dvc-tech-challenge-fase-3` são dispensáveis: o projeto não usa esse bucket. Permissões usadas por outros serviços ou pelo retorno à fase 2 devem ser avaliadas separadamente. [Política oficial AmazonSSMManagedInstanceCore](https://docs.aws.amazon.com/aws-managed-policy/latest/reference/AmazonSSMManagedInstanceCore.html).
 
 Após configurar os pré-requisitos, um push na `main` inicia CI e implantação. Pushes em outras branches e pull requests executam somente o CI. O gatilho direto de `ci.yml` exclui `main` para evitar duas validações do mesmo push; nessa branch, a validação pertence ao workflow de implantação.
 

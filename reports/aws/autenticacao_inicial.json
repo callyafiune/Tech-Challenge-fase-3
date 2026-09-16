@@ -1,0 +1,29 @@
+{
+  "revisao": "eacd3b9058a8c445205e0c8b7030db2e2bb5f8ae",
+  "workflow_run": 35038813631,
+  "url": "https://github.com/callyafiune/Tech-Challenge-fase-3/actions/runs/35038813631",
+  "evento": "push",
+  "branch": "main",
+  "ci": {
+    "job": 104613859320,
+    "conclusao": "success"
+  },
+  "implantacao": {
+    "job": 104614737817,
+    "conclusao": "failure",
+    "etapa": "Autenticar na AWS com OIDC",
+    "erro": "Could not assume role with OIDC: Not authorized to perform sts:AssumeRoleWithWebIdentity",
+    "publicacao_ecr_executada": false,
+    "comando_ssm_executado": false,
+    "fase_3_implantada": false
+  },
+  "identidade_github": {
+    "repositorio": "callyafiune/Tech-Challenge-fase-3",
+    "repository_id": 1370511453,
+    "repository_owner_id": 16156667,
+    "criado_em_utc": "2026-09-14T20:12:38Z",
+    "origem": "https://api.github.com/repos/callyafiune/Tech-Challenge-fase-3",
+    "sub_padrao_esperado": "repo:callyafiune@16156667/Tech-Challenge-fase-3@1370511453:environment:production",
+    "sub_emitido_verificado": false
+  }
+}

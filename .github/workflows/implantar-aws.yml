@@ -22,6 +22,8 @@ jobs:
     name: Validar a revisão antes de implantar
     if: github.ref == 'refs/heads/main'
     uses: ./.github/workflows/ci.yml
+    with:
+      preservar_airflow: ${{ inputs.airflow == true }}
 
   implantar:
     name: Publicar no ECR e substituir a aplicação na EC2
@@ -57,6 +59,19 @@ jobs:
             fi
           done
           [[ "$ARTEFATO_ID" =~ ^[0-9]+$ ]]
+      - name: Registrar os parâmetros públicos da identidade OIDC
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const token = await core.getIDToken('sts.amazonaws.com');
+            core.setSecret(token);
+            const claims = JSON.parse(Buffer.from(token.split('.')[1], 'base64url').toString('utf8'));
+            const identidade = Object.fromEntries(
+              ['iss', 'aud', 'sub', 'repository', 'repository_id', 'repository_owner_id',
+               'environment', 'ref', 'ref_type', 'workflow_ref', 'job_workflow_ref']
+                .map(chave => [chave, claims[chave]])
+            );
+            core.info(JSON.stringify(identidade));
       - name: Autenticar na AWS com OIDC
         uses: aws-actions/configure-aws-credentials@v4
         with:
@@ -84,20 +99,25 @@ jobs:
         env:
           REGISTRO: ${{ steps.ecr.outputs.registry }}
         run: |
-          aws ecr describe-repositories --repository-names "$ECR_REPOSITORY" > /dev/null
           imagem="$REGISTRO/$ECR_REPOSITORY"
+          python scripts/implantar_ec2.py --validar --regiao "$AWS_REGION" --revisao "$GITHUB_SHA" \
+            --imagem-runtime "$imagem:fase3-runtime-$GITHUB_SHA" \
+            --imagem-treinamento "$imagem:fase3-treinamento-$GITHUB_SHA"
+          aws ecr describe-repositories --repository-names "$ECR_REPOSITORY" > /dev/null
           docker tag medical-classifier:local "$imagem:fase3-runtime-$GITHUB_SHA"
           docker tag medical-classifier-treino:local "$imagem:fase3-treinamento-$GITHUB_SHA"
           docker push "$imagem:fase3-runtime-$GITHUB_SHA"
           docker push "$imagem:fase3-treinamento-$GITHUB_SHA"
-      - name: Construir e publicar o Airflow quando solicitado
+      - name: Carregar e publicar o Airflow validado quando solicitado
         if: inputs.airflow
         env:
           REGISTRO: ${{ steps.ecr.outputs.registry }}
         run: |
           imagem="$REGISTRO/$ECR_REPOSITORY:fase3-airflow-$GITHUB_SHA"
-          docker build -f Dockerfile.airflow --tag "$imagem" .
-          docker run --rm --network none --entrypoint /usr/local/bin/python "$imagem" -m pip --python /opt/airflow-venv/bin/python check
+          sha256sum -c imagem/airflow.tar.gz.sha256
+          docker load --input imagem/airflow.tar.gz
+          test "$(docker image inspect medical-classifier-airflow:local --format '{{.Id}}')" = "$(cat imagem/airflow-id.txt)"
+          docker tag medical-classifier-airflow:local "$imagem"
           docker push "$imagem"
       - name: Implantar por SSM e conferir o classificador público
         env:
