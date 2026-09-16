@@ -1,4 +1,4 @@
-name: Ler recibo da implantação AWS
+name: Diagnosticar Compose na EC2
 
 on:
   push:
@@ -20,7 +20,7 @@ jobs:
           role-to-assume: ${{ vars.AWS_ROLE_ARN }}
           aws-region: eu-west-1
           role-session-name: consulta-recibo-${{ github.run_id }}
-      - name: Consultar somente o recibo da execução que falhou
+      - name: Validar Compose e consultar recursos sem iniciar serviços
         shell: python
         run: |
           import json
@@ -48,6 +48,9 @@ jobs:
               raise RuntimeError('A sessão não pertence à conta esperada.')
 
           codigo = '''import json
+          import os
+          import shutil
+          import subprocess
           from pathlib import Path
           caminho = Path('/opt/tech-challenge-fase-3/releases/20260916T011838140279Z-901c8f89fcce/receipt.json')
           if not caminho.is_file():
@@ -75,6 +78,33 @@ jobs:
           if len(saida) > 20000:
               saida = json.dumps({'erro': retorno.get('erro'), 'mensagem': retorno.get('mensagem'), 'truncado': True})
           print(saida)
+          pasta = caminho.parent
+          ambiente = os.environ.copy()
+          for chave in ['ECR_RUNTIME_IMAGE', 'ECR_TRAINING_IMAGE', 'ECR_AIRFLOW_IMAGE',
+                        'API_PORT', 'PROMETHEUS_PORT', 'GRAFANA_PORT', 'AIRFLOW_PORT']:
+              ambiente.pop(chave, None)
+          # Valores sintéticos bastam para validar o Compose sem revelar os reais.
+          ambiente['GRAFANA_ADMIN_PASSWORD'] = 'valor-sintetico-diagnostico'
+          ambiente['GRAFANA_ADMIN_USER'] = 'admin'
+          comando = ['docker', 'compose', '--project-directory', str(pasta),
+                     '--env-file', str(pasta / 'implantacao.env'), '-p', 'medical-classifier',
+                     '-f', str(pasta / 'docker-compose.yml'),
+                     '-f', str(pasta / 'docker-compose.aws.yml'), 'config', '--quiet']
+          resultado = subprocess.run(comando, capture_output=True, text=True, env=ambiente, timeout=15)
+          print(json.dumps({'compose_config_codigo': resultado.returncode,
+                            'compose_config_erro': resultado.stderr[:1500]}, ensure_ascii=True))
+          disco = shutil.disk_usage('/var/lib/docker')
+          print(json.dumps({'disco_total_gib': round(disco.total / 2**30, 2),
+                            'disco_livre_gib': round(disco.free / 2**30, 2)}))
+          for comando in [
+              ['docker', 'compose', 'version', '--short'],
+              ['docker', 'image', 'ls', '--format', '{{.Repository}}:{{.Tag}} {{.Size}}'],
+              ['docker', 'ps', '-a', '--filter', 'label=com.docker.compose.project=medical-classifier',
+               '--format', '{{.Names}} {{.Status}}'],
+          ]:
+              resultado = subprocess.run(comando, capture_output=True, text=True, timeout=10)
+              print(json.dumps({'consulta': comando[:3], 'codigo': resultado.returncode,
+                                'resultado': resultado.stdout[:5000]}, ensure_ascii=True))
           '''
           parametros = {'executionTimeout': ['60'],
                         'commands': ["python3 - <<'PY_RECIBO'\n" + codigo + '\nPY_RECIBO']}
