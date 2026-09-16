@@ -2,6 +2,7 @@ name: Integração contínua
 
 on:
   push:
+    branches-ignore: [main]
   pull_request:
   workflow_dispatch:
   workflow_call:
@@ -53,6 +54,8 @@ jobs:
           docker compose config --quiet
           docker compose -f docker-compose.yml -f docker-compose.benchmark.yml config --quiet
           docker compose -f docker-compose.airflow.yml config --quiet
+          ECR_RUNTIME_IMAGE=exemplo/runtime:ci ECR_TRAINING_IMAGE=exemplo/treinamento:ci docker compose -f docker-compose.yml -f docker-compose.aws.yml config --quiet
+          ECR_AIRFLOW_IMAGE=exemplo/airflow:ci docker compose -f docker-compose.airflow.yml -f docker-compose.airflow.aws.yml config --quiet
       - name: Construir as imagens de inferência e treinamento
         run: |
           docker compose build api pipeline
@@ -110,6 +113,9 @@ jobs:
           docker image inspect medical-classifier:local --format '{{.Id}}' > imagem/id.txt
           docker save medical-classifier:local | gzip -1 > imagem/classificador.tar.gz
           sha256sum imagem/classificador.tar.gz > imagem/classificador.tar.gz.sha256
+          docker image inspect medical-classifier-treino:local --format '{{.Id}}' > imagem/treinamento-id.txt
+          docker save medical-classifier-treino:local | gzip -1 > imagem/treinamento.tar.gz
+          sha256sum imagem/treinamento.tar.gz > imagem/treinamento.tar.gz.sha256
       - name: Disponibilizar a imagem validada para entrega
         id: imagem_validada
         uses: actions/upload-artifact@v4

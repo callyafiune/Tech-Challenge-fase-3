@@ -27,7 +27,7 @@ Explique que os resumos e exemplos do modelo estão em inglês.
 4. **B4 — Airflow e CI/CD:** DAG executável, artefato produzido, lint, testes e
    build no workflow, com execução local e remota identificadas separadamente.
 5. **B5 — Integração e documentação:** README operacional, decisão de nuvem,
-   resultados reais, roteiro/vídeo STAR e matriz de rastreabilidade atualizada.
+   resultados reais e matriz de rastreabilidade atualizada.
 
 Mantenha os contratos entre produtores e consumidores explícitos. A API lê um bundle
 completo e validado; o pipeline publica atomicamente o ponteiro para uma execução.
@@ -73,5 +73,5 @@ demonstra execução no GitHub. Separe benchmark do modelo em processo da latên
 HTTP e nunca ajuste decisões usando o conjunto de teste final.
 
 Ao concluir, confira requisitos obrigatórios, revisões, correções e evidências reais.
-Reporte diretamente os resultados e as pendências externas, como vídeo ou publicação
+Reporte diretamente os resultados e as pendências externas, como publicação
 remota ainda inexistente. Nunca invente métricas, aprovações, execuções ou links.

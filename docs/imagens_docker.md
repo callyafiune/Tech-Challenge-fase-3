@@ -119,4 +119,4 @@ O [inventário da imagem no CI](../reports/ci/35033470421/imagens/runtime-imagem
 
 ## Proveniência das evidências
 
-Esta alteração de empacotamento é posterior à gravação do vídeo STAR e aos benchmarks históricos. O MP4 e seu manifesto permanecem intactos. O workflow atual mudou; a versão correspondente ao hash da captura está no [commit histórico `65b1b34`](https://github.com/callyafiune/Tech-Challenge-fase-3/blob/65b1b34a6640b4b435baa9bed9ab2616af3c0981/.github/workflows/ci.yml). As demais 13 fontes do manifesto mantêm seus hashes. O vídeo não é apresentado como teste da nova imagem; esta atualização tem evidências próprias em `reports/docker/imagem_enxuta/` e `reports/ci/35033470421/`.
+Esta alteração de empacotamento é posterior aos benchmarks históricos. O workflow atual tem evidências próprias em `reports/docker/imagem_enxuta/` e `reports/ci/35033470421/`; os registros anteriores não comprovam automaticamente a nova imagem.

@@ -192,7 +192,7 @@ A resposta acima ilustra o esquema; não é uma predição executada. O tipo e a
 - Submeter B5 ao Claude Code `fable`; revisar cobertura do enunciado, instruções copiáveis, links reais e incompatibilidades entre alegações e resultados.
 - Corrigir achados confirmados e atualizar a matriz de rastreabilidade.
 
-**Aceitação:** um avaliador consegue instalar, treinar, servir, consultar métricas e executar a DAG seguindo a documentação; as evidências sustentam as alegações. Pendências de publicação remota, vídeo ou ferramenta indisponível são explicitadas.
+**Aceitação:** um avaliador consegue instalar, treinar, servir, consultar métricas e executar a DAG seguindo a documentação; as evidências sustentam as alegações. Pendências de publicação remota ou ferramenta indisponível são explicitadas.
 
 ## Protocolo da revisão adversarial
 

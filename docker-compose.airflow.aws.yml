@@ -1,0 +1,7 @@
+# Aplicar somente sobre docker-compose.airflow.yml, no projeto separado do Airflow.
+services:
+  airflow:
+    build: !reset null
+    image: ${ECR_AIRFLOW_IMAGE:?Defina ECR_AIRFLOW_IMAGE com a imagem do Airflow no ECR}
+
+# A interface permanece em 127.0.0.1; os volumes mantêm os nomes e vínculos originais.

@@ -1,0 +1,18 @@
+# Sobreposição da stack principal na EC2; exige Docker Compose 2.24.4 ou superior.
+services:
+  pipeline:
+    build: !reset null
+    image: ${ECR_TRAINING_IMAGE:?Defina ECR_TRAINING_IMAGE com a imagem de treinamento no ECR}
+    mem_limit: 1g
+    memswap_limit: 1g
+    cpus: 1.0
+
+  api:
+    build: !reset null
+    image: ${ECR_RUNTIME_IMAGE:?Defina ECR_RUNTIME_IMAGE com a imagem de inferência no ECR}
+    # Substitui a publicação local para impedir dois binds na mesma porta.
+    ports: !override
+      - "0.0.0.0:${API_PORT:-8000}:8000"
+
+# Prometheus, Grafana e os volumes preservam as definições da stack principal.
+# Os painéis continuam vinculados a 127.0.0.1 e são acessados por túnel.

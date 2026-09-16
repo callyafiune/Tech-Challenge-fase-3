@@ -1,0 +1,18 @@
+{
+  "codigo_saida": 0,
+  "duracao_segundos": 31.19,
+  "estado": {
+    "Status": "exited",
+    "OOMKilled": false,
+    "ExitCode": 0,
+    "StartedAt": "2026-09-15T23:48:39.264608386Z",
+    "FinishedAt": "2026-09-15T23:49:08.920557583Z"
+  },
+  "imagem_id": "sha256:a15688140c748dde33bdc8cd74dd5a289652583aaf1b3bf721e48c83c1184290",
+  "memoria_limite_bytes": 1073741824,
+  "memoria_e_swap_limite_bytes": 1073741824,
+  "nanocpus": 1000000000,
+  "qualidade_aprovada": true,
+  "versao_modelo": "20260915T234852-272e1225",
+  "ambiente": "Docker Desktop/WSL2 local; sem volumes da stack"
+}

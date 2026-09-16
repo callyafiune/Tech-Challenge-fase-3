@@ -1,0 +1,107 @@
+{
+  "bloco": "B4",
+  "modelo_solicitado": "fable",
+  "inicio_utc": "2026-09-15T23:40:26.820604+00:00",
+  "arquivos": [
+    {
+      "caminho": "scripts/implantar_ec2.py",
+      "sha256": "ea0537f4ac409624e40ebe407afb3bf7dca50504cbe1d5e87e25ecd428c18e6d",
+      "bytes": 19230
+    },
+    {
+      "caminho": "scripts/enviar_implantacao_aws.py",
+      "sha256": "845d2bac09d8a359aaf059f1c4c3a5f9ddd7c18bbea4a59ed554d3d054eb6510",
+      "bytes": 11332
+    },
+    {
+      "caminho": "docker-compose.yml",
+      "sha256": "08dfb80b3efda19e3c0dc128fe517cbe8119a1ea597bf3acdf7f257d7085a7b3",
+      "bytes": 3381
+    },
+    {
+      "caminho": "docker-compose.airflow.yml",
+      "sha256": "3e54f33c4e7993e232b33400bf51adda7aa0e94ce6fda0414a4a09e6f341222d",
+      "bytes": 1667
+    },
+    {
+      "caminho": "docker-compose.aws.yml",
+      "sha256": "cceafb9b62ed6fcf58c692e05a1bf583587e645828eb88e4a1c4ed3463a98a53",
+      "bytes": 646
+    },
+    {
+      "caminho": "docker-compose.airflow.aws.yml",
+      "sha256": "cda8a4b7836cd710f6f6f39726b5ab8418ace035e2ce8b9ef484fbebf58fcd2e",
+      "bytes": 307
+    },
+    {
+      "caminho": ".github/workflows/ci.yml",
+      "sha256": "39e6cd3cf25915504a6bb61a1014371e69e12025fc93f8427032b9bf08987777",
+      "bytes": 7736
+    },
+    {
+      "caminho": ".github/workflows/implantar-aws.yml",
+      "sha256": "041e1c80326aa4d9039b9bdae90c45b678c9ab068569b0f1ac17cf9a99ae8563",
+      "bytes": 5123
+    },
+    {
+      "caminho": "docs/aws.md",
+      "sha256": "95b480146547ac873e7b303bd54966cb3d103124dbe69a730419836d77da80af",
+      "bytes": 24503
+    },
+    {
+      "caminho": "docs/aws/github-oidc-trust-policy.json",
+      "sha256": "f874ab217e348806626a0f696711ccc92a9e1b98a288f9ebf8fbcfb5ee526912",
+      "bytes": 568
+    },
+    {
+      "caminho": "docs/aws/deploy-role-policy.json",
+      "sha256": "305348b7bb0da243986ba94088774f07f0dbae513161e19f10ca8c2982f69b6a",
+      "bytes": 1640
+    },
+    {
+      "caminho": "docs/aws/ec2-ecr-policy.json",
+      "sha256": "03a81fb77ae96868aa58d6a2e3cd3a03548accedb4000f96f617a74c85d67fe0",
+      "bytes": 717
+    },
+    {
+      "caminho": "tests/test_aws_deployment.py",
+      "sha256": "09a944c4fe4de19dcc2c33e114f49eb001eb842554589e6e007e50b7be1f3e24",
+      "bytes": 14863
+    },
+    {
+      "caminho": "tests/test_aws_launcher.py",
+      "sha256": "0c5306630eacd53a2ec0586bb9d1236c34ceee711c321f4df4ba7af40fe5f8f1",
+      "bytes": 2318
+    }
+  ],
+  "prompt_sha256": "e117faf4cceaa8f402e40941fb5d3cf9ccea07bb9fbf1153667ee7fe75314073",
+  "contexto": "Revisao adversarial do novo bloco de implantacao AWS. EC2 existente i-024a7c79b3ec2bfa1 em eu-west-1 conta 076516546831; ECR tech-challenge-fase-3. Troca da aplicacao anterior autorizada. GitHub Actions OIDC com environment production, cinco vars, sem S3. Ainda nenhuma operacao AWS realizada: estado preparado, nao implantado. Verifique falhas concretas de integracao, contrato, rollback e primeiro deploy; fase 2 deve seguir ativa ate candidato validado. Airflow opcional. Usuario pediu remover video e referencias; remocao editorial ocorre em paralelo e nao faz parte deste snapshot. Avalie codigo e politicas, sem atribuir execucao remota. Tests locais e actionlint executados.",
+  "timeout_segundos": 600,
+  "aprovacao_automatica": false,
+  "fim_utc": "2026-09-15T23:44:53.913003+00:00",
+  "comando": [
+    "C:\\Users\\Cally\\.vscode\\extensions\\anthropic.claude-code-2.1.272-win32-x64\\resources\\native-binary\\claude.exe",
+    "-p",
+    "--model",
+    "fable",
+    "--effort",
+    "medium",
+    "--safe-mode",
+    "--strict-mcp-config",
+    "--permission-mode",
+    "dontAsk",
+    "--tools",
+    "",
+    "--output-format",
+    "json",
+    "--no-session-persistence"
+  ],
+  "modelos_reportados": [
+    "claude-fable-5-1",
+    "claude-haiku-4-5-20251001"
+  ],
+  "exit_code": 0,
+  "codigo_saida_script": 0,
+  "stderr": "",
+  "erro": ""
+}

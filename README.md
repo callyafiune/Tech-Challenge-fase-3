@@ -5,7 +5,7 @@
 ![ONNX Runtime](https://img.shields.io/badge/ONNX%20Runtime-1.23-005CED)
 ![Docker](https://img.shields.io/badge/Docker-Compose-2496ED)
 ![Airflow](https://img.shields.io/badge/Airflow-2.11-017CEE)
-[![GitHub Actions](https://github.com/callyafiune/Tech-Challenge-fase-3/actions/workflows/ci.yml/badge.svg)](https://github.com/callyafiune/Tech-Challenge-fase-3/actions/workflows/ci.yml)
+[![GitHub Actions](https://github.com/callyafiune/Tech-Challenge-fase-3/actions/workflows/implantar-aws.yml/badge.svg)](https://github.com/callyafiune/Tech-Challenge-fase-3/actions/workflows/implantar-aws.yml)
 
 API para classificar **resumos médicos em inglês** com TF-IDF e regressão logística, otimizada com **ONNX Runtime**. O projeto inclui treinamento reproduzível, retreino no Airflow, imagens Docker, CI/CD e monitoramento com Prometheus e Grafana.
 
@@ -92,15 +92,12 @@ O [CI](https://github.com/callyafiune/Tech-Challenge-fase-3/actions/runs/3503347
 
 ## Arquitetura de produção
 
-A proposta usa **AWS ECS Fargate + Application Load Balancer** para inferência síncrona, com prontidão em `/ready`, imagens no ECR e modelos versionados em S3. Fargate reduz a administração de servidores; o retreino batch fica separado para não disputar recursos com a API. **A infraestrutura AWS não foi provisionada.** Decisões, custos operacionais e limites estão em [arquitetura.md](docs/arquitetura.md).
+Cada push na `main` executa o CI e, após aprovação, implanta na **EC2 existente**, com imagens no ECR `tech-challenge-fase-3`, OIDC e SSM. Os modelos permanecem em volumes locais; S3 não é necessário. **A primeira implantação ainda não foi verificada remotamente.** Decisões: [arquitetura](docs/arquitetura.md). Configuração e operação: [guia AWS](docs/aws.md).
 
-## Vídeo e documentação
-
-O [vídeo STAR](reports/video/apresentacao_star.mp4) tem **4min21s**, oito cenas e narração sintética em português Brasil. Apresenta API, DAG, otimização e configuração de monitoração com consultas reais. O [manifesto](reports/video/evidencias.json), as [67 verificações](reports/video/verificacao.json) e a [inspeção visual](reports/video/inspecao_visual.json) identificam a captura. O vídeo preserva as versões e imagens do momento da gravação.
+## Documentação
 
 - [Modelo, corpus e limitações](docs/model_card.md).
 - [Arquitetura e operação](docs/arquitetura.md).
 - [Imagens Docker e dependências](docs/imagens_docker.md).
 - [Execução Linux/macOS e benchmarks](docs/execucao_linux_macos.md).
-- [Roteiro e reprodução do vídeo no Windows](docs/roteiro_star.md).
 - [Critérios de avaliação](docs/auditoria_criterios.md) e [matriz de rastreabilidade](docs/matriz_rastreabilidade.md).

@@ -29,6 +29,6 @@
 - [x] Registrar matriz de dependências, comandos e comparação medida em documentação própria.
 - [x] Submeter o bloco de implementação a revisão adversarial Claude Code `fable`; corrigir achados confirmados e registrar decisões.
 - [x] Executar Ruff, suíte local, checks de dependências e CI completo.
-- [x] Publicar a implementação e os relatórios; preservar vídeo e evidências anteriores identificados como capturas históricas.
+- [x] Publicar a implementação e os relatórios; preservar evidências anteriores identificadas como registros históricos.
 
 As imagens locais, a importação real da DAG, o reuso do pipeline, a API, o monitoramento e a partida até `/ready` foram verificados. O [CI 35033470421](../reports/ci/35033470421/execucao.json), no commit remoto `34e4781`, concluiu 107 testes aprovados e um ignorado, builds dos perfis e Airflow, inventários, quatro tarefas reais e smoke. Publicou a versão `20260915T230048-695b0121` no runner e disponibilizou a imagem validada como artefato de entrega. Os [dois runners de diagnóstico](../reports/ci/35033470146/execucao.json) também concluíram com sucesso. A implementação e os relatórios estão identificados pelo commit e pelos artefatos; a consolidação documental posterior não altera a árvore de código validada.

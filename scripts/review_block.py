@@ -22,7 +22,7 @@ em vez de classificação de urgência. O corpus e os exemplos do modelo estão 
 Requisitos mínimos: ao menos 2.000 amostras reais; modelo textual leve; otimização
 de latência mensurada; FastAPI; Docker; CI com lint, testes e build; DAG Airflow
 de ingestão, treino e publicação; Prometheus e Grafana via Compose com três painéis;
-decisão de nuvem e roteiro/vídeo STAR de até cinco minutos. A fase 2 é referência
+decisão de nuvem e documentação dos entregáveis presentes. A fase 2 é referência
 de organização, reprodução, prontidão, identificação dos modelos e rastreabilidade.
 Arquivos implementados não demonstram por si só execução em Docker, Airflow ou GitHub.
 Não se deve confundir a classificação acadêmica de resumos com diagnóstico clínico.

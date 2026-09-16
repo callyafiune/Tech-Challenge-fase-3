@@ -4,7 +4,7 @@
 
 O serviço classifica um resumo médico em inglês em uma das cinco categorias do Medical Abstracts TC Corpus. A arquitetura oferece inferência textual com baixa latência, retreino controlado e observabilidade.
 
-A implementação executável deste repositório é local, em Docker Compose. A implantação AWS descrita a seguir é uma proposta de produção; não há provisionamento, endereço público ou recursos AWS criados por estes arquivos.
+A implementação foi verificada localmente em Docker Compose. O repositório também contém automação para implantação na EC2 existente, descrita em [aws.md](aws.md). Essa implantação permanece pendente de execução e verificação remota; os arquivos não criam infraestrutura.
 
 ## Decisão: inferência em tempo real, treino em batch
 
@@ -18,30 +18,32 @@ A implementação executável deste repositório é local, em Docker Compose. A 
 
 Uma aplicação que pede a classificação de um resumo por vez se beneficia da resposta síncrona. Executar treino dentro da requisição aumentaria a latência e tornaria o serviço dependente da duração e das falhas do pipeline. O retreino em Airflow utiliza recursos separados e só altera a versão publicada depois das verificações.
 
-## Proposta AWS
+## Decisão AWS: EC2, ECR e Systems Manager
 
-**ECS Fargate + ALB** foi escolhido como desenho de implantação. Fargate executa os containers sem administração direta de instâncias EC2, e o ALB oferece encaminhamento HTTP/HTTPS para o serviço. A proposta mantém a imagem Docker que já é usada na demonstração. [Fargate para Amazon ECS](https://docs.aws.amazon.com/AmazonECS/latest/developerguide/AWS_Fargate.html), [ALB para serviços ECS](https://docs.aws.amazon.com/AmazonECS/latest/developerguide/alb.html).
+O destino escolhido é a instância `i-024a7c79b3ec2bfa1`, em `eu-west-1`, com as imagens no ECR `tech-challenge-fase-3`. A opção reutiliza a capacidade existente e executa os mesmos serviços Compose verificados localmente. A operação do sistema, do Docker e dos volumes continua sendo responsabilidade de quem administra a instância.
 
 ```mermaid
 flowchart TB
-    Cliente[Cliente autorizado] --> ALB[ALB HTTPS]
-    ALB --> API[ECS Fargate: API em sub-redes privadas]
+    Cliente[Cliente] --> API[EC2: API HTTP na porta 8000]
     ECR[ECR: imagem identificada por digest] --> API
-    S3[S3: bundle de modelo identificado por versão e SHA-256] --> API
-    Dados[Corpus aprovado] --> Airflow[Airflow fora do serviço de inferência]
-    Airflow --> Gates[Qualidade, paridade e avaliação]
-    Gates --> S3
+    Volume[Volume Docker: modelos versionados] --> API
+    Dados[Corpus público] --> Pipeline[Pipeline de treinamento]
+    Airflow[Airflow opcional] --> Pipeline
+    Pipeline --> Gates[Qualidade, paridade e latência]
+    Gates --> Volume
     CI[CI: testes e build] --> ECR
-    API --> Monitoramento[Coleta e painéis operacionais]
+    CI --> SSM[Systems Manager: implantação]
+    SSM --> API
+    API --> Monitoramento[Prometheus e Grafana: acesso por túnel]
 ```
 
-O serviço teria tarefas em zonas de disponibilidade distintas, com grupo de destino do ALB do tipo `ip`, adequado à rede `awsvpc` do Fargate. A checagem de prontidão usaria `/ready`; `/health` apenas demonstra que o processo HTTP está vivo. O dimensionamento partiria de medições de CPU, memória, taxa de chamadas e p95 sob concorrência; o benchmark de concorrência um deste projeto não estabelece a capacidade máxima do serviço. O uso de alvos `ip` e as verificações de saúde fazem parte da [integração documentada ECS/ALB](https://docs.aws.amazon.com/AmazonECS/latest/developerguide/alb.html).
+Cada push na `main` inicia o workflow de implantação, que primeiro chama o CI reutilizável. Após aprovação, publica as imagens e envia um comando pelo Systems Manager. Outras branches executam somente o CI. O script prepara o modelo, verifica uma API candidata em uma porta local e só então troca o serviço público. O recibo registra imagens por digest e versão do modelo. Falhas na troca acionam a recuperação da configuração anterior. O mecanismo de execução remota usa [SSM Run Command](https://docs.aws.amazon.com/systems-manager/latest/userguide/run-command.html).
 
-Os modelos seriam publicados em chaves versionadas de S3, com manifesto e hashes; as imagens usariam digest no ECR. A revisão da definição de tarefa fixaria a combinação de código e modelo. Um processo de inicialização precisaria baixar e verificar o bundle antes de responder como pronto. Esse mecanismo de download S3 e a infraestrutura de rede não foram implementados nesta demonstração.
+S3 não é necessário nessa implantação. O corpus vem da origem pública, e os modelos e relatórios permanecem em volumes Docker no disco da EC2. A API monta os modelos somente para leitura. Um backup externo dos volumes pode ser acrescentado separadamente; não há rotina de backup implementada por este fluxo.
 
-O armazenamento imutável por versão permite investigar qual modelo respondeu a uma chamada e voltar à combinação anterior. A política proposta dá à API somente acesso de leitura ao prefixo dos modelos e separa a permissão de publicação do pipeline. Credenciais temporárias e configuração externa ao código fariam parte da implantação, com autenticação e TLS na entrada.
+O GitHub usa credenciais temporárias por OIDC, e a EC2 baixa as imagens com seu próprio papel IAM. A API fica pública na porta 8000; os painéis permanecem em loopback. O endereço de demonstração usa HTTP, sem autenticação na API ou terminação TLS configuradas por estes arquivos.
 
-O custo da proposta inclui tarefas Fargate em execução, ALB, armazenamento, coleta de métricas e transferência de dados. Não foi feita cotação ou projeção financeira. Uma instância EC2 única reduziria a quantidade de componentes da demonstração, mas exigiria operação do host; Kubernetes acrescentaria uma camada de administração desnecessária ao tamanho atual do projeto. A escolha de Fargate é uma decisão de simplicidade operacional para containers, condicionada à medição de carga e orçamento reais.
+A instância única concentra execução e armazenamento, sem alta disponibilidade. Airflow é opcional e exige capacidade adicional; inferência e treinamento continuam em imagens separadas. CPU, memória, disco e p95 sob concorrência devem orientar o dimensionamento: o benchmark com concorrência um não estabelece a capacidade máxima. Não foi feita projeção de custos.
 
 ## Implementação local
 
@@ -97,7 +99,7 @@ O [CI remoto 34908437830](../reports/ci/34908437830/execucao.json) concluiu com 
 
 A tag com SHA identifica a revisão do código; `latest` é uma referência conveniente e mutável. Para o desenho de produção, a revisão da tarefa ECS deveria usar digest de imagem e versão explícita do modelo. Os relatórios no repositório e os artefatos do workflow cumprem papéis distintos: um resultado local não comprova que o workflow já foi executado pelo GitHub.
 
-A separação das imagens foi implementada depois dos CIs e do vídeo citados como evidências históricas. Ela não altera versões de Python/bibliotecas, normalização ou modelos ONNX. Novas verificações têm relatórios próprios; o vídeo e os arquivos usados em sua captura preservam os hashes originais e não comprovam automaticamente esta atualização do empacotamento.
+A separação das imagens foi implementada depois dos CIs históricos. Ela não altera versões de Python/bibliotecas, normalização ou modelos ONNX. As novas verificações têm relatórios próprios e não são comprovadas automaticamente pelos registros anteriores.
 
 ## Observabilidade e limites
 

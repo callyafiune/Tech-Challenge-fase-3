@@ -1,0 +1,135 @@
+name: Implantar na AWS
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+    inputs:
+      airflow:
+        description: Incluir o Airflow na mesma instância (exige capacidade disponível)
+        type: boolean
+        default: false
+
+permissions:
+  contents: read
+
+concurrency:
+  group: implantacao-aws
+  cancel-in-progress: false
+
+jobs:
+  qualidade:
+    name: Validar a revisão antes de implantar
+    if: github.ref == 'refs/heads/main'
+    uses: ./.github/workflows/ci.yml
+
+  implantar:
+    name: Publicar no ECR e substituir a aplicação na EC2
+    needs: qualidade
+    if: github.ref == 'refs/heads/main'
+    runs-on: ubuntu-latest
+    timeout-minutes: 75
+    environment: production
+    permissions:
+      contents: read
+      id-token: write
+    env:
+      AWS_REGION: ${{ vars.AWS_REGION }}
+      ECR_REPOSITORY: ${{ vars.ECR_REPOSITORY }}
+      EC2_INSTANCE_ID: ${{ vars.EC2_INSTANCE_ID }}
+      PUBLIC_API_URL: ${{ vars.PUBLIC_API_URL }}
+    steps:
+      - name: Obter os scripts da mesma revisão validada
+        uses: actions/checkout@v4
+      - name: Preparar Python 3.11 para o cliente SSM
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - name: Conferir as cinco variáveis de implantação
+        env:
+          AWS_ROLE_ARN: ${{ vars.AWS_ROLE_ARN }}
+          ARTEFATO_ID: ${{ needs.qualidade.outputs.imagem_artefato_id }}
+        run: |
+          for nome in AWS_REGION AWS_ROLE_ARN EC2_INSTANCE_ID ECR_REPOSITORY PUBLIC_API_URL; do
+            if [ -z "${!nome}" ]; then
+              echo "Variável obrigatória ausente: $nome" >&2
+              exit 1
+            fi
+          done
+          [[ "$ARTEFATO_ID" =~ ^[0-9]+$ ]]
+      - name: Autenticar na AWS com OIDC
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          role-to-assume: ${{ vars.AWS_ROLE_ARN }}
+          aws-region: ${{ vars.AWS_REGION }}
+          role-session-name: fase3-${{ github.run_id }}
+      - name: Autenticar no ECR
+        id: ecr
+        uses: aws-actions/amazon-ecr-login@v2
+      - name: Baixar as imagens produzidas pelo CI desta execução
+        uses: actions/download-artifact@v4
+        with:
+          artifact-ids: ${{ needs.qualidade.outputs.imagem_artefato_id }}
+          path: imagem
+          merge-multiple: true
+      - name: Conferir e carregar as imagens validadas
+        run: |
+          sha256sum -c imagem/classificador.tar.gz.sha256
+          sha256sum -c imagem/treinamento.tar.gz.sha256
+          docker load --input imagem/classificador.tar.gz
+          docker load --input imagem/treinamento.tar.gz
+          test "$(docker image inspect medical-classifier:local --format '{{.Id}}')" = "$(cat imagem/id.txt)"
+          test "$(docker image inspect medical-classifier-treino:local --format '{{.Id}}')" = "$(cat imagem/treinamento-id.txt)"
+      - name: Publicar os perfis de inferência e treinamento
+        env:
+          REGISTRO: ${{ steps.ecr.outputs.registry }}
+        run: |
+          aws ecr describe-repositories --repository-names "$ECR_REPOSITORY" > /dev/null
+          imagem="$REGISTRO/$ECR_REPOSITORY"
+          docker tag medical-classifier:local "$imagem:fase3-runtime-$GITHUB_SHA"
+          docker tag medical-classifier-treino:local "$imagem:fase3-treinamento-$GITHUB_SHA"
+          docker push "$imagem:fase3-runtime-$GITHUB_SHA"
+          docker push "$imagem:fase3-treinamento-$GITHUB_SHA"
+      - name: Construir e publicar o Airflow quando solicitado
+        if: inputs.airflow
+        env:
+          REGISTRO: ${{ steps.ecr.outputs.registry }}
+        run: |
+          imagem="$REGISTRO/$ECR_REPOSITORY:fase3-airflow-$GITHUB_SHA"
+          docker build -f Dockerfile.airflow --tag "$imagem" .
+          docker run --rm --network none --entrypoint /usr/local/bin/python "$imagem" -m pip --python /opt/airflow-venv/bin/python check
+          docker push "$imagem"
+      - name: Implantar por SSM e conferir o classificador público
+        env:
+          REGISTRO: ${{ steps.ecr.outputs.registry }}
+          INCLUIR_AIRFLOW: ${{ inputs.airflow }}
+        run: |
+          imagem="$REGISTRO/$ECR_REPOSITORY"
+          parametros=(
+            --instancia "$EC2_INSTANCE_ID"
+            --regiao "$AWS_REGION"
+            --revisao "$GITHUB_SHA"
+            --imagem-runtime "$imagem:fase3-runtime-$GITHUB_SHA"
+            --imagem-treinamento "$imagem:fase3-treinamento-$GITHUB_SHA"
+            --url-publica "$PUBLIC_API_URL"
+            --saida reports/aws/implantacao.json
+          )
+          if [ "$INCLUIR_AIRFLOW" = true ]; then
+            parametros+=(--imagem-airflow "$imagem:fase3-airflow-$GITHUB_SHA")
+          fi
+          python scripts/enviar_implantacao_aws.py "${parametros[@]}"
+      - name: Atualizar a referência da imagem implantada
+        env:
+          REGISTRO: ${{ steps.ecr.outputs.registry }}
+        run: |
+          imagem="$REGISTRO/$ECR_REPOSITORY"
+          docker tag medical-classifier:local "$imagem:latest"
+          docker push "$imagem:latest"
+      - name: Preservar o resultado da implantação
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: implantacao-aws-${{ github.run_id }}
+          path: reports/aws/
+          if-no-files-found: warn
+          retention-days: 14

@@ -123,7 +123,3 @@ docker compose down
 ```
 
 Os comandos de encerramento preservam os volumes. Encerre também com `Ctrl+C` as APIs do host que tiver iniciado em terminais separados.
-
-## Apresentação em vídeo
-
-O [MP4 publicado](../reports/video/apresentacao_star.mp4) pode ser reproduzido em qualquer sistema com suporte a H.264/AAC. O gerador deste projeto usa Windows PowerShell, `System.Drawing`, `System.Speech` e a voz Microsoft Maria Desktop. Para renderizar novamente, use o ambiente Windows descrito no [roteiro STAR](roteiro_star.md); apenas trocar o caminho do interpretador Python não torna o gerador compatível com Linux/macOS.
