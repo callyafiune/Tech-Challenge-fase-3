@@ -1,4 +1,4 @@
-name: Diagnosticar preparo do pipeline na EC2
+name: Conferir implantação e acesso público
 
 on:
   push:
@@ -15,25 +15,24 @@ concurrency:
 jobs:
   consultar:
     runs-on: ubuntu-latest
-    timeout-minutes: 8
+    timeout-minutes: 5
     environment: production
     steps:
-      - name: Autenticar a consulta por OIDC
+      - name: Autenticar as consultas por OIDC
         uses: aws-actions/configure-aws-credentials@v4
         with:
           role-to-assume: ${{ vars.AWS_ROLE_ARN }}
           aws-region: eu-west-1
-          role-session-name: consulta-recibo-${{ github.run_id }}
-      - name: Reproduzir preparo sem executar treinamento nem substituir a API
+          role-session-name: consulta-rede-${{ github.run_id }}
+      - name: Consultar resultado SSM e regras sem alterar a instância
         shell: python
         run: |
           import json
-          import pathlib
           import re
           import subprocess
-          import time
+          import urllib.request
 
-          def aws(*argumentos):
+          def consultar(*argumentos):
               resultado = subprocess.run(
                   ['aws', '--region', 'eu-west-1', '--no-cli-pager',
                    '--cli-connect-timeout', '5', '--cli-read-timeout', '10',
@@ -41,152 +40,39 @@ jobs:
                   capture_output=True, text=True, timeout=20,
               )
               if resultado.returncode:
-                  if argumentos[:2] == ('ssm', 'get-command-invocation') and 'InvocationDoesNotExist' in resultado.stderr:
-                      raise LookupError('A invocação ainda não foi propagada.')
-                  erro = re.search(r'An error occurred \(([A-Za-z0-9]+)\) when calling the ([A-Za-z0-9]+) operation', resultado.stderr)
-                  resumo = ': '.join(erro.groups()) if erro else 'erro não identificado'
-                  raise RuntimeError('A consulta AWS falhou: ' + resumo + '; código ' + str(resultado.returncode))
+                  erro = re.search(r'An error occurred \(([A-Za-z0-9]+)\)', resultado.stderr)
+                  print(json.dumps({'consulta': argumentos[:2], 'erro': erro.group(1) if erro else 'nao_identificado'}))
+                  return None
               return json.loads(resultado.stdout)
 
-          if aws('sts', 'get-caller-identity')['Account'] != '076516546831':
-              raise RuntimeError('A sessão não pertence à conta esperada.')
-
-          codigo = '''import json
-          import os
-          import fcntl
-          import re
-          import shutil
-          import subprocess
-          from pathlib import Path
-          caminho = Path('/opt/tech-challenge-fase-3/releases/20260916T011838140279Z-901c8f89fcce/receipt.json')
-          trava = Path('/opt/tech-challenge-fase-3/implantacao.lock').open('a')
-          fcntl.flock(trava, fcntl.LOCK_EX | fcntl.LOCK_NB)
-          if not caminho.is_file():
-              print(json.dumps({'erro': 'recibo_ausente', 'caminho': str(caminho)}))
-              raise SystemExit(1)
-          if caminho.stat().st_size > 65536:
-              print(json.dumps({'erro': 'recibo_excede_limite'}))
-              raise SystemExit(1)
-          try:
-              recibo = json.loads(caminho.read_text(encoding='utf-8'))
-          except Exception as erro:
-              print(json.dumps({'erro': type(erro).__name__}))
-              raise SystemExit(1)
-          campos = ['revisao', 'sucesso', 'erro', 'mensagem', 'corte_iniciado',
-                    'recuperacao_em_andamento', 'rollback_concluido', 'rollback_erros',
-                    'memoria_disponivel_mib', 'memoria_antes_pipeline_mib',
-                    'memoria_minima_pipeline_mib', 'imagens', 'modelo', 'legados_ativos']
-          retorno = {k: recibo[k] for k in campos if k in recibo}
-          for campo in ['erro', 'mensagem']:
-              if campo in retorno:
-                  retorno[campo] = str(retorno[campo])[:500]
-          if 'rollback_erros' in retorno:
-              retorno['quantidade_erros_rollback'] = len(retorno.pop('rollback_erros'))
-          saida = json.dumps(retorno, ensure_ascii=True)
-          if len(saida) > 2000:
-              saida = json.dumps({'erro': retorno.get('erro'), 'mensagem': retorno.get('mensagem'), 'truncado': True})
-          print(saida)
-          pasta = caminho.parent
-          ambiente = os.environ.copy()
-          for chave in ['ECR_RUNTIME_IMAGE', 'ECR_TRAINING_IMAGE', 'ECR_AIRFLOW_IMAGE',
-                        'API_PORT', 'PROMETHEUS_PORT', 'GRAFANA_PORT', 'AIRFLOW_PORT']:
-              ambiente.pop(chave, None)
-          # Valores sintéticos bastam para validar o Compose sem revelar os reais.
-          ambiente['GRAFANA_ADMIN_PASSWORD'] = 'valor-sintetico-diagnostico'
-          ambiente['GRAFANA_ADMIN_USER'] = 'admin'
-          for perfil, chave in [('runtime', 'ECR_RUNTIME_IMAGE'), ('treinamento', 'ECR_TRAINING_IMAGE')]:
-              imagem = recibo['imagens'][perfil]
-              if not re.fullmatch(r'076516546831\.dkr\.ecr\.eu-west-1\.amazonaws\.com/tech-challenge-fase-3@sha256:[a-f0-9]{64}', imagem):
-                  raise RuntimeError('Digest de imagem incompatível com o destino.')
-              ambiente[chave] = imagem
-          comando = ['docker', 'compose', '--project-directory', str(pasta),
-                     '--env-file', str(pasta / 'implantacao.env'), '-p', 'medical-classifier',
-                     '-f', str(pasta / 'docker-compose.yml'),
-                     '-f', str(pasta / 'docker-compose.aws.yml'), 'config', '--quiet']
-          resultado = subprocess.run(comando, capture_output=True, text=True, env=ambiente, timeout=15)
-          print(json.dumps({'compose_config_codigo': resultado.returncode,
-                            'compose_config_erro': resultado.stderr[:500]}, ensure_ascii=True))
-          disco = shutil.disk_usage('/var/lib/docker')
-          print(json.dumps({'disco_total_gib': round(disco.total / 2**30, 2),
-                            'disco_livre_gib': round(disco.free / 2**30, 2)}))
-          for comando in [
-              ['docker', 'compose', 'version', '--short'],
-              ['docker', 'image', 'ls', '--format', '{{.Repository}}:{{.Tag}} {{.Size}}'],
-              ['docker', 'ps', '-a', '--filter', 'label=com.docker.compose.project=medical-classifier',
-               '--format', '{{.Names}} {{.Status}}'],
-          ]:
-              resultado = subprocess.run(comando, capture_output=True, text=True, timeout=10)
-              print(json.dumps({'consulta': comando[:3], 'codigo': resultado.returncode,
-                                'resultado': resultado.stdout[:500]}, ensure_ascii=True))
-          existentes = subprocess.run(['docker', 'ps', '-aq', '--filter',
-                                       'name=^/medical-classifier-pipeline-1$'],
-                                      capture_output=True, text=True, timeout=10, check=True)
-          if existentes.stdout.strip():
-              raise RuntimeError('Já existe um container pipeline; a reprodução não irá recriá-lo.')
-          ambiente_aws = ambiente.copy()
-          for nome in ('AWS_PROFILE AWS_DEFAULT_PROFILE AWS_ACCESS_KEY_ID AWS_SECRET_ACCESS_KEY '
-                       'AWS_SESSION_TOKEN AWS_WEB_IDENTITY_TOKEN_FILE AWS_ROLE_ARN AWS_ROLE_SESSION_NAME '
-                       'AWS_CONTAINER_CREDENTIALS_RELATIVE_URI AWS_CONTAINER_CREDENTIALS_FULL_URI').split():
-              ambiente_aws.pop(nome, None)
-          ambiente_aws.update(AWS_SHARED_CREDENTIALS_FILE='/dev/null', AWS_CONFIG_FILE='/dev/null',
-                              AWS_EC2_METADATA_DISABLED='false')
-          autenticacao = subprocess.run(['aws', 'ecr', 'get-login-password', '--region', 'eu-west-1'],
-                                       capture_output=True, text=True, env=ambiente_aws, timeout=20)
-          if autenticacao.returncode:
-              raise RuntimeError('Falha ao obter autenticação ECR da role da instância.')
-          login = subprocess.run(['docker', 'login', '--username', 'AWS', '--password-stdin',
-                                  '076516546831.dkr.ecr.eu-west-1.amazonaws.com'],
-                                 input=autenticacao.stdout, capture_output=True, text=True, timeout=15)
-          if login.returncode:
-              raise RuntimeError('Falha ao renovar o login Docker no ECR.')
-          del autenticacao, login
-          print(json.dumps({'autenticacao_ecr': 'renovada'}), flush=True)
-          comando = ['docker', 'compose', '--project-directory', str(pasta),
-                     '--env-file', str(pasta / 'implantacao.env'), '-p', 'medical-classifier',
-                     '-f', str(pasta / 'docker-compose.yml'),
-                     '-f', str(pasta / 'docker-compose.aws.yml')]
-          for etapa, opcoes in [
-              ('baixar_imagens', ['pull', 'api', 'prometheus', 'grafana']),
-              ('criar_pipeline_parado', ['create', '--no-deps', 'pipeline']),
-          ]:
+          identidade = consultar('sts', 'get-caller-identity')
+          if not identidade or identidade['Account'] != '076516546831':
+              raise RuntimeError('Conta AWS diferente da esperada.')
+          invocacao = consultar(
+              'ssm', 'get-command-invocation', '--command-id',
+              'd07e9d05-210f-4dfb-a000-484192c1c3b8',
+              '--instance-id', 'i-024a7c79b3ec2bfa1',
+          )
+          if invocacao:
+              resumo = {k: invocacao.get(k) for k in (
+                  'CommandId', 'Status', 'ResponseCode', 'ExecutionStartDateTime', 'ExecutionEndDateTime')}
+              remoto = json.loads(invocacao.get('StandardOutputContent') or '{}')
+              resumo['remoto'] = {k: remoto.get(k) for k in (
+                  'sucesso', 'revisao', 'versao_modelo', 'receipt')}
+              print(json.dumps({'invocacao': resumo}, ensure_ascii=False))
+          resposta = consultar('ec2', 'describe-instances', '--instance-ids', 'i-024a7c79b3ec2bfa1')
+          if resposta:
+              instancia = resposta['Reservations'][0]['Instances'][0]
+              grupos = [g['GroupId'] for g in instancia['SecurityGroups']]
+              print(json.dumps({'instancia': instancia['InstanceId'], 'ip_publico': instancia.get('PublicIpAddress'), 'grupos': grupos}))
+              regras = consultar('ec2', 'describe-security-groups', '--group-ids', *grupos)
+              if regras:
+                  for grupo in regras['SecurityGroups']:
+                      print(json.dumps({'grupo': grupo['GroupId'], 'entradas': grupo['IpPermissions']}))
+          for endereco in ('https://checkip.amazonaws.com', 'http://54.246.245.167:8000/health', 'http://54.246.245.167:8000/ready'):
               try:
-                  resultado = subprocess.run(comando + opcoes, capture_output=True,
-                                             text=True, env=ambiente, timeout=60)
-              except subprocess.TimeoutExpired:
-                  print(json.dumps({'etapa': etapa, 'erro': 'TimeoutExpired'}), flush=True)
-                  raise SystemExit(1)
-              print(json.dumps({'etapa': etapa, 'codigo': resultado.returncode,
-                                'saida': resultado.stdout[-500:],
-                                'erro': resultado.stderr[-2000:]}, ensure_ascii=True), flush=True)
-              if resultado.returncode:
-                  raise SystemExit(1)
-          '''
-          parametros = {'executionTimeout': ['240'],
-                        'commands': ["python3 -u - <<'PY_RECIBO'\n" + codigo + '\nPY_RECIBO']}
-          arquivo = pathlib.Path('consulta-recibo.json')
-          arquivo.write_text(json.dumps(parametros), encoding='utf-8')
-          envio = aws('ssm', 'send-command', '--instance-ids', 'i-024a7c79b3ec2bfa1',
-                      '--document-name', 'AWS-RunShellScript', '--timeout-seconds', '60',
-                      '--comment', 'Reproduzir pull e criar pipeline parado; sem executar treino ou trocar API',
-                      '--parameters', 'file://' + str(arquivo))
-          identificador = envio['Command']['CommandId']
-          print('Consulta SSM enviada: ' + identificador, flush=True)
-          limite = time.monotonic() + 330
-          while time.monotonic() < limite:
-              # A propagação eventual não deve encerrar a consulta antecipadamente.
-              time.sleep(5)
-              try:
-                  resposta = aws('ssm', 'get-command-invocation', '--command-id', identificador,
-                                 '--instance-id', 'i-024a7c79b3ec2bfa1')
-              except LookupError:
-                  continue
-              estado = resposta['Status']
-              print('Estado da consulta: ' + estado, flush=True)
-              if estado not in {'Pending', 'InProgress', 'Delayed'}:
-                  print('Código de saída remoto: ' + str(resposta.get('ResponseCode')), flush=True)
-                  print(resposta.get('StandardOutputContent', ''), flush=True)
-                  if estado != 'Success':
-                      raise RuntimeError('A leitura do recibo terminou com estado ' + estado)
-                  break
-          else:
-              raise TimeoutError('A leitura não concluiu no prazo; não reenviar automaticamente.')
+                  with urllib.request.urlopen(endereco, timeout=10) as resposta:
+                      conteudo = resposta.read(2048).decode('utf-8')
+                      print(json.dumps({'url': endereco, 'codigo': resposta.status, 'resposta': conteudo}, ensure_ascii=False))
+              except Exception as erro:
+                  print(json.dumps({'url': endereco, 'erro': type(erro).__name__}))
